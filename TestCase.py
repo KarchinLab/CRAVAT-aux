@@ -16,6 +16,8 @@ class TestCase(object):
         self.desc_lines = open('%s/%s_desc.txt'%(self.path, self.name)).read().split('\n')
         self.attributes = {}
         for line in self.desc_lines:
+            if line.startswith('#'):
+                continue
             self.attributes[line.split(':')[0]] = line.split(':')[1]
         self.input_path = '%s/%s_input.txt' %(self.path, self.name)
         self.key_path = '%s/%s_key.txt' %(self.path, self.name)
