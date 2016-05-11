@@ -1,18 +1,17 @@
-Date: 16-05-10
-Time: 13:37:49
+Date: 16-05-11
+Time: 12:57:25
 Tests: 1
-    ['so_best_cravat']
+['so_best_vcf']
 Passed: 1
-    ['so_best_cravat']
+['so_best_vcf']
 Failed: 0
-    []
-Time: 5.27s
-
+[]
+Time: 4.26 seconds
+    
 Test Details
 ================================================================================
-so_best_cravat
-	kmoad_20160510_133752
-	Passed
-	Time: 5.27 
+so_best_vcf
+Passed
+Time: 4.26 
 
 --------------------------------------------------
