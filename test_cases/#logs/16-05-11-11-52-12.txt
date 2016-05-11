@@ -1,0 +1,57 @@
+Date: 16-05-11
+Time: 11:52:12
+Tests: 6
+    ['hugo_cravat', 'hugo_vcf', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf']
+Passed: 5
+    ['hugo_vcf', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf']
+Failed: 1
+    ['hugo_cravat']
+Time: 25.41s
+
+Test Details
+================================================================================
+protein_change_cravat
+	kmoad_20160511_115203
+	Passed
+	Time: 4.24 
+
+--------------------------------------------------
+hugo_vcf
+	kmoad_20160511_115158
+	Passed
+	Time: 4.23 
+
+--------------------------------------------------
+so_best_vcf
+	kmoad_20160511_115215
+	Passed
+	Time: 4.26 
+
+--------------------------------------------------
+protein_change_vcf
+	kmoad_20160511_115207
+	Passed
+	Time: 4.21 
+
+--------------------------------------------------
+hugo_cravat
+	kmoad_20160511_115154
+	Failed
+
+	Expected: ((1L, 'ZNF567'), (2L, 'Non-Coding'), (3L, 'PHOSPHO2-KLHL23'), (4L, 'GLUD2'), (5L, 'UTY'), (6L, 'Non-Coding'))
+	Recieved: ((1L, 'ZNF567'), (2L, 'Non-Coding'), (4L, 'GLUD2'), (5L, 'UTY'), (6L, 'Non-Coding'))
+	Failures by line:
+		Line 3: 
+			#PHOSPHO2-KLHL23	CHR2	170592455	+	G	C
+			Status: Absent
+			Expected: PHOSPHO2-KLHL23
+			Received: N/A
+	Time: 4.26 
+
+--------------------------------------------------
+so_best_cravat
+	kmoad_20160511_115211
+	Passed
+	Time: 4.21 
+
+--------------------------------------------------

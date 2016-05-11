@@ -1,0 +1,6 @@
+1,ZNF567
+2,Non-Coding
+3,PHOSPHO2-KLHL23
+4,GLUD2
+5,UTY
+6,Non-Coding
