@@ -1,0 +1,7 @@
+#cravat means the location came from the cravat mappability database
+#igv means the location was found using igv
+cravat1	chr5	25010	+	T	G
+cravat2	chr1	156186563	+	T	G
+cravat3	chr4	21583640	-	T	A
+cravat4	chr16	34188000	+	A	G
+igv1	chr1	121483540	+	T	A
