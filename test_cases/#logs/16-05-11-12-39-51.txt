@@ -1,0 +1,57 @@
+Date: 16-05-11
+Time: 12:39:51
+Tests: 1
+['so_best_cravat']
+Passed: 0
+[]
+Failed: 1
+['so_best_cravat']
+Time: 4.33 seconds
+    
+Test Details
+================================================================================
+so_best_cravat
+Failed
+Variant UID: 10
+	Column: so_best
+	Expected: SS
+	Recieved: ()
+Variant UID: 1
+	Column: so_best
+	Expected: SY
+	Recieved: ()
+Variant UID: 3
+	Column: so_best
+	Expected: SG
+	Recieved: ()
+Variant UID: 2
+	Column: so_best
+	Expected: SL
+	Recieved: ()
+Variant UID: 5
+	Column: so_best
+	Expected: II
+	Recieved: ()
+Variant UID: 4
+	Column: so_best
+	Expected: MS
+	Recieved: ()
+Variant UID: 7
+	Column: so_best
+	Expected: ID
+	Recieved: ()
+Variant UID: 6
+	Column: so_best
+	Expected: FI
+	Recieved: ()
+Variant UID: 9
+	Column: so_best
+	Expected: CS
+	Recieved: ()
+Variant UID: 8
+	Column: so_best
+	Expected: FD
+	Recieved: ()
+Time: 4.33 
+
+--------------------------------------------------
