@@ -1,0 +1,37 @@
+Date: 16-05-11
+Time: 13:25:48
+Tests: 6
+['hugo_cravat', 'hugo_vcf', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf']
+Passed: 6
+['hugo_cravat', 'hugo_vcf', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf']
+Failed: 0
+[]
+Time: 24.37 seconds
+    
+Test Details
+================================================================================
+protein_change_cravat
+Passed
+Time: 4.18 
+
+--------------------------------------------------hugo_vcf
+Passed
+Time: 3.2 
+
+--------------------------------------------------so_best_vcf
+Passed
+Time: 4.24 
+
+--------------------------------------------------protein_change_vcf
+Passed
+Time: 4.22 
+
+--------------------------------------------------hugo_cravat
+Passed
+Time: 4.26 
+
+--------------------------------------------------so_best_cravat
+Passed
+Time: 4.27 
+
+--------------------------------------------------

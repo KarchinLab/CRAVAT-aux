@@ -60,7 +60,7 @@ for test in test_list:
     
     curTest.submitJob()
     print 'Job Submitted: %s' % curTest.job_id
-    curTest.checkStatus() 
+    curTest.checkStatus(1) 
     # Test will not continue until checkStatus() is complete
     print 'Submission %s: %s' % (curTest.job_status, curTest.job_id)
     # If test submission was successful, get the data and check that it matches the key
@@ -70,7 +70,7 @@ for test in test_list:
     else:
         curTest.data = 'Submission Failed'
         curTest.result = False
-        curTest.log_text = 'Submission Failure\n'
+        curTest.log_text = 'Submission Failure'
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
     if curTest.result:

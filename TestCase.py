@@ -13,36 +13,13 @@ class TestCase(object):
     
     # Get the attributes from the properly formatted description file    
     def getAttributes(self):
-        self.desc_file = open('%s/%s_desc.txt'%(self.path, self.name))
-        self.desc_text = self.desc_file.read().split('\n')
-        self.mut_format = self.desc_text[0].split(':')[1]
-        self.analyses = self.desc_text[1].split(':')[1]
+        self.desc_lines = open('%s/%s_desc.txt'%(self.path, self.name)).read().split('\n')
+        self.attributes = {}
+        for line in self.desc_lines:
+            self.attributes[line.split(':')[0]] = line.split(':')[1]
         self.input_path = '%s/%s_input.txt' %(self.path, self.name)
         self.key_path = '%s/%s_key.txt' %(self.path, self.name)
         self.input_text = open(self.input_path).read()
-    
-    # Submit the job to cravat    
-    def submitJob(self):        
-        data = {
-             'email':'kmoad@insilico.us.com',
-             'analyses': self.analyses
-            }
-        files = {
-                'inputfile': open(self.input_path, 'r')
-                }
-        r = requests.post(self.url_base+'/rest/service/submit', files=files, data=data)
-        self.job_id = json.loads(r.text)['jobid']
-   
-    # Check the status of the job.  Hold execution until job complete
-    def checkStatus(self):
-        self.job_status = ''
-        while self.job_status == '':
-            json_response = requests.get('%s/rest/service/status?jobid=%s' %(self.url_base, self.job_id))
-            json_status = json.loads(json_response.text)['status']
-            if json_status in ['Success', 'Salvaged', 'Error']:
-                self.job_status = json_status
-            
-            time.sleep(1)
     
     # Read in key file
     def getKey(self):
@@ -56,7 +33,31 @@ class TestCase(object):
             self.key[row] = {}
             for col in self.cols:
                 self.key[row][col] = temp[self.cols.index(col)]
-
+                
+    # Submit the job to cravat    
+    def submitJob(self):        
+        data = {
+             'email':'kmoad@insilico.us.com',
+             'analyses': self.attributes['analyses']
+            }
+        files = {
+                'inputfile': open(self.input_path, 'r')
+                }
+        r = requests.post(self.url_base+'/rest/service/submit', files=files, data=data)
+        self.job_id = json.loads(r.text)['jobid']
+   
+    # Check the status of the job.  Hold execution until job complete
+    def checkStatus(self,sleep_time):
+        self.job_status = ''
+        while self.job_status == '':
+            json_response = requests.get('%s/rest/service/status?jobid=%s' %(self.url_base, self.job_id))
+            json_status = json.loads(json_response.text)['status']
+            if json_status in ['Success', 'Salvaged', 'Error']:
+                self.job_status = json_status
+            
+            time.sleep(sleep_time)
+            
+    # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self):
         self.result = True
         self.log_text = ''
