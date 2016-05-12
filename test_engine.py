@@ -34,12 +34,14 @@ print 'Test Started'
 # Initialize with options
 main_dir = 'C:/Users/Kyle/cravat/testing/test_cases'
 url = 'http://192.168.99.100:8888/CRAVAT'
-test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['protein_change_cravat'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
     test_list = os.listdir(main_dir)
-    test_list.remove('#logs')
+    for item in test_list[:]:
+        if item.startswith('#'):
+            test_list.remove(item)
 else:
     test_list = test_cases
 

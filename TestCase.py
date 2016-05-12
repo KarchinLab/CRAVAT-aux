@@ -71,20 +71,22 @@ class TestCase(object):
         
         try:
             cursor = db.cursor()
+            self.data = {}
             for uid in self.key:
                 for col in self.cols:
                     query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                     cursor.execute(query)
-                    data = cursor.fetchall()
-                    if data == ():
+                    datapoint = cursor.fetchall()
+                    if datapoint == ():
                         self.result = False
-                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], data)
+                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
                         continue
-                    data = data[0][0]
-                    correct = self.key[uid][col] == data
+                    datapoint = str(datapoint[0][0])
+                    correct = self.key[uid][col] == datapoint
                     if not(correct):
                         self.result = False
-                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], data)
+                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
+                    self.data[uid][col] = datapoint
         except Exception:
             print traceback.format_exc()
         finally:
