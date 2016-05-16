@@ -1,6 +1,0 @@
-uid,hugo,so_best
-v1,NOTCH2,MS
-v2,DNMT1,MS
-v3,TNFAIP3,MS
-v4,BRAF,MS
-v5,CDKN2A,MS
