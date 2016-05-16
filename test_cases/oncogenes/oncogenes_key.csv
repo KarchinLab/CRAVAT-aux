@@ -1,6 +1,8 @@
-uid,hugo,so_best
-v1,NOTCH2,MS
-v2,DNMT1,MS
-v3,TNFAIP3,MS
-v4,BRAF,MS
-v5,CDKN2A,MS
+uid,driver_genes,target
+NOTCH2,TSG,Notch Inhibitors
+DNMT1,Oncogene,None
+TNFAIP3,TSG,None
+BRAF,Oncogene,"Gefitinib, Erlotinib, EGFR inhibitors
+Vemurafenib, Dabrafenib, RAF inhibitors
+Dasatinib, SRC inhibitors"
+CDKN2A,TSG,CDK4/6 inhibitors

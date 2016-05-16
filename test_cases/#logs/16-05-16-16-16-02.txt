@@ -1,0 +1,24 @@
+Date: 16-05-16
+Time: 16:16:02
+Tests: 1
+['oncogenes']
+Passed: 0
+[]
+Failed: 1
+['oncogenes']
+Time: 6.33 seconds
+    
+Test Details
+================================================================================
+oncogenes
+kmoad_20160516_161614
+Failed
+Variant UID: v4
+	Column: target
+	Expected: Gefitinib, Erlotinib, EGFR inhibitors
+Vemurafenib, Dabrafenib, RAF inhibitors
+Dasatinib, SRC inhibitors
+	Recieved: Vemurafenib, Dabrafenib, RAF inhibitors
+Time: 6.33 
+
+--------------------------------------------------
