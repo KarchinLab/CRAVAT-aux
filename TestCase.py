@@ -4,6 +4,7 @@ import time
 import MySQLdb
 import traceback
 import math
+import csv
 
 class TestCase(object):
     
@@ -45,21 +46,27 @@ class TestCase(object):
                 continue
             self.attributes[line.split(':')[0]] = line.split(':')[1]
         self.input_path = '%s/%s_input.txt' %(self.path, self.name)
-        self.key_path = '%s/%s_key.txt' %(self.path, self.name)
+        self.key_path = '%s/%s_key.csv' %(self.path, self.name)
         self.input_text = open(self.input_path).read()
     
     # Read in key file
     def getKey(self):
-        self.key_lines = open(self.key_path).read().split('\n')
-        self.cols = self.key_lines.pop(0).split(',')[1:] # Top row in key file, all but first entry
-          
-        self.key = {}
-        for line in self.key_lines:
-            temp = line.split(',')
-            row = temp.pop(0)
-            self.key[row] = {}
-            for col in self.cols:
-                self.key[row][col] = temp[self.cols.index(col)]
+        with open(self.key_path) as r:
+            key_csv = csv.DictReader(r)
+            self.key = {}
+            for row in key_csv:
+                self.key[row['uid']] = row
+                del self.key[row['uid']]['uid'] 
+#         self.key_lines = open(self.key_path).read().split('\n')
+#         self.cols = self.key_lines.pop(0).split(',')[1:] # Top row in key file, all but first entry
+#           
+#         self.key = {}
+#         for line in self.key_lines:
+#             temp = line.split(',')
+#             row = temp.pop(0)
+#             self.key[row] = {}
+#             for col in self.cols:
+#                 self.key[row][col] = temp[self.cols.index(col)]
                 
     # Submit the job to cravat    
     def submitJob(self):        
@@ -99,7 +106,7 @@ class TestCase(object):
             self.data = {}
             for uid in self.key:
                 self.data[uid] = {}
-                for col in self.cols:
+                for col in self.key[uid]:
                     query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                     cursor.execute(query)
                     datapoint = self.__data_parse(cursor.fetchall(),col)
