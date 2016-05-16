@@ -19,13 +19,13 @@ Time: %s seconds
     log_text += '\nTest Details\n' + '='*80 + '\n'
     for test in tests:
         curTest = tests[test]
-        log_text += '%s\n' % curTest.name
+        log_text += '%s\n%s\n' % (curTest.name,curTest.job_id)
         if curTest.result:
             log_text += 'Passed\n'
         else:
             log_text += 'Failed\n'
             log_text += curTest.log_text
-        log_text += 'Time: %s \n\n%s' %(curTest.elapsed_time, '-'*50)
+        log_text += 'Time: %s \n\n%s\n' %(curTest.elapsed_time, '-'*50)
     log_file.write(log_text)
     log_file.close()    
 
