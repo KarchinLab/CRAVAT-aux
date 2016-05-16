@@ -1,0 +1,8 @@
+exac1	chr15	51503881	+	T	A
+exac2	chr15	51503148	+	G	A
+exac3	chr2	136555659	+	T	C
+exac4	chr2	136545844	+	C	G
+exac5	chr2	136546110	+	A	G
+exac6	chr1	55505732	+	A	G
+exac7	chr1	55505668	+	C	T
+exac8	chr1	55505552	+	A	ACTG

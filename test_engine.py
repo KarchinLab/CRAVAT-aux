@@ -34,7 +34,7 @@ print 'Test Started'
 # Initialize with options
 main_dir = 'C:/Users/Kyle/cravat/testing/test_cases'
 url = 'http://192.168.99.100:8888/CRAVAT'
-test_cases = ['cosmic'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['exac'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
@@ -80,6 +80,7 @@ for test in test_list:
         results['pass'].append(curTest.name)
     else:
         print 'Failed: %s' %curTest.name
+        print curTest.log_text
         results['fail'].append(curTest.name)
     
     # curTest.elapsed_time records how long the test took to run    
