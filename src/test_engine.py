@@ -4,8 +4,9 @@ import time
 
 main_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
+# Print a log of the completed test to 
 def print_log(log_name):
-    log_file = open('C:/Users/Kyle/cravat/testing/test_cases/#logs/%s.txt' % log_name,'w')
+    log_file = open(os.path.join(main_dir,'#logs','%s.txt' % log_name),'w')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
     # Log header contains info on whole test
     log_text += """Tests: %d
@@ -31,15 +32,14 @@ Time: %s seconds
     log_file.write(log_text)
     log_file.close()    
 
-
-# Initialize with options
 url = 'http://192.168.99.100:8888/CRAVAT'
-test_cases = ['dbsnp'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['oncogenes'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
     test_list = os.listdir(main_dir)
     for item in test_list[:]:
+        # Ignore dirs that start with #
         if item.startswith('#'):
             test_list.remove(item)
 else:
@@ -51,29 +51,31 @@ total_time = 0
 tests = {}
 # Results will store names of tests that passed or failed, used later to summarize test
 results = {'pass':[],'fail':[]}
+
 for test in test_list:
     start_time = time.time()
-    test_dir = '%s/%s' %(main_dir,test)
     print '%s\nStarting: %s' % ('-'*25,test)
+    test_dir = os.path.join(main_dir,test)
     
-    # Make an AtomicCase object with a temporary name
+    # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
     curTest = TestCase(test_dir,url)
     curTest.getAttributes()
     curTest.getKey()
     
+    # Submit job and check submission success
     curTest.submitJob()
     print 'Job Submitted: %s' % curTest.job_id
     curTest.checkStatus(1) 
     # Test will not continue until checkStatus() is complete
     print 'Submission %s: %s' % (curTest.job_status, curTest.job_id)
+    
     # If test submission was successful, get the data and check that it matches the key
-    if curTest.job_status != 'Error':
-        curTest.verify()
- 
-    else:
+    if curTest.job_status == 'Error':
         curTest.data = 'Submission Failed'
         curTest.result = False
         curTest.log_text = 'Submission Failure'
+    else:
+        curTest.verify()
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
     if curTest.result:
@@ -83,13 +85,14 @@ for test in test_list:
         print 'Failed: %s' %curTest.name
         print curTest.log_text
         results['fail'].append(curTest.name)
+                
+    # Enter the test object into the dict   
+    tests[test] = curTest
     
     # curTest.elapsed_time records how long the test took to run    
     end_time = time.time()
     curTest.elapsed_time = round(end_time - start_time,2)
     print "%s seconds" % curTest.elapsed_time
-    # Enter the test object into the dict   
-    tests[test] = curTest
     total_time += curTest.elapsed_time
 
 # Print log file, name of file is cur date/time
