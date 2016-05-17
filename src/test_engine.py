@@ -2,6 +2,8 @@ from TestCase import TestCase
 import os
 import time
 
+main_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
+
 def print_log(log_name):
     log_file = open('C:/Users/Kyle/cravat/testing/test_cases/#logs/%s.txt' % log_name,'w')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
@@ -29,10 +31,8 @@ Time: %s seconds
     log_file.write(log_text)
     log_file.close()    
 
-print 'Test Started'
 
 # Initialize with options
-main_dir = 'C:/Users/Kyle/cravat/testing/test_cases'
 url = 'http://192.168.99.100:8888/CRAVAT'
 test_cases = ['dbsnp'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 
@@ -46,6 +46,7 @@ else:
     test_list = test_cases
 
 # Run tests. Store resulting test objects in dictionary, indexed by test name   
+print 'Test Started'
 total_time = 0
 tests = {}
 # Results will store names of tests that passed or failed, used later to summarize test

@@ -57,16 +57,6 @@ class TestCase(object):
             for row in key_csv:
                 self.key[row['uid']] = row
                 del self.key[row['uid']]['uid'] 
-#         self.key_lines = open(self.key_path).read().split('\n')
-#         self.cols = self.key_lines.pop(0).split(',')[1:] # Top row in key file, all but first entry
-#           
-#         self.key = {}
-#         for line in self.key_lines:
-#             temp = line.split(',')
-#             row = temp.pop(0)
-#             self.key[row] = {}
-#             for col in self.cols:
-#                 self.key[row][col] = temp[self.cols.index(col)]
                 
     # Submit the job to cravat    
     def submitJob(self):        
