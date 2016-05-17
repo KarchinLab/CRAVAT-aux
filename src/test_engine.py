@@ -2,11 +2,14 @@ from TestCase import TestCase
 import os
 import time
 
-main_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
+test_cases = ['oncogenes'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+url = 'http://192.168.99.100:8888/CRAVAT'
+test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
+log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
 
-# Print a log of the completed test to 
+# Print a log of the completed test to ..\logs
 def print_log(log_name):
-    log_file = open(os.path.join(main_dir,'#logs','%s.txt' % log_name),'w')
+    log_file = open(os.path.join(log_dir,'%s.txt' % log_name),'w')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
     # Log header contains info on whole test
     log_text += """Tests: %d
@@ -32,12 +35,10 @@ Time: %s seconds
     log_file.write(log_text)
     log_file.close()    
 
-url = 'http://192.168.99.100:8888/CRAVAT'
-test_cases = ['oncogenes'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
-    test_list = os.listdir(main_dir)
+    test_list = os.listdir(test_cases_dir)
     for item in test_list[:]:
         # Ignore dirs that start with #
         if item.startswith('#'):
@@ -55,7 +56,7 @@ results = {'pass':[],'fail':[]}
 for test in test_list:
     start_time = time.time()
     print '%s\nStarting: %s' % ('-'*25,test)
-    test_dir = os.path.join(main_dir,test)
+    test_dir = os.path.join(test_cases_dir,test)
     
     # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
     curTest = TestCase(test_dir,url)
