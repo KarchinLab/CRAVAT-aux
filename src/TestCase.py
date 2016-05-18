@@ -124,6 +124,7 @@ class TestCase(object):
         finally:
             try:
                 cursor.close()
+                db.close()
             except Exception:
                 pass
         
