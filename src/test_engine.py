@@ -2,7 +2,7 @@ from TestCase import TestCase
 import os
 import time
 
-test_cases = ['exac'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['oncogenes'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 url = 'http://192.168.99.100:8888/CRAVAT'
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
