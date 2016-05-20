@@ -66,7 +66,7 @@ class TestCase(object):
                 time.sleep(sleep_time)
     
     # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
-    def __data_parse(self,raw_tuple,col):
+    def _data_parse(self,raw_tuple,col):
                 
         if str(raw_tuple) == 'None':
             return str(raw_tuple)
@@ -112,7 +112,7 @@ class TestCase(object):
                         query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                         cursor.execute(query)
                         # data_parse is needed to parse some columns
-                        datapoint = self.__data_parse(cursor.fetchone(),col)
+                        datapoint = self._data_parse(cursor.fetchone(),col)
                         correct = self.key[uid][col] == datapoint
                         if datapoint == () or not(correct):
                             self.result = False
