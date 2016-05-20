@@ -2,39 +2,10 @@ from TestCase import TestCase
 import os
 import time
 
-test_cases = ['oncogenes'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['hugo_vcf','oncogenes','so_best_cravat','dbsnp','cosmic'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 url = 'http://192.168.99.100:8888/CRAVAT'
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
-
-# Print a log of the completed test to ..\logs
-def print_log(log_name):
-    log_file = open(os.path.join(log_dir,'%s.txt' % log_name),'w')
-    log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
-    # Log header contains info on whole test
-    log_text += """Tests: %d
-%r
-Passed: %d
-%r
-Failed: %d
-%r
-Time: %s seconds
-    """ %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['fail']), results['fail'], total_time)
-    
-    # Log then contains details of each test
-    log_text += '\nTest Details\n' + '='*80 + '\n'
-    for test in tests:
-        curTest = tests[test]
-        log_text += '%s\n%s\n' % (curTest.name,curTest.job_id)
-        if curTest.result:
-            log_text += 'Passed\n'
-        else:
-            log_text += 'Failed\n'
-            log_text += curTest.log_text
-        log_text += 'Time: %s \n\n%s\n' %(curTest.elapsed_time, '-'*50)
-    log_file.write(log_text)
-    log_file.close()    
-
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
@@ -94,4 +65,23 @@ print '%s\nPassed: %d\n%r\nFailed: %d\n%r' %('-'*25,len(results['pass']),results
 print '%s seconds\n%s\nTest Complete' %(total_time,'-'*25)
 
 # Print log file, name of file is cur date/time
-print_log(time.strftime('%y-%m-%d-%H-%M-%S'))
+log_name = time.strftime('%y-%m-%d-%H-%M-%S')
+log_file = open(os.path.join(log_dir,'%s.txt' % log_name),'w')
+log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
+# Log header contains info on whole test
+log_text += """Tests: %d
+%r
+Passed: %d
+%r
+Failed: %d
+%r
+Time: %s seconds
+""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['fail']), results['fail'], total_time)
+# Log then contains details of each test
+log_text += '\nTest Details\n' + '='*80 + '\n'
+for test in tests:
+    log_text += '-'*25 + '\n'
+    curTest = tests[test]
+    log_text += '%s\n%s\n%s\nTime: %s\n\n' % (curTest.name,curTest.job_id,curTest.log_text,curTest.elapsed_time)
+log_file.write(log_text)
+log_file.close()    

@@ -112,12 +112,8 @@ class TestCase(object):
                         cursor.execute(query)
                         # data_parse is needed to parse some columns
                         datapoint = self.__data_parse(cursor.fetchall(),col)
-                        if datapoint == ():
-                            self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
-                            continue
                         correct = self.key[uid][col] == datapoint
-                        if not(correct):
+                        if datapoint == () or not(correct):
                             self.result = False
                             self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
                         self.data[uid][col] = datapoint
@@ -125,6 +121,10 @@ class TestCase(object):
                 print traceback.format_exc()
                 self.result = False
             finally:
+                if self.result:
+                    self.log_text = 'Passed\n'
+                else:
+                    self.log_text = 'Failed\n' + self.log_text
                 try:
                     cursor.close()
                     db.close()
