@@ -9,10 +9,10 @@ db = MySQLdb.connect(host="192.168.99.100",
         
 try:
     cursor = db.cursor()
-    query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %('exac_eas', 'kmoad_20160516_112412', 'exac1')
+    query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %('so_best', 'kmoad_20160520_094759', 'jk')
     cursor.execute(query)
-    data = cursor.fetchall()
-    print data
+    data = cursor.fetchone()
+    print type(data)
    
 except Exception:
     print traceback.format_exc()

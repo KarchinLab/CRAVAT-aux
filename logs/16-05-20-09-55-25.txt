@@ -1,0 +1,57 @@
+Date: 16-05-20
+Time: 09:55:25
+Tests: 5
+['hugo_vcf', 'oncogenes', 'so_best_cravat', 'dbsnp', 'cosmic']
+Passed: 3
+['hugo_vcf', 'so_best_cravat', 'cosmic']
+Failed: 2
+['oncogenes', 'dbsnp']
+Time: 12.0 seconds
+
+Test Details
+================================================================================
+------------------------- 
+so_best_cravat 
+kmoad_20160520_095535 
+Passed
+ 
+Time: 2.16
+
+------------------------- 
+dbsnp 
+kmoad_20160520_095537 
+Failed
+Variant UID: PPP2R1A
+	Column: dbsnp
+	Expected: rs786205227
+	Recieved: None
+ 
+Time: 2.14
+
+------------------------- 
+oncogenes 
+kmoad_20160520_095532 
+Failed
+Variant UID: BRAF
+	Column: target
+	Expected: Gefitinib, Erlotinib, EGFR inhibitors
+Vemurafenib, Dabrafenib, RAF inhibitors
+Dasatinib, SRC inhibitors
+	Recieved: Vemurafenib, Dabrafenib, RAF inhibitors
+ 
+Time: 2.21
+
+------------------------- 
+cosmic 
+kmoad_20160520_095539 
+Passed
+ 
+Time: 2.3
+
+------------------------- 
+hugo_vcf 
+kmoad_20160520_095529 
+Passed
+ 
+Time: 3.19
+

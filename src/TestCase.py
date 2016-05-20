@@ -41,30 +41,6 @@ class TestCase(object):
                 self.key[row['uid']] = row
                 del self.key[row['uid']]['uid'] 
     
-    # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
-    def __data_parse(self,raw_tuple,col):
-                
-        if raw_tuple == ():
-            return raw_tuple
-        
-        datapoint = raw_tuple[0][0]
-        
-        if col == 'cosmic_protein_change':
-            # Just want to verify the protein change code
-            return str(datapoint).split(' ')[0]
-        elif col.startswith('exac'):
-            # Change zeros from 0.0 to 0. Round to 4 sig figs if it's a number.
-            if type(datapoint) is float:
-                if datapoint == 0:
-                    data_rounded = 0
-                else:
-                    data_rounded = round(datapoint, int(4 - math.ceil(math.log10(abs(datapoint)))))
-                return str(data_rounded)
-            else:
-                return str(datapoint)
-        else:
-            # Force the data into a string
-            return str(datapoint)
                 
     # Submit the job to cravat   
     def submitJob(self):        
@@ -88,6 +64,31 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
+    
+    # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
+    def __data_parse(self,raw_tuple,col):
+                
+        if str(raw_tuple) == 'None':
+            return str(raw_tuple)
+        
+        datapoint = raw_tuple[0]
+        
+        if col == 'cosmic_protein_change':
+            # Just want to verify the protein change code
+            return str(datapoint).split(' ')[0]
+        elif col.startswith('exac'):
+            # Change zeros from 0.0 to 0. Round to 4 sig figs if it's a number.
+            if type(datapoint) is float:
+                if datapoint == 0:
+                    data_rounded = 0
+                else:
+                    data_rounded = round(datapoint, int(4 - math.ceil(math.log10(abs(datapoint)))))
+                return str(data_rounded)
+            else:
+                return str(datapoint)
+        else:
+            # Force the data into a string
+            return str(datapoint)
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self):
@@ -111,7 +112,7 @@ class TestCase(object):
                         query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                         cursor.execute(query)
                         # data_parse is needed to parse some columns
-                        datapoint = self.__data_parse(cursor.fetchall(),col)
+                        datapoint = self.__data_parse(cursor.fetchone(),col)
                         correct = self.key[uid][col] == datapoint
                         if datapoint == () or not(correct):
                             self.result = False
