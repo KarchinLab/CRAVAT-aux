@@ -60,8 +60,6 @@ for test in test_list:
     
     # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
     curTest = TestCase(test_dir,url)
-    curTest.getAttributes()
-    curTest.getKey()
     
     # Submit job and check submission success
     curTest.submitJob()

@@ -13,7 +13,31 @@ class TestCase(object):
         self.path = path
         self.url_base = url
         self.name = os.path.basename(self.path)
-        print self.name   
+        self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
+        self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
+        self.desc_path = os.path.join(self.path, '%s_desc.txt' %self.name)
+        self.attributes = {}
+        self.key = {}
+        self.job_id = ''
+        self.job_status = ''
+        self.data = {}
+        self.result = False
+        self.log_text = ''
+
+        
+        with open(self.desc_path) as desc_file:
+            desc_lines = desc_file.read().split('\n')
+            for line in desc_lines:
+                if line.startswith('#'):
+                    continue
+                self.attributes[line.split(':')[0]] = line.split(':')[1]
+
+        with open(self.key_path) as r:
+            key_csv = csv.DictReader(r)
+            # Key goes in a 2 layer dict with layer 1 indexed by uid and layer 2 indexed by results db column name
+            for row in key_csv:
+                self.key[row['uid']] = row
+                del self.key[row['uid']]['uid'] 
     
     # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
     def __data_parse(self,raw_tuple,col):
@@ -39,28 +63,6 @@ class TestCase(object):
         else:
             # Force the data into a string
             return str(datapoint)
-
-    # Get the attributes from the properly formatted description file    
-    def getAttributes(self):
-        self.attributes = {}
-        with open(os.path.join(self.path, '%s_desc.txt' %self.name)) as desc_file:
-            desc_lines = desc_file.read().split('\n')
-            for line in desc_lines:
-                if line.startswith('#'):
-                    continue
-                self.attributes[line.split(':')[0]] = line.split(':')[1]
-        self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
-        self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
-    
-    # Read in key csv file
-    def getKey(self):
-        with open(self.key_path) as r:
-            key_csv = csv.DictReader(r)
-            # Key goes in a 2 layer dict with layer 1 indexed by uid and layer 2 indexed by results db column name
-            self.key = {}
-            for row in key_csv:
-                self.key[row['uid']] = row
-                del self.key[row['uid']]['uid'] 
                 
     # Submit the job to cravat   
     def submitJob(self):        
@@ -77,7 +79,6 @@ class TestCase(object):
    
     # Check the status of the job.  Hold execution until job complete
     def checkStatus(self,sleep_time):
-        self.job_status = ''
         while self.job_status == '':
             json_response = requests.get('%s/rest/service/status?jobid=%s' %(self.url_base, self.job_id))
             json_status = json.loads(json_response.text)['status']
@@ -91,7 +92,6 @@ class TestCase(object):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         # There is probably a better way
         self.result = True
-        self.log_text = ''
         db = MySQLdb.connect(host="192.168.99.100",
                          port=3306, 
                          user="root", 
