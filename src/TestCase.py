@@ -24,14 +24,16 @@ class TestCase(object):
         self.result = False
         self.log_text = ''
 
-        
+        # Open up the desc file and read the test attributes
         with open(self.desc_path) as desc_file:
             desc_lines = desc_file.read().split('\n')
             for line in desc_lines:
                 if line.startswith('#'):
                     continue
-                self.attributes[line.split(':')[0]] = line.split(':')[1]
-
+                else:
+                    self.attributes[line.split(':')[0]] = line.split(':')[1]
+        
+        # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
             key_csv = csv.DictReader(r)
             # Key goes in a 2 layer dict with layer 1 indexed by uid and layer 2 indexed by results db column name
@@ -84,47 +86,52 @@ class TestCase(object):
             json_status = json.loads(json_response.text)['status']
             if json_status in ['Success', 'Salvaged', 'Error']:
                 self.job_status = json_status
-            
-            time.sleep(sleep_time)
+            else:
+                time.sleep(sleep_time)
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
-        # There is probably a better way
         self.result = True
-        db = MySQLdb.connect(host="192.168.99.100",
-                         port=3306, 
-                         user="root", 
-                         passwd="1", 
-                         db="cravat_results")
         
-        try:
-            cursor = db.cursor()
-            # Data is a dict that will match the key dict if test is passed
-            self.data = {}
-            for uid in self.key:
-                self.data[uid] = {}
-                for col in self.key[uid]:
-                    query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
-                    cursor.execute(query)
-                    # data_parse is needed to parse some columns
-                    datapoint = self.__data_parse(cursor.fetchall(),col)
-                    if datapoint == ():
-                        self.result = False
-                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
-                        continue
-                    correct = self.key[uid][col] == datapoint
-                    if not(correct):
-                        self.result = False
-                        self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
-                    self.data[uid][col] = datapoint
-        except Exception:
-            print traceback.format_exc()
-            self.result = False
-        finally:
+        if self.job_status != 'Error':
+            db = MySQLdb.connect(host="192.168.99.100",
+                             port=3306, 
+                             user="root", 
+                             passwd="1", 
+                             db="cravat_results")
+            
             try:
-                cursor.close()
-                db.close()
+                cursor = db.cursor()
+                # Data is a dict that will match the key dict if test is passed
+                self.data = {}
+                for uid in self.key:
+                    self.data[uid] = {}
+                    for col in self.key[uid]:
+                        query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
+                        cursor.execute(query)
+                        # data_parse is needed to parse some columns
+                        datapoint = self.__data_parse(cursor.fetchall(),col)
+                        if datapoint == ():
+                            self.result = False
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
+                            continue
+                        correct = self.key[uid][col] == datapoint
+                        if not(correct):
+                            self.result = False
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
+                        self.data[uid][col] = datapoint
             except Exception:
-                pass
+                print traceback.format_exc()
+                self.result = False
+            finally:
+                try:
+                    cursor.close()
+                    db.close()
+                except Exception:
+                    pass
+        else:
+            self.data = 'Submission Failed'
+            self.result = False
+            self.log_text = 'Submission Failure'
         

@@ -68,13 +68,8 @@ for test in test_list:
     # Test will not continue until checkStatus() is complete
     print 'Submission %s: %s' % (curTest.job_status, curTest.job_id)
     
-    # If test submission was successful, get the data and check that it matches the key
-    if curTest.job_status == 'Error':
-        curTest.data = 'Submission Failed'
-        curTest.result = False
-        curTest.log_text = 'Submission Failure'
-    else:
-        curTest.verify()
+    # Check that data matches key
+    curTest.verify()
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
     if curTest.result:
@@ -94,8 +89,9 @@ for test in test_list:
     print "%s seconds" % curTest.elapsed_time
     total_time += curTest.elapsed_time
 
-# Print log file, name of file is cur date/time
-print_log(time.strftime('%y-%m-%d-%H-%M-%S'))
 # Print closing comments to command line
 print '%s\nPassed: %d\n%r\nFailed: %d\n%r' %('-'*25,len(results['pass']),results['pass'],len(results['fail']),results['fail'])
 print '%s seconds\n%s\nTest Complete' %(total_time,'-'*25)
+
+# Print log file, name of file is cur date/time
+print_log(time.strftime('%y-%m-%d-%H-%M-%S'))
