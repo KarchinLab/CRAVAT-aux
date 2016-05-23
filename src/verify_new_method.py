@@ -2,6 +2,7 @@ import MySQLdb
 import traceback
 import csv
 import math
+import os
 
 db = MySQLdb.connect(host="192.168.99.100",
                          port=3306, 
@@ -13,8 +14,9 @@ key = {}
 sig_figs = 4
 log_text = ''
 data = {}
-job_id = 'kmoad_20160520_115730'
+job_id = 'kmoad_20160523_104930'
 failures = 0
+path = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\rounding\\'
 
 def attempt_round(entry,precision):
     try: 
@@ -28,8 +30,22 @@ def attempt_round(entry,precision):
 #     print out, type(out)
     return out
 
+def verify_special(obj1,obj2,method,precision):
+
+# Read dsc file
+attributes = {}
+desc_path = os.path.join(path,'rounding_desc.txt')
+with open(desc_path) as desc_file:
+    desc_lines = desc_file.read().split('\n')
+    for line in desc_lines:
+        if line.startswith('#'):
+            continue
+        else:
+            attributes[line.split(':')[0]] = line.split(':')[1]
+print attributes
+
 # Read the key file into a 2D dictionary
-key_path = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\pop_stats\\pop_stats_key.csv'
+key_path = os.path.join(path,'rounding_key.csv')
 with open(key_path) as r:
     key_csv = csv.DictReader(r)
     for row in key_csv:
@@ -38,7 +54,7 @@ with open(key_path) as r:
         del key[uid]['uid']
         for entry in key[uid]:
             key[uid][entry] = attempt_round(key[uid][entry],sig_figs)
-        
+      
 try:
     cursor = db.cursor()
     for uid in key:
@@ -65,12 +81,5 @@ finally:
     except Exception:
         pass
 
-# for row in key:
-#     print row
-#     print key[row]
-#     print data[row]
-
 print 'Number of failures:', failures
 print log_text
-# print key['CYP19A1_NC']['exac_total'],data['CYP19A1_NC']['exac_total']
-# print key['CYP19A1']['exac_nfe'],data['CYP19A1']['exac_nfe']

@@ -116,7 +116,7 @@ class TestCase(object):
                         correct = self.key[uid][col] == datapoint
                         if datapoint == () or not(correct):
                             self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tRecieved: %s\n' %(uid, col, self.key[uid][col], datapoint)
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n' %(uid, col, self.key[uid][col], datapoint)
                         self.data[uid][col] = datapoint
             except Exception:
                 print traceback.format_exc()

@@ -1,0 +1,19 @@
+Date: 16-05-23
+Time: 10:39:57
+Tests: 1
+['rounding']
+Passed: 0
+[]
+Failed: 1
+['rounding']
+Time: 2.24 seconds
+
+Test Details
+================================================================================
+------------------------- 
+rounding 
+kmoad_20160523_103957 
+Failed
+ 
+Time: 2.24
+
