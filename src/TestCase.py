@@ -9,6 +9,8 @@ import os
 import xml.etree.ElementTree as ET
 
 class TestCase(object):
+    
+    # _recurse_xml will move recursively through an xml.etree.ElementTree object and transform it into a nested dictionary.
     def _recurse_xml(self,d):
         out = {}
         if len(d):
@@ -18,7 +20,10 @@ class TestCase(object):
                 else:
                     out[k.tag] = self._recurse_xml(k)
         else:
-            out = d.text.strip()
+            if d.text == None:
+                out = ''
+            else:
+                out = d.text.strip()
         return out
     
     def __init__(self,path,url):
@@ -74,31 +79,6 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
-    
-#     # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
-#     def _data_parse(self,raw_tuple,col):
-#                 
-#         if str(raw_tuple) == 'None':
-#             return str(raw_tuple)
-#         
-#         datapoint = raw_tuple[0]
-#         
-#         if col == 'cosmic_protein_change':
-#             # Just want to verify the protein change code
-#             return str(datapoint).split(' ')[0]
-#         elif col.startswith('exac'):
-#             # Change zeros from 0.0 to 0. Round to 4 sig figs if it's a number.
-#             if type(datapoint) is float:
-#                 if datapoint == 0:
-#                     data_rounded = 0
-#                 else:
-#                     data_rounded = round(datapoint, int(4 - math.ceil(math.log10(abs(datapoint)))))
-#                 return str(data_rounded)
-#             else:
-#                 return str(datapoint)
-#         else:
-#             # Force the data into a string
-#             return str(datapoint)
         
     def _compare(self,datapoint, keypoint, method, modifier):    
         if method == 'string_exact':
@@ -196,9 +176,10 @@ class TestCase(object):
                         keypoint = self.key[uid][col]
                         self.data[uid][col] = datapoint
                         #
-                        if col in self.desc['verify_rules'].keys():
-                            method = self.desc['verify_rules'][col]['method']
-                            modifier = self.desc['verify_rules'][col]['modifier']
+                        if type(self.desc['verify_rules']) is dict:
+                            if col in self.desc['verify_rules'].keys():
+                                method = self.desc['verify_rules'][col]['method']
+                                modifier = self.desc['verify_rules'][col]['modifier']
                         else:
                             method = 'string_exact'
                             modifier = None
@@ -206,7 +187,7 @@ class TestCase(object):
                         correct = self._compare(datapoint, keypoint, method, modifier)
                         if not(correct):
                             self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r' \
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
                                                 %(uid, col, keypoint, datapoint, method, modifier)
             except Exception:
                 print traceback.format_exc()
