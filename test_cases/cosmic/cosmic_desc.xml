@@ -1,5 +1,10 @@
 <desc>
 	<analyses>
 	</analyses>
-	<verify_rules></verify_rules>
+	<verify_rules>
+		<column name = 'cosmic_protein_change'>
+			<method>string_parse</method>
+			<modifier>\x20</modifier>
+		</column>
+	</verify_rules>
 </desc>

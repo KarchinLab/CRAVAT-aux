@@ -23,7 +23,10 @@ class TestCase(object):
             if d.text == None:
                 out = ''
             else:
-                out = d.text.strip()
+                out = d.text
+                rep_dict = {'\\x20':'\x20'}
+                for old in rep_dict:
+                    out = out.replace(old,rep_dict[old])
         return out
     
     def __init__(self,path,url):
@@ -46,7 +49,6 @@ class TestCase(object):
         with open(self.desc_path) as desc_file:
             desc_xml = ET.parse(desc_file).getroot()
             self.desc = self._recurse_xml(desc_xml)
-            print self.desc
         
         # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
