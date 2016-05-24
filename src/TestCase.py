@@ -36,8 +36,7 @@ class TestCase(object):
         self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
         self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
         self.desc_path = os.path.join(self.path, '%s_desc.xml' %self.name)
-        print self.desc_path
-        self.attributes = {}
+        self.desc = {}
         self.key = {}
         self.job_id = ''
         self.job_status = ''
@@ -60,9 +59,9 @@ class TestCase(object):
     
             
     # Submit the job to cravat   
-    def submitJob(self):        
+    def submitJob(self):
         data = {
-             'email':'kmoad@insilico.us.com',
+             'email': self.desc['email'],
              'analyses': self.desc['analyses']
             }
         files = {
@@ -176,12 +175,17 @@ class TestCase(object):
                         # 
                         datapoint = cursor.fetchone()[0]
                         keypoint = self.key[uid][col]
-                        self.data[uid][col] = datapoint
                         #
                         if type(self.desc['verify_rules']) is dict:
-                            if col in self.desc['verify_rules'].keys():
+                            if keypoint == None or datapoint == None or datapoint == ():
+                                method = 'string_exact'
+                                modifier = None 
+                            elif col in self.desc['verify_rules'].keys():
                                 method = self.desc['verify_rules'][col]['method']
                                 modifier = self.desc['verify_rules'][col]['modifier']
+                            else:
+                                method = 'string_exact'
+                                modifier = None 
                         else:
                             method = 'string_exact'
                             modifier = None
@@ -191,6 +195,7 @@ class TestCase(object):
                             self.result = False
                             self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
                                                 %(uid, col, keypoint, datapoint, method, modifier)
+                        self.data[uid][col] = datapoint
             except Exception:
                 print traceback.format_exc()
                 self.result = False

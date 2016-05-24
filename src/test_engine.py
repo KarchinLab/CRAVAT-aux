@@ -2,7 +2,7 @@ from TestCase import TestCase
 import os
 import time
 
-test_cases = ['cosmic'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 url = 'http://192.168.99.100:8888/CRAVAT'
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
@@ -36,7 +36,7 @@ for test in test_list:
     
     # Submit job and check submission success
     curTest.submitJob()
-    print 'Job Submitted: %s' %curTest.job_id
+    print 'Job Sent: %s' %curTest.job_id
     curTest.checkStatus(1) 
     # Test will not continue until checkStatus() is complete
     print 'Submission %s: %s' %(curTest.job_status, curTest.job_id)

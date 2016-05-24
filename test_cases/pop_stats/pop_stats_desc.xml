@@ -1,5 +1,50 @@
 <desc>
-	<analyses>
-	</analyses>
-	<verify_rules></verify_rules>
+	<analyses></analyses>
+	<email>kmoad@insilico.us.com</email>
+	<verify_rules>
+		<column name = 'exac_afr'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_eas'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_fin'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_nfe'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_lat'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_oth'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_sas'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'exac_total'>
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name = 'esp_ea'>
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name = 'esp_aa'>
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name = 'esp_avg'>
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>		
+	</verify_rules>
 </desc>

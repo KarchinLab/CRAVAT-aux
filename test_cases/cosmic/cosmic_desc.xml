@@ -1,6 +1,6 @@
 <desc>
-	<analyses>
-	</analyses>
+	<analyses></analyses>
+	<email>kmoad@insilico.us.com</email>
 	<verify_rules>
 		<column name = 'cosmic_protein_change'>
 			<method>string_parse</method>
