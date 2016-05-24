@@ -67,7 +67,6 @@ print '%s\nPassed: %d\n%r\nFailed: %d\n%r' %('-'*25,len(results['pass']),results
 print '%s seconds\n%s\nTest Complete' %(total_time,'-'*25)
 
 # Print log file
-# Log header contains info on whole test
 log_text += """Tests: %d
 %r
 Passed: %d

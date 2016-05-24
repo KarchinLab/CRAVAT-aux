@@ -6,8 +6,20 @@ import traceback
 import math
 import csv
 import os
+import xml.etree.ElementTree as ET
 
 class TestCase(object):
+    def _recurse_xml(self,d):
+        out = {}
+        if len(d):
+            for k in d:
+                if len(k.attrib):
+                    out[k.attrib['name']] = self._recurse_xml(k)
+                else:
+                    out[k.tag] = self._recurse_xml(k)
+        else:
+            out = d.text.strip()
+        return out
     
     def __init__(self,path,url):
         self.path = path
@@ -15,7 +27,8 @@ class TestCase(object):
         self.name = os.path.basename(self.path)
         self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
         self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
-        self.desc_path = os.path.join(self.path, '%s_desc.txt' %self.name)
+        self.desc_path = os.path.join(self.path, '%s_desc.xml' %self.name)
+        print self.desc_path
         self.attributes = {}
         self.key = {}
         self.job_id = ''
@@ -26,12 +39,9 @@ class TestCase(object):
 
         # Open up the desc file and read the test attributes
         with open(self.desc_path) as desc_file:
-            desc_lines = desc_file.read().split('\n')
-            for line in desc_lines:
-                if line.startswith('#'):
-                    continue
-                else:
-                    self.attributes[line.split(':')[0]] = line.split(':')[1]
+            desc_xml = ET.parse(desc_file).getroot()
+            self.desc = self._recurse_xml(desc_xml)
+            print self.desc
         
         # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
@@ -41,12 +51,12 @@ class TestCase(object):
                 self.key[row['uid']] = row
                 del self.key[row['uid']]['uid'] 
     
-                
+            
     # Submit the job to cravat   
     def submitJob(self):        
         data = {
              'email':'kmoad@insilico.us.com',
-             'analyses': self.attributes['analyses']
+             'analyses': self.desc['analyses']
             }
         files = {
                 'inputfile': open(self.input_path, 'r')
@@ -65,30 +75,100 @@ class TestCase(object):
             else:
                 time.sleep(sleep_time)
     
-    # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
-    def _data_parse(self,raw_tuple,col):
-                
-        if str(raw_tuple) == 'None':
-            return str(raw_tuple)
+#     # Private function to handle special output parsing needs of some test types.  Everything is returned as a string.
+#     def _data_parse(self,raw_tuple,col):
+#                 
+#         if str(raw_tuple) == 'None':
+#             return str(raw_tuple)
+#         
+#         datapoint = raw_tuple[0]
+#         
+#         if col == 'cosmic_protein_change':
+#             # Just want to verify the protein change code
+#             return str(datapoint).split(' ')[0]
+#         elif col.startswith('exac'):
+#             # Change zeros from 0.0 to 0. Round to 4 sig figs if it's a number.
+#             if type(datapoint) is float:
+#                 if datapoint == 0:
+#                     data_rounded = 0
+#                 else:
+#                     data_rounded = round(datapoint, int(4 - math.ceil(math.log10(abs(datapoint)))))
+#                 return str(data_rounded)
+#             else:
+#                 return str(datapoint)
+#         else:
+#             # Force the data into a string
+#             return str(datapoint)
         
-        datapoint = raw_tuple[0]
+    def _compare(self,datapoint, keypoint, method, modifier):    
+        if method == 'string_exact':
+            datapoint = str(datapoint)
+            keypoint = str(keypoint)
+            out = datapoint == keypoint
         
-        if col == 'cosmic_protein_change':
-            # Just want to verify the protein change code
-            return str(datapoint).split(' ')[0]
-        elif col.startswith('exac'):
-            # Change zeros from 0.0 to 0. Round to 4 sig figs if it's a number.
-            if type(datapoint) is float:
-                if datapoint == 0:
-                    data_rounded = 0
-                else:
-                    data_rounded = round(datapoint, int(4 - math.ceil(math.log10(abs(datapoint)))))
-                return str(data_rounded)
+        elif method == 'string_truncate':
+            modifier = int(modifier)
+            datapoint = str(datapoint)
+            keypoint = str(keypoint)
+            out = datapoint[:modifier] == keypoint[:modifier]
+        
+        elif method == 'string_parse':
+            modifier = str(modifier)
+            datapoint = str(datapoint)
+            keypoint = str(keypoint)
+            out = keypoint == datapoint.split(modifier)[0] 
+        
+        elif method == 'float_sigfig':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            modifier = int(modifier)
+            if datapoint != 0 and keypoint != 0:
+                data_rounded = round(datapoint, int(modifier - math.ceil(math.log10(abs(datapoint)))))
+                key_rounded = out = round(keypoint, int(modifier - math.ceil(math.log10(abs(keypoint)))))
+                out = data_rounded == key_rounded
             else:
-                return str(datapoint)
+                out = round(datapoint,modifier) == round(keypoint,modifier)
+        
+        elif method == 'float_round':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            modifier = int(modifier)
+            data_rounded = round(datapoint,modifier)
+            key_rounded = out = round(keypoint,modifier)
+            out = data_rounded == key_rounded
+        
+        elif method == 'float_truncate':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            modifier = int(modifier)
+            temp = str(datapoint).split('.')
+            temp[1] = temp[1][:modifier]
+            data_rounded = float('.'.join(temp))
+            temp = str(keypoint).split('.')
+            temp[1] = temp[1][:modifier]
+            key_rounded = float('.'.join(temp))
+            out = data_rounded == key_rounded
+        
+        elif method == 'float_numeric_range':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            modifier = float(modifier)
+            diff = abs(datapoint - keypoint)
+            out = diff <= modifier
+        
+        elif method == 'float_percentage_range':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            if keypoint != 0:
+                perc_diff = abs(datapoint - keypoint)/keypoint * 100
+                out = perc_diff <= modifier
+            else:
+                out = False
+        
         else:
-            # Force the data into a string
-            return str(datapoint)
+            raise BaseException('Improper comparison method: %r. Check the syntax in the desc file.' %method)
+        
+        return out
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self):
@@ -101,23 +181,33 @@ class TestCase(object):
                              user="root", 
                              passwd="1", 
                              db="cravat_results")
+            # Data is a dict that will match the key dict if test is passed
+            self.data = {}
             
             try:
                 cursor = db.cursor()
-                # Data is a dict that will match the key dict if test is passed
-                self.data = {}
                 for uid in self.key:
                     self.data[uid] = {}
                     for col in self.key[uid]:
                         query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                         cursor.execute(query)
-                        # data_parse is needed to parse some columns
-                        datapoint = self._data_parse(cursor.fetchone(),col)
-                        correct = self.key[uid][col] == datapoint
-                        if datapoint == () or not(correct):
-                            self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n' %(uid, col, self.key[uid][col], datapoint)
+                        # 
+                        datapoint = cursor.fetchone()[0]
+                        keypoint = self.key[uid][col]
                         self.data[uid][col] = datapoint
+                        #
+                        if col in self.desc['verify_rules'].keys():
+                            method = self.desc['verify_rules'][col]['method']
+                            modifier = self.desc['verify_rules'][col]['modifier']
+                        else:
+                            method = 'string_exact'
+                            modifier = None
+                        #
+                        correct = self._compare(datapoint, keypoint, method, modifier)
+                        if not(correct):
+                            self.result = False
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r' \
+                                                %(uid, col, keypoint, datapoint, method, modifier)
             except Exception:
                 print traceback.format_exc()
                 self.result = False
