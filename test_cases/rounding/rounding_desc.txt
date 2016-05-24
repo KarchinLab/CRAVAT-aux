@@ -1,4 +1,0 @@
-analyses:
-kg:float
-esp_avg:float
-exac_total:float

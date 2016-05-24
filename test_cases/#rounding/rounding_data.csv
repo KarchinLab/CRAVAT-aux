@@ -1,0 +1,6 @@
+uid,round,sigfig,truncate,percrange,numrange,numrange2,string,string2,string3
+v1,1.24533,0.043279,1.9,0.96,6,5.05,is,kyle,mike:kyle
+v2,9.89794,0.005738,9.69,10.6,7.1,4.9,derek,kyle is,mike:derek
+v3,0.00014,0.1484,0.08,94.9,10568.9,5.009,3.0,akyle,mik:ekyle
+v4,14.12345,0.00004566,1095.69,1005,1,4.89,0,kyl,mike
+v5,0.00005,0.0009,0.05,0.01,-1.5,0.11,0.0,kyle,:kyle
