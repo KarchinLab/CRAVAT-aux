@@ -1,13 +1,23 @@
 from TestCase import TestCase
 import os
 import time
+import xml.etree.ElementTree as ET
+import XML_conversions
+import MySQLdb
 
-test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['pop_stats'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 url = 'http://192.168.99.100:8888/CRAVAT'
+email = 'kmoad@insilico.us.com'
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
 log_name = time.strftime('%y-%m-%d-%H-%M-%S')
 log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
+db = MySQLdb.connect(host="192.168.99.100",
+                             port=3306, 
+                             user="root", 
+                             passwd="1", 
+                             db="cravat_results")
+
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
@@ -32,17 +42,17 @@ for test in test_list:
     test_dir = os.path.join(test_cases_dir,test)
     
     # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
-    curTest = TestCase(test_dir,url)
+    curTest = TestCase(test_dir)
     
     # Submit job and check submission success
-    curTest.submitJob()
+    curTest.submitJob(url,email)
     print 'Job Sent: %s' %curTest.job_id
-    curTest.checkStatus(1) 
+    curTest.checkStatus(url,1) 
     # Test will not continue until checkStatus() is complete
     print 'Submission %s: %s' %(curTest.job_status, curTest.job_id)
     
     # Check that data matches key
-    curTest.verify()
+    curTest.verify(db)
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
     if curTest.result:

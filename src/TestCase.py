@@ -7,31 +7,13 @@ import math
 import csv
 import os
 import xml.etree.ElementTree as ET
+import XML_conversions
+
 
 class TestCase(object):
     
-    # _recurse_xml will move recursively through an xml.etree.ElementTree object and transform it into a nested dictionary.
-    def _recurse_xml(self,d):
-        out = {}
-        if len(d):
-            for k in d:
-                if len(k.attrib):
-                    out[k.attrib['name']] = self._recurse_xml(k)
-                else:
-                    out[k.tag] = self._recurse_xml(k)
-        else:
-            if d.text == None:
-                out = ''
-            else:
-                out = d.text
-                rep_dict = {'\\x20':'\x20'}
-                for old in rep_dict:
-                    out = out.replace(old,rep_dict[old])
-        return out
-    
-    def __init__(self,path,url):
+    def __init__(self,path):
         self.path = path
-        self.url_base = url
         self.name = os.path.basename(self.path)
         self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
         self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
@@ -47,7 +29,7 @@ class TestCase(object):
         # Open up the desc file and read the test attributes
         with open(self.desc_path) as desc_file:
             desc_xml = ET.parse(desc_file).getroot()
-            self.desc = self._recurse_xml(desc_xml)
+            self.desc = XML_conversions.recurse_to_dict(desc_xml)
         
         # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
@@ -59,22 +41,22 @@ class TestCase(object):
     
             
     # Submit the job to cravat   
-    def submitJob(self):
+    def submitJob(self,url_base,email):
         data = {
-             'email': self.desc['email'],
-             'analyses': self.desc['analyses']
-            }
+                'email': email,
+                'analyses': self.desc['analyses']
+                }
         files = {
                 'inputfile': open(self.input_path, 'r')
                 }
-        r = requests.post(self.url_base+'/rest/service/submit', files=files, data=data)
+        r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
         self.job_id = json.loads(r.text)['jobid']
    
     # Check the status of the job.  Hold execution until job complete
-    def checkStatus(self,sleep_time):
+    def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
-            json_response = requests.get('%s/rest/service/status?jobid=%s' %(self.url_base, self.job_id))
+            json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
             json_status = json.loads(json_response.text)['status']
             if json_status in ['Success', 'Salvaged', 'Error']:
                 self.job_status = json_status
@@ -152,24 +134,23 @@ class TestCase(object):
         return out
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
-    def verify(self):
+    def verify(self,db):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
         
         if self.job_status != 'Error':
-            db = MySQLdb.connect(host="192.168.99.100",
-                             port=3306, 
-                             user="root", 
-                             passwd="1", 
-                             db="cravat_results")
+           
             # Data is a dict that will match the key dict if test is passed
             self.data = {}
             
             try:
+                points = 0
+                points_failed = 0
                 cursor = db.cursor()
                 for uid in self.key:
                     self.data[uid] = {}
                     for col in self.key[uid]:
+                        points += 1
                         query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                         cursor.execute(query)
                         # 
@@ -192,6 +173,7 @@ class TestCase(object):
                         #
                         correct = self._compare(datapoint, keypoint, method, modifier)
                         if not(correct):
+                            points_failed += 1
                             self.result = False
                             self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
                                                 %(uid, col, keypoint, datapoint, method, modifier)
@@ -203,7 +185,7 @@ class TestCase(object):
                 if self.result:
                     self.log_text = 'Passed\n'
                 else:
-                    self.log_text = 'Failed\n' + self.log_text
+                    self.log_text = 'Failed %d of %d\n' %(points_failed,points) + self.log_text
                 try:
                     cursor.close()
                     db.close()
