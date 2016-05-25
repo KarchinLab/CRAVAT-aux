@@ -1,6 +1,5 @@
 <desc>
 	<analyses></analyses>
-	<email>kmoad@insilico.us.com</email>
 	<verify_rules>
 		<column name = 'exac_afr'>
 			<method>float_sigfig</method>

@@ -5,19 +5,17 @@ import xml.etree.ElementTree as ET
 import XML_conversions
 import MySQLdb
 
-test_cases = ['pop_stats'] # Input tests to run as list of strings, or use 'all' to run every test in directory
-url = 'http://192.168.99.100:8888/CRAVAT'
-email = 'kmoad@insilico.us.com'
+test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
+with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:
+            args_xml = ET.parse(args_file).getroot()
+args = XML_conversions.recurse_to_dict(args_xml)
+url = args['url']
+email = args['email']
+db_args = args['db_info']
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
 log_name = time.strftime('%y-%m-%d-%H-%M-%S')
 log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
-db = MySQLdb.connect(host="192.168.99.100",
-                             port=3306, 
-                             user="root", 
-                             passwd="1", 
-                             db="cravat_results")
-
 
 # Generate list of tests to run, either from dir names in main dir, or user input
 if test_cases == ['all']:
@@ -52,7 +50,7 @@ for test in test_list:
     print 'Submission %s: %s' %(curTest.job_status, curTest.job_id)
     
     # Check that data matches key
-    curTest.verify(db)
+    curTest.verify(db_args)
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
     if curTest.result:

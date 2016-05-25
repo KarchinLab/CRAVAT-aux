@@ -1,13 +1,13 @@
 import requests
 import json
 import time
-import MySQLdb
 import traceback
 import math
 import csv
 import os
 import xml.etree.ElementTree as ET
 import XML_conversions
+import MySQLdb
 
 
 class TestCase(object):
@@ -134,7 +134,7 @@ class TestCase(object):
         return out
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
-    def verify(self,db):
+    def verify(self,db_args):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
         
@@ -144,6 +144,12 @@ class TestCase(object):
             self.data = {}
             
             try:
+                db = MySQLdb.connect(host = db_args['host'],
+                     port = int(db_args['port']),
+                     user = db_args['user'],
+                     passwd = db_args['password'],
+                     db = db_args['db']
+                     )
                 points = 0
                 points_failed = 0
                 cursor = db.cursor()
