@@ -3,9 +3,8 @@ import os
 import time
 import xml.etree.ElementTree as ET
 import XML_conversions
-import MySQLdb
 
-test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['transcript'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:
             args_xml = ET.parse(args_file).getroot()

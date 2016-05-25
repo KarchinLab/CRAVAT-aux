@@ -37,8 +37,7 @@ class TestCase(object):
             # Key goes in a 2 layer dict with layer 1 indexed by uid and layer 2 indexed by results db column name
             for row in key_csv:
                 self.key[row['uid']] = row
-                del self.key[row['uid']]['uid'] 
-    
+                del self.key[row['uid']]['uid']     
             
     # Submit the job to cravat   
     def submitJob(self,url_base,email):
@@ -64,23 +63,34 @@ class TestCase(object):
                 time.sleep(sleep_time)
         
     def _compare(self,datapoint, keypoint, method, modifier):    
+        # Exact string comparison
         if method == 'string_exact':
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint == keypoint
-        
+        # Key string is first <modifier> characters
         elif method == 'string_truncate':
             modifier = int(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint[:modifier] == keypoint[:modifier]
-        
+        # Key string is data string up to <modifier> character
         elif method == 'string_parse':
             modifier = str(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = keypoint == datapoint.split(modifier)[0] 
-        
+        # Key string is present in data string. Multiple unique strings in key can be separated with <modifier> character
+        elif method == 'string_included':
+            modifier = str(modifier)
+            datapoint = str(datapoint)
+            keypoint_list = str(keypoint).split(modifier)
+            out = True
+            for key_string in keypoint_list:
+                correct = key_string in datapoint
+                if not(correct):
+                    out = False
+        # Key and data match when rounded to <modifier> sigfigs, will ignore preceding zeros in decimal
         elif method == 'float_sigfig':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -91,7 +101,7 @@ class TestCase(object):
                 out = data_rounded == key_rounded
             else:
                 out = round(datapoint,modifier) == round(keypoint,modifier)
-        
+        # Key and data match when rounded to <modifier> decimal points
         elif method == 'float_round':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -99,7 +109,7 @@ class TestCase(object):
             data_rounded = round(datapoint,modifier)
             key_rounded = out = round(keypoint,modifier)
             out = data_rounded == key_rounded
-        
+        # Key and data match when truncated at the <modifier> decimal point
         elif method == 'float_truncate':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -111,14 +121,14 @@ class TestCase(object):
             temp[1] = temp[1][:modifier]
             key_rounded = float('.'.join(temp))
             out = data_rounded == key_rounded
-        
+        # Data is within <modifier> integers of key, inclusive
         elif method == 'float_numeric_range':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
             modifier = float(modifier)
             diff = abs(datapoint - keypoint)
             out = diff <= modifier
-        
+        # Data is within <modifier> percentage range of key
         elif method == 'float_percentage_range':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
