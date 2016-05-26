@@ -1,0 +1,9 @@
+<desc>
+	<analyses></analyses>
+	<verify_rules>
+		<column name = 'pubmed_n'>
+			<method>float_numeric_range</method>
+			<modifier>10</modifier>
+		</column>
+	</verify_rules>
+</desc>

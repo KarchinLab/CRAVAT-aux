@@ -1,0 +1,115 @@
+Date: 16-05-26
+Time: 13:42:54
+Tests: 1
+['#pub_med']
+Passed: 0
+[]
+Failed: 1
+['#pub_med']
+Time: 2.19 seconds
+
+Test Details
+================================================================================
+------------------------- 
+#pub_med 
+kmoad_20160526_134258 
+Failed 16 of 16
+Variant UID: BRCA1
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=MKL1[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: BRCA1
+	Column: pubmed_n
+	Expected: '6309'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PIWIL3
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=MTMR3[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PIWIL3
+	Column: pubmed_n
+	Expected: '2'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: ARL6IP4
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=HNF1A[MH]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: ARL6IP4
+	Column: pubmed_n
+	Expected: '1'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: MKL1
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=PIWIL3[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: MKL1
+	Column: pubmed_n
+	Expected: '25'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: RB1
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=RB1[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: RB1
+	Column: pubmed_n
+	Expected: '1236'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: HNF1A
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=BRCA1[MH]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: HNF1A
+	Column: pubmed_n
+	Expected: '162'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: AAMP
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=AAMP[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: AAMP
+	Column: pubmed_n
+	Expected: '3'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: MTMR3
+	Column: pubmed_link
+	Expected: 'http://www.ncbi.nlm.nih.gov/pubmed?term=ARL6IP4[TIAB]+AND+cancer[MH]'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: MTMR3
+	Column: pubmed_n
+	Expected: '3'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.19
+

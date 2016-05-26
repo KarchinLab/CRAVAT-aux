@@ -1,0 +1,25 @@
+Date: 16-05-26
+Time: 13:55:57
+Tests: 1
+['#pub_med']
+Passed: 0
+[]
+Failed: 1
+['#pub_med']
+Time: 2.22 seconds
+
+Test Details
+================================================================================
+------------------------- 
+#pub_med 
+kmoad_20160526_135602 
+Failed 1 of 16
+Variant UID: MKL1
+	Column: pubmed_n
+	Expected: '14'
+	Recieved: 25L
+	Method: float_numeric_range
+	Modifier: '10'
+ 
+Time: 2.22
+

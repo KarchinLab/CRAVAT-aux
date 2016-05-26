@@ -2,13 +2,13 @@ from TestCase import TestCase
 import os
 import time
 import xml.etree.ElementTree as ET
-import XML_conversions
+from XML_conversions import recurse_to_dict
 
-test_cases = ['transcript'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['#pub_med'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:
             args_xml = ET.parse(args_file).getroot()
-args = XML_conversions.recurse_to_dict(args_xml)
+args = recurse_to_dict(args_xml)
 url = args['url']
 email = args['email']
 db_args = args['db_info']

@@ -6,8 +6,8 @@ import math
 import csv
 import os
 import xml.etree.ElementTree as ET
-import XML_conversions
 import MySQLdb
+from XML_conversions import recurse_to_dict
 
 
 class TestCase(object):
@@ -29,7 +29,7 @@ class TestCase(object):
         # Open up the desc file and read the test attributes
         with open(self.desc_path) as desc_file:
             desc_xml = ET.parse(desc_file).getroot()
-            self.desc = XML_conversions.recurse_to_dict(desc_xml)
+            self.desc = recurse_to_dict(desc_xml)
         
         # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
@@ -43,7 +43,7 @@ class TestCase(object):
     def submitJob(self,url_base,email):
         data = {
                 'email': email,
-                'analyses': self.desc['analyses']
+                'analyses': self.desc['analyses'],
                 }
         files = {
                 'inputfile': open(self.input_path, 'r')
@@ -197,6 +197,7 @@ class TestCase(object):
             except Exception:
                 print traceback.format_exc()
                 self.result = False
+                self.log_text += traceback.format_exc()
             finally:
                 if self.result:
                     self.log_text = 'Passed\n'
