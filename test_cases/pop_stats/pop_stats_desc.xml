@@ -3,6 +3,10 @@
 		<analyses></analyses>
 	</sub_params>
 	<verify_rules>
+		<column name = 'kg'>
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
 		<column name = 'exac_afr'>
 			<method>float_sigfig</method>
 			<modifier>4</modifier>
