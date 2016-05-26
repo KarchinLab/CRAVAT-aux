@@ -1,5 +1,7 @@
 <desc>
-	<analyses></analyses>
+	<sub_params>
+		<analyses></analyses>
+	</sub_params>
 	<verify_rules>
 		<column name = 'exac_afr'>
 			<method>float_sigfig</method>

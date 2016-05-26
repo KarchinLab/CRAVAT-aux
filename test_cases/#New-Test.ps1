@@ -2,7 +2,9 @@ param([string]$testName="blank")
 if($testName -eq "blank"){
 	$testName = read-host "Enter a test name"}
 $xml_text = "<desc>
-	<analyses></analyses>
+	<sub_params>
+		<analyses></analyses>
+	</sub_params>
 	<verify_rules></verify_rules>
 </desc>"
 $files = "desc.xml", "input.txt", "key.csv"

@@ -41,10 +41,9 @@ class TestCase(object):
             
     # Submit the job to cravat   
     def submitJob(self,url_base,email):
-        data = {
-                'email': email,
-                'analyses': self.desc['analyses'],
-                }
+        data = {'email': email}
+        for param in self.desc['sub_params']:
+            data[param] = self.desc['sub_params'][param]
         files = {
                 'inputfile': open(self.input_path, 'r')
                 }

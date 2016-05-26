@@ -1,0 +1,325 @@
+Date: 16-05-26
+Time: 14:09:03
+Tests: 13
+['cosmic', 'dbsnp', 'hugo_cravat', 'hugo_vcf', 'mappability', 'oncogenes', 'pop_stats', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf', 'transcript', 'vcf_parsing']
+Passed: 10
+['cosmic', 'hugo_cravat', 'hugo_vcf', 'mappability', 'protein_change_cravat', 'protein_change_vcf', 'so_best_cravat', 'so_best_vcf', 'transcript', 'vcf_parsing']
+Failed: 3
+['dbsnp', 'oncogenes', 'pop_stats']
+Time: 29.76 seconds
+
+Test Details
+================================================================================
+------------------------- 
+pop_stats 
+kmoad_20160526_140920 
+Failed 35 of 88
+Variant UID: LCT_1
+	Column: exac_nfe
+	Expected: '1.003E-01'
+	Recieved: 0.7003
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: LCT_NC
+	Column: exac_afr
+	Expected: '7.056E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_sas
+	Expected: '7.427E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_nfe
+	Expected: '8.140E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: esp_ea
+	Expected: '8.279E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_fin
+	Expected: '8.581E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: esp_aa
+	Expected: '7.097E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_lat
+	Expected: '8.117E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_eas
+	Expected: '8.131E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: LCT_NC
+	Column: exac_oth
+	Expected: '7.567E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_afr
+	Expected: '8.316E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_sas
+	Expected: '9.686E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_nfe
+	Expected: '9.485E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: esp_ea
+	Expected: '9.484E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_fin
+	Expected: '9.574E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: esp_aa
+	Expected: '8.397E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_lat
+	Expected: '8.474E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_eas
+	Expected: '9.410E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_NC
+	Column: exac_oth
+	Expected: '9.224E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: PCSK9_2
+	Column: exac_afr
+	Expected: '1.629E-01'
+	Recieved: 0.169454
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: exac_total
+	Expected: '1.375E-01'
+	Recieved: 0.142824
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: exac_sas
+	Expected: '1.383E-01'
+	Recieved: 0.141042
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: exac_nfe
+	Expected: '1.385E-01'
+	Recieved: 0.145445
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: esp_ea
+	Expected: '1.117E-01'
+	Recieved: 0.149762
+	Method: float_round
+	Modifier: '3'
+Variant UID: PCSK9_2
+	Column: exac_fin
+	Expected: '1.294E-01'
+	Recieved: 0.141177
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: esp_aa
+	Expected: '1.453E-01'
+	Recieved: 0.185065
+	Method: float_round
+	Modifier: '3'
+Variant UID: PCSK9_2
+	Column: exac_lat
+	Expected: '1.085E-01'
+	Recieved: 0.122776
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: exac_eas
+	Expected: '9.028E-02'
+	Recieved: 0.09375
+	Method: float_sigfig
+	Modifier: '4'
+Variant UID: PCSK9_2
+	Column: esp_avg
+	Expected: '5.756E-01'
+	Recieved: 0.167413
+	Method: float_round
+	Modifier: '3'
+Variant UID: CYP19A1_NC
+	Column: exac_afr
+	Expected: '3.053E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: CYP19A1_NC
+	Column: exac_sas
+	Expected: '3.593E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: CYP19A1_NC
+	Column: exac_nfe
+	Expected: '5.140E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: CYP19A1_NC
+	Column: exac_lat
+	Expected: '3.804E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: CYP19A1_NC
+	Column: exac_eas
+	Expected: '5.152E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+Variant UID: CYP19A1_NC
+	Column: exac_oth
+	Expected: '3.947E-01'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.21
+
+------------------------- 
+vcf_parsing 
+kmoad_20160526_140934 
+Passed
+ 
+Time: 2.32
+
+------------------------- 
+protein_change_cravat 
+kmoad_20160526_140922 
+Passed
+ 
+Time: 3.21
+
+------------------------- 
+oncogenes 
+kmoad_20160526_140918 
+Failed 1 of 10
+Variant UID: BRAF
+	Column: target
+	Expected: 'Gefitinib, Erlotinib, EGFR inhibitors\nVemurafenib, Dabrafenib, RAF inhibitors\nDasatinib, SRC inhibitors'
+	Recieved: 'Vemurafenib, Dabrafenib, RAF inhibitors'
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.2
+
+------------------------- 
+hugo_vcf 
+kmoad_20160526_140914 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+cosmic 
+kmoad_20160526_140907 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+so_best_vcf 
+kmoad_20160526_140930 
+Passed
+ 
+Time: 2.28
+
+------------------------- 
+protein_change_vcf 
+kmoad_20160526_140926 
+Passed
+ 
+Time: 2.19
+
+------------------------- 
+mappability 
+kmoad_20160526_140916 
+Passed
+ 
+Time: 2.24
+
+------------------------- 
+hugo_cravat 
+kmoad_20160526_140911 
+Passed
+ 
+Time: 2.19
+
+------------------------- 
+so_best_cravat 
+kmoad_20160526_140928 
+Passed
+ 
+Time: 2.18
+
+------------------------- 
+dbsnp 
+kmoad_20160526_140909 
+Failed 1 of 5
+Variant UID: PPP2R1A
+	Column: dbsnp
+	Expected: 'rs786205227'
+	Recieved: None
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.16
+
+------------------------- 
+transcript 
+kmoad_20160526_140932 
+Passed
+ 
+Time: 2.18
+

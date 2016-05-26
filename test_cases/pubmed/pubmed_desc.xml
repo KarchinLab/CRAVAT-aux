@@ -1,5 +1,8 @@
 <desc>
-	<analyses></analyses>
+	<sub_params>
+		<analyses></analyses>
+		<analysistype>geneannotationonly</analysistype>
+	</sub_params>
 	<verify_rules>
 		<column name = 'pubmed_n'>
 			<method>float_numeric_range</method>
