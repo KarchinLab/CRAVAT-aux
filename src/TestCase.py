@@ -67,19 +67,19 @@ class TestCase(object):
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint == keypoint
-        # Key string is first <modifier> characters
+        # True if first <modifier> characters in data string equal key string
         elif method == 'string_truncate':
             modifier = int(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint[:modifier] == keypoint[:modifier]
-        # Key string is data string up to <modifier> character
+        # True if data string up to <modifier> character is equal to key string
         elif method == 'string_parse':
             modifier = str(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = keypoint == datapoint.split(modifier)[0] 
-        # Key string is present in data string. Multiple unique strings in key can be separated with <modifier> character
+        # True if key string is present in data string. Multiple unique strings in key can be separated with <modifier> character
         elif method == 'string_included':
             modifier = str(modifier)
             datapoint = str(datapoint)
@@ -89,7 +89,15 @@ class TestCase(object):
                 correct = key_string in datapoint
                 if not(correct):
                     out = False
-        # Key and data match when rounded to <modifier> sigfigs, will ignore preceding zeros in decimal
+        # True if key and data match when rounded to <modifier> decimal points
+        elif method == 'float_round':
+            datapoint = float(datapoint)
+            keypoint = float(keypoint)
+            modifier = int(modifier)
+            data_rounded = round(datapoint,modifier)
+            key_rounded = out = round(keypoint,modifier)
+            out = data_rounded == key_rounded
+        # True if key and data match when rounded to <modifier> sigfigs. Will ignore preceding zeros in decimals.
         elif method == 'float_sigfig':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -100,15 +108,7 @@ class TestCase(object):
                 out = data_rounded == key_rounded
             else:
                 out = round(datapoint,modifier) == round(keypoint,modifier)
-        # Key and data match when rounded to <modifier> decimal points
-        elif method == 'float_round':
-            datapoint = float(datapoint)
-            keypoint = float(keypoint)
-            modifier = int(modifier)
-            data_rounded = round(datapoint,modifier)
-            key_rounded = out = round(keypoint,modifier)
-            out = data_rounded == key_rounded
-        # Key and data match when truncated at the <modifier> decimal point
+        # True if key and data match when truncated at the <modifier> decimal point
         elif method == 'float_truncate':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -120,14 +120,14 @@ class TestCase(object):
             temp[1] = temp[1][:modifier]
             key_rounded = float('.'.join(temp))
             out = data_rounded == key_rounded
-        # Data is within <modifier> integers of key, inclusive
+        # True if data is within <modifier> integers of key. Inclusive
         elif method == 'float_numeric_range':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
             modifier = float(modifier)
             diff = abs(datapoint - keypoint)
             out = diff <= modifier
-        # Data is within <modifier> percentage range of key
+        # True if data is within <modifier> percentage range of key. Inclusive
         elif method == 'float_percentage_range':
             datapoint = float(datapoint)
             keypoint = float(keypoint)
@@ -162,16 +162,18 @@ class TestCase(object):
                 points = 0
                 points_failed = 0
                 cursor = db.cursor()
+                # Loop through the key dictionary, uid is used as primary index, SQL col name as secondary index
                 for uid in self.key:
                     self.data[uid] = {}
                     for col in self.key[uid]:
                         points += 1
                         query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
                         cursor.execute(query)
-                        # 
+                        # Datapoint and keypoint are the result and answer key entries at the current row and column
                         datapoint = cursor.fetchone()[0]
                         keypoint = self.key[uid][col]
-                        #
+                        # If there are special verification methods listed in verify_rules, assign those methods for their columns.
+                        # Default to string_exact
                         if type(self.desc['verify_rules']) is dict:
                             if keypoint == None or datapoint == None or datapoint == ():
                                 method = 'string_exact'
@@ -185,7 +187,7 @@ class TestCase(object):
                         else:
                             method = 'string_exact'
                             modifier = None
-                        #
+                        # Use self.__compare, with method assigned above, to check if datapoint matches keypoint
                         correct = self._compare(datapoint, keypoint, method, modifier)
                         if not(correct):
                             points_failed += 1
