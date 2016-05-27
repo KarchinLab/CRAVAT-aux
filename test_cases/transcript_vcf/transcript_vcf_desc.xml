@@ -1,0 +1,11 @@
+<desc>
+	<sub_params>
+		<analyses></analyses>
+	</sub_params>
+	<verify_rules>
+		<column name = 'so_best_all'>
+			<method>string_included</method>
+			<modifier>,</modifier>
+		</column>
+	</verify_rules>
+</desc>
