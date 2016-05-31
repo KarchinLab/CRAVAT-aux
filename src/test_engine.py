@@ -4,7 +4,7 @@ import time
 import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
-test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['oncogenes_hg18'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:

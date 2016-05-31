@@ -34,5 +34,4 @@ else:
 for test in test_list:
     test_dir = os.path.join(test_cases_dir,test)
     desc_path = os.path.join(test_dir,'%s_desc.xml' %test)
-    tree = ET.parse(desc_path)
-    tree.write(desc_path)
+    ## Things to do to desc files go here ###
