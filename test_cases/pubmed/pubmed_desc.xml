@@ -1,10 +1,10 @@
 <desc>
 	<sub_params>
-		<analyses></analyses>
+		<analyses />
 		<analysistype>geneannotationonly</analysistype>
 	</sub_params>
 	<verify_rules>
-		<column name = 'pubmed_n'>
+		<column name="pubmed_n">
 			<method>float_numeric_range</method>
 			<modifier>10</modifier>
 		</column>

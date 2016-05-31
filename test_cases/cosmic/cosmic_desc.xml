@@ -1,9 +1,9 @@
 <desc>
 	<sub_params>
-		<analyses></analyses>
+		<analyses />
 	</sub_params>
 	<verify_rules>
-		<column name = 'cosmic_protein_change'>
+		<column name="cosmic_protein_change">
 			<method>string_parse</method>
 			<modifier>\x20</modifier>
 		</column>
