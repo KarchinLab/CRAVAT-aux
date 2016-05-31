@@ -1,0 +1,55 @@
+<desc>
+	<sub_params>
+		<analyses />
+	<hg18>on</hg18></sub_params>
+	<verify_rules>
+		<column name="kg">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="exac_afr">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_eas">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_fin">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_nfe">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_lat">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_oth">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_sas">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="exac_total">
+			<method>float_sigfig</method>
+			<modifier>4</modifier>
+		</column>
+		<column name="esp_ea">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="esp_aa">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="esp_avg">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>		
+	</verify_rules>
+</desc>

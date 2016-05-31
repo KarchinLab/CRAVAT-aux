@@ -4,7 +4,7 @@ import time
 import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
-test_cases = ['oncogenes_hg18'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['all_cravat'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:
@@ -34,6 +34,15 @@ elif test_cases == ['all_vcf']:
         # Ignore dirs that don't include _vcf
         elif not('_vcf' in item):
             test_list.remove(item)
+elif test_cases == ['all_hg18']:
+    test_list = os.listdir(test_cases_dir)
+    for item in test_list[:]:
+        # Ignore dirs that start with #
+        if item.startswith('#'):
+            test_list.remove(item)
+        # Ignore dirs that don't include _vcf
+        elif not('_hg18' in item):
+            test_list.remove(item)
 elif test_cases == ['all_cravat']:
     test_list = os.listdir(test_cases_dir)
     for item in test_list[:]:
@@ -42,6 +51,8 @@ elif test_cases == ['all_cravat']:
             test_list.remove(item)
         # Ignore dirs that don't include _vcf
         elif ('_vcf' in item):
+            test_list.remove(item)
+        elif ('_hg18' in item):
             test_list.remove(item)
 else:
     test_list = test_cases
