@@ -56,6 +56,7 @@ class TestCase(object):
     def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
             json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
+#             print json_response.text
             json_status = json.loads(json_response.text)['status']
             if json_status in ['Success', 'Salvaged', 'Error']:
                 self.job_status = json_status
