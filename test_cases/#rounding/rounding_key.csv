@@ -1,6 +1,0 @@
-uid,round,sigfig,truncate,percrange,numrange,numrange2,string,string2,string3
-v1,1.24531,0.043273,1.9999,1,4,5,is,kyle is,mike
-v2,9.89796,0.005732,9.7,10,5,5,kyle,kyle,mike
-v3,0.00018,0.1483,0.008,100,10567,5,3,kyle,mike
-v4,14.12348,0.000045732,1095.5648,1000,-1,5,0,kyle,mike
-v5,0,0.001,0,0,0,0,0,ky,mike

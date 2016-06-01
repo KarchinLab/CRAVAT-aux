@@ -4,10 +4,11 @@ import time
 import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
-test_cases = ['all_cravat'] # Input tests to run as list of strings, or use 'all' to run every test in directory
-test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
+test_suite = 'hg18' # Test suite defines the subfolder that is used
+test_cases = ['pop_stats'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases',test_suite))
 
-with open(os.path.join(test_cases_dir,'#TestArguments.xml'),'r') as args_file:
+with open(os.path.join(test_cases_dir,os.path.pardir,'TestArguments.xml'),'r') as args_file:
             args_xml = ET.parse(args_file).getroot()
 args = recurse_to_dict(args_xml)
 url = args['url']
@@ -18,47 +19,19 @@ log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
 log_name = time.strftime('%y-%m-%d-%H-%M-%S')
 log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
 
-# Generate list of tests to run, either from dir names in main dir, or user input
+# Generate list of tests to run, either from dir names in test dir, or user input
 if test_cases == ['all']:
     test_list = os.listdir(test_cases_dir)
     for item in test_list[:]:
         # Ignore dirs that start with #
         if item.startswith('#'):
             test_list.remove(item)
-elif test_cases == ['all_vcf']:
-    test_list = os.listdir(test_cases_dir)
-    for item in test_list[:]:
-        # Ignore dirs that start with #
-        if item.startswith('#'):
-            test_list.remove(item)
-        # Ignore dirs that don't include _vcf
-        elif not('_vcf' in item):
-            test_list.remove(item)
-elif test_cases == ['all_hg18']:
-    test_list = os.listdir(test_cases_dir)
-    for item in test_list[:]:
-        # Ignore dirs that start with #
-        if item.startswith('#'):
-            test_list.remove(item)
-        # Ignore dirs that don't include _vcf
-        elif not('_hg18' in item):
-            test_list.remove(item)
-elif test_cases == ['all_cravat']:
-    test_list = os.listdir(test_cases_dir)
-    for item in test_list[:]:
-        # Ignore dirs that start with #
-        if item.startswith('#'):
-            test_list.remove(item)
-        # Ignore dirs that don't include _vcf
-        elif ('_vcf' in item):
-            test_list.remove(item)
-        elif ('_hg18' in item):
-            test_list.remove(item)
 else:
     test_list = test_cases
 
 # Run tests. Store resulting test objects in dictionary, indexed by test name   
 print 'Test Started'
+print 'Suite: %s' %test_suite
 total_time = 0
 tests = {}
 # Results will store names of tests that passed or failed, used later to summarize test

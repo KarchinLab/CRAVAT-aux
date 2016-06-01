@@ -1,4 +1,0 @@
-analyses:
-kg:trunc,4
-esp_avg:sigfig,4
-exac_total:round,4
