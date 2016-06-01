@@ -15,7 +15,7 @@ def switch_strand(seq, strand):
         out = seq
     return out
 
-test_cases = ['pop_stats']
+test_cases = ['all']
 source_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\cravat'
 dest_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\vcf'
 

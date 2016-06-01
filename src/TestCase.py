@@ -167,7 +167,7 @@ class TestCase(object):
                     self.data[uid] = {}
                     for col in self.key[uid]:
                         points += 1
-                        query = 'SELECT %s FROM %s_variant WHERE uid = \'%s\';' %(col, self.job_id, uid)
+                        query = 'SELECT %s FROM %s_%s WHERE uid = \'%s\';' %(col, self.job_id, self.desc['tab'],uid)
                         cursor.execute(query)
                         # Datapoint and keypoint are the result and answer key entries at the current row and column
                         datapoint = cursor.fetchone()[0]

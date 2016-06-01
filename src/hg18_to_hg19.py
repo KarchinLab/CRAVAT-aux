@@ -3,9 +3,10 @@ import os
 import xml.etree.ElementTree as ET
 import shutil
 
-test_cases = ['pop_stats']
+test_cases = ['all']
 source_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\cravat'
 dest_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\hg18'
+lo = LiftOver('hg19','hg18')
 
 # Generate list of tests to run, either from dir names in test dir, or user input
 if test_cases == ['all']:
@@ -51,7 +52,6 @@ for test in test_list:
     print '\tLifting over coordinates'
     input_path = os.path.join(hg18_dir,'%s_input.txt' %test)
     input_text = open(input_path,'r').read()
-    lo = LiftOver('hg19','hg18')
     lines19 = input_text.split('\n')
     lines18 = []
     for line19 in lines19:
