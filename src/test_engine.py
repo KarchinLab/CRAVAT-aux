@@ -5,23 +5,29 @@ import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
 ### Define tests to run ###
-test_suite = 'hg18' # Test suite defines the subfolders that are used
-test_cases = ['cosmic'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
-test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases',test_suite))
+test_cases = ['cravat\\all','vcf\\all','hg18\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 # Generate list of tests to run, either from dir names in test dir, or user input
-if test_cases == ['all']:
-    test_list = os.listdir(test_cases_dir)
-    for item in test_list[:]:
-        # Ignore dirs that start with #
-        if item.startswith('#'):
-            test_list.remove(item)
-else:
-    test_list = test_cases
+test_list = []
+for case in test_cases:
+    if 'all' in case:
+        case_split = case.split('\\')
+        if case_split[0] == 'all':
+            suites = [d for d in os.listdir(test_cases_dir) if os.path.isdir(os.path.join(test_cases_dir,d))]
+            for s in suites:
+                test_list.append(os.path.join(s,case_split[1]))
+        elif case_split[1] == 'all':
+            suite_path = os.path.join(test_cases_dir,case_split[0])
+            tests = [d for d in os.listdir(suite_path) if os.path.isdir(os.path.join(suite_path,d))]
+            for t in tests:
+                test_list.append(os.path.join(case_split[0],t))
+    else:
+        test_list.append(case)
 
-### Do test startup tasks ###
+### Perform startup tasks ###
 # Read in the TestArguments file containing pointers to docker container and results database
-with open(os.path.join(test_cases_dir,os.path.pardir,'TestArguments.xml'),'r') as args_file:
+with open(os.path.join(test_cases_dir,'TestArguments.xml'),'r') as args_file:
             args_xml = ET.parse(args_file).getroot()
 args = recurse_to_dict(args_xml)
 
@@ -36,7 +42,6 @@ results = {'pass':[],'fail':[]}
 ### Run tests ###
 tests = {} # Will store resulting test objects   
 print 'Test Started'
-print 'Suite: %s' %test_suite
 total_time = 0
 ######################################################################
 for test in test_list:
@@ -45,7 +50,7 @@ for test in test_list:
     test_dir = os.path.join(test_cases_dir,test)
     
     # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
-    curTest = TestCase(test_dir)
+    curTest = TestCase(test,test_dir)
     
     # Submit job 
     curTest.submitJob(args['url'],args['email'])

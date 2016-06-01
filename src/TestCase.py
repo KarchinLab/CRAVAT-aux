@@ -12,12 +12,13 @@ from XML_conversions import recurse_to_dict
 
 class TestCase(object):
     
-    def __init__(self,path):
+    def __init__(self,name,path):
+        self.name = name
         self.path = path
-        self.name = os.path.basename(self.path)
-        self.input_path = os.path.join(self.path,'%s_input.txt' %self.name)
-        self.key_path = os.path.join(self.path,'%s_key.csv' %self.name)
-        self.desc_path = os.path.join(self.path, '%s_desc.xml' %self.name)
+        bottom_dir = os.path.split(self.path)[1]
+        self.input_path = os.path.join(self.path,'%s_input.txt' %bottom_dir)
+        self.key_path = os.path.join(self.path,'%s_key.csv' %bottom_dir)
+        self.desc_path = os.path.join(self.path, '%s_desc.xml' %bottom_dir)
         self.desc = {}
         self.key = {}
         self.job_id = ''
