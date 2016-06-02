@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
 ### Define tests to run ###
-test_cases = ['cravat//pop_stats'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['cravat\\cosmic'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 # Generate list of tests to run

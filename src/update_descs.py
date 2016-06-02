@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import os
 
-test_cases = ['all'] # Input tests to run as list of strings, or use 'all' to run every test in directory
+test_cases = ['cosmic'] # Input tests to run as list of strings, or use 'all' to run every test in directory
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases','cravat'))
 
 if test_cases == ['all']:
@@ -18,7 +18,7 @@ for test in test_list:
     desc_path = os.path.join(test_dir,'%s_desc.xml' %test)
     ## Things to do to desc files go here ###
     desc = ET.parse(desc_path)
-    tab = ET.Element('tab')
-    tab.text = 'variant'
-    desc.getroot().append(tab)
+    new = ET.Element('key_col')
+    new.text = 'hugo'
+    desc.getroot().append(new)
     desc.write(desc_path)

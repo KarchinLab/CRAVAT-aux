@@ -35,10 +35,12 @@ class TestCase(object):
         # Read the key file into a 2D dictionary
         with open(self.key_path) as r:
             key_csv = csv.DictReader(r)
-            # Key goes in a 2 layer dict with layer 1 indexed by uid and layer 2 indexed by results db column name
+            # Key goes in a 2 layer dict with layer 1 indexed by first column of the sql file
+            # and layer 2 indexed by results db column name
+            self.sql_key = key_csv.fieldnames[0]
             for row in key_csv:
-                self.key[row['uid']] = row
-                del self.key[row['uid']]['uid']     
+                self.key[row[self.sql_key]] = row
+                del self.key[row[self.sql_key]][self.sql_key]     
             
     # Submit the job to cravat   
     def submitJob(self,url_base,email):
@@ -161,19 +163,20 @@ class TestCase(object):
                      passwd = db_args['password'],
                      db = db_args['db']
                      )
+                cursor = db.cursor()
                 points = 0
                 points_failed = 0
-                cursor = db.cursor()
-                # Loop through the key dictionary, uid is used as primary index, SQL col name as secondary index
-                for uid in self.key:
-                    self.data[uid] = {}
-                    for col in self.key[uid]:
+                # Loop through the key dictionary, row is used as primary index, SQL col name as secondary index
+                for row in self.key:
+                    self.data[row] = {}
+                    for col in self.key[row]:
                         points += 1
-                        query = 'SELECT %s FROM %s_%s WHERE uid = \'%s\';' %(col, self.job_id, self.desc['tab'],uid)
+                        query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                %(col, self.job_id, self.desc['tab'], self.sql_key, row)
                         cursor.execute(query)
                         # Datapoint and keypoint are the result and answer key entries at the current row and column
                         datapoint = cursor.fetchone()[0]
-                        keypoint = self.key[uid][col]
+                        keypoint = self.key[row][col]
                         # If there are special verification methods listed in verify_rules, assign those methods for their columns.
                         # Default to string_exact
                         if type(self.desc['verify_rules']) is dict:
@@ -195,8 +198,8 @@ class TestCase(object):
                             points_failed += 1
                             self.result = False
                             self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
-                                                %(uid, col, keypoint, datapoint, method, modifier)
-                        self.data[uid][col] = datapoint
+                                                %(row, col, keypoint, datapoint, method, modifier)
+                        self.data[row][col] = datapoint
             except Exception:
                 print traceback.format_exc()
                 self.result = False
