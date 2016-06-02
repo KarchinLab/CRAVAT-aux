@@ -3,9 +3,10 @@ if($testName -eq "blank"){
 	$testName = read-host "Enter a test name"}
 $xml_text = "<desc>
 	<sub_params>
-		<analyses></analyses>
+		<analyses />
 	</sub_params>
-	<verify_rules></verify_rules>
+	<verify_rules />
+	<tab>variants</tab>
 </desc>"
 $files = "desc.xml", "input.txt", "key.csv"
 
