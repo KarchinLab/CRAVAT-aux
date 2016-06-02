@@ -15,7 +15,7 @@ def switch_strand(seq, strand):
         out = seq
     return out
 
-test_cases = ['tcga']
+test_cases = ['gene_tab']
 source_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\cravat'
 dest_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\vcf'
 

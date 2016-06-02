@@ -3,7 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 import shutil
 
-test_cases = ['all']
+test_cases = ['gene_tab']
 source_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\cravat'
 dest_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\hg18'
 lo = LiftOver('hg19','hg18')
