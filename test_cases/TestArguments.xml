@@ -3,7 +3,7 @@
 	<url>http://192.168.99.101:8889/CRAVAT</url>
 	<db_info>
 		<host>192.168.99.101</host>
-		<port>3306</port>
+		<port>3307</port>
 		<user>root</user>
 		<password>1</password>
 		<db>cravat_results</db>
