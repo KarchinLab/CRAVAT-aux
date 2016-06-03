@@ -1,0 +1,9 @@
+input_line_number,error
+2,UID should not contain a comma
+4,Duplicate ID error
+5,Position exceeds chromosome size
+6,"Number of columns should be 3, 4, 6, or 7"
+7,"Number of columns should be 3, 4, 6, or 7"
+8,Input reference base is incorrect for the specified chromosome and position.
+9,Gene is on the opposite strand to the input strand.
+10,Alternate base error

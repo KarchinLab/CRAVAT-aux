@@ -61,7 +61,7 @@ class TestCase(object):
                 json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
                 json_status = json.loads(json_response.text)['status']
             except:
-                print 'JSON get error'
+                print traceback.format_exc()
                 time.sleep(sleep_time)
                 continue
             if json_status in ['Success', 'Salvaged', 'Error']:
@@ -177,13 +177,22 @@ class TestCase(object):
                         points += 1
                         keypoint = self.key[row][col]
                         try:
-                            query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                    %(col, self.job_id, self.desc['tab'], self.sql_key, row)
-                            cursor.execute(query)
-                            # Datapoint and keypoint are the result and answer key entries at the current row and column
-                            datatuple = cursor.fetchone()
-                            if type(datatuple)==tuple: datapoint = datatuple[0]
-                            else: datapoint = 'Error: Entry Not Found'
+                            for table in self.desc['tab'].split(','):
+                                try:
+                                    query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                          %(col, self.job_id, table, self.sql_key, row)
+                                    cursor.execute(query)
+                                    datatuple = cursor.fetchone()
+                                except:
+                                    datatuple = None
+                                if type(datatuple)==tuple: 
+                                    datapoint = datatuple[0]
+                                    break
+                            try:
+                                datapoint
+                            except:
+                                datapoint = 'Error: SQL entry not found.'
+                            
                             # If there are special verification methods listed in verify_rules, assign those methods for their columns.
                             # Default to string_exact
                             if type(self.desc['verify_rules']) is dict:
@@ -208,6 +217,7 @@ class TestCase(object):
                                                     %(row, col, keypoint, datapoint, method, modifier)
                             self.data[row][col] = datapoint
                         except:
+                            print traceback.format_exc()
                             self.result = False
                             self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
                                              %(row,col,keypoint,traceback.format_exc())
@@ -216,6 +226,7 @@ class TestCase(object):
                 points_failed += 1
                 self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
                                     %(row,col,keypoint,traceback.format_exc())
+                print traceback.format_exc()
             finally:
                 if self.result:
                     self.log_text = 'Passed\n'
@@ -226,6 +237,7 @@ class TestCase(object):
                     cursor.close()
                     db.close()
                 except Exception:
+                    print traceback.format_exc()
                     pass
         
         else:

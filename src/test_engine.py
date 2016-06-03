@@ -6,7 +6,7 @@ from XML_conversions import recurse_to_dict
 import collections
 
 ### Define tests to run ###
-test_cases = ['hugo\\c', 'mappability\\c'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['all\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 # Generate list of tests to run
