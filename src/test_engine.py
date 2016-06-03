@@ -3,9 +3,10 @@ import os
 import time
 import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
+import collections
 
 ### Define tests to run ###
-test_cases = ['all\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['hugo\\c', 'mappability\\c'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 # Generate list of tests to run
@@ -33,7 +34,10 @@ for case in test_cases:
 with open(os.path.join(test_cases_dir,'TestArguments.xml'),'r') as args_file:
             args_xml = ET.parse(args_file).getroot()
 args = recurse_to_dict(args_xml)
-
+for char in ['[',']','\'',' ']:
+    args['expected_failures'] = args['expected_failures'].replace(char,'')
+args['expected_failures'] = args['expected_failures'].strip().split(',')
+    
 # Define log directory and start log writing.
 log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
 log_name = time.strftime('%y-%m-%d-%H-%M-%S')
@@ -43,7 +47,7 @@ log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
 results = {'pass':[],'fail':[]}
 
 ### Run tests ###
-tests = {} # Will store resulting test objects   
+tests = collections.OrderedDict() # Will store resulting test objects in order they were run  
 print 'Test Started'
 total_time = 0
 ######################################################################
@@ -81,26 +85,37 @@ for test in test_list:
     total_time += curTest.elapsed_time
 
     # Enter the test object into the dict   
-    tests[test_name] = curTest  
+    tests[test] = curTest  
 ######################################################################
+
+results['unexp_fail'] = [t for t in results['fail'] if t not in args['expected_failures']]
+results['unexp_pass'] = [t for t in args['expected_failures'] if t in results['pass']]
    
 # Print closing comments to command line
-print '%s\nPassed: %d\n%r\nFailed: %d\n%r' %('-'*25,len(results['pass']),results['pass'],len(results['fail']),results['fail'])
+print '-'*25
+print 'Passed: %d\n%r' %(len(results['pass']),results['pass'])
+print 'Unexpected Sucesses: %d\n%r' %(len(results['unexp_pass']), results['unexp_pass'])
+print 'Failed: %d\n%r' %(len(results['fail']),results['fail'])
+print 'Unexpected Failures: %d\n%r' %(len(results['unexp_fail']), results['unexp_fail'])
 print '%s seconds\n%s\nTest Complete' %(total_time,'-'*25)
 
 ### Print log file ###
 log_text += """Tests: %d
 %r
-Passed: %d
+Successes: %d
 %r
-Failed: %d
+Unexpected Successes: %d
+%r
+Failures: %d
+%r
+Unexpected Failures: %d
 %r
 Time: %s seconds
-""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['fail']), results['fail'], total_time)
+""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['unexp_pass']), results['unexp_pass'],\
+      len(results['fail']), results['fail'], len(results['unexp_fail']), results['unexp_fail'], total_time)
 # Log then contains details of each test
 log_text += '\nTest Details\n' + '='*80 + '\n'
-for test in tests:
-    curTest = tests[test]
+for curTest in tests.values():
     log_text += '%s \n%s \n%s \n%s \nTime: %s\n\n' %('-'*25,curTest.name,curTest.job_id,curTest.log_text,curTest.elapsed_time)
     
 # Write log text to file

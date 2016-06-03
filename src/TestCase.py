@@ -57,9 +57,13 @@ class TestCase(object):
     # Check the status of the job.  Hold execution until job complete
     def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
-            json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
-#             print json_response.text
-            json_status = json.loads(json_response.text)['status']
+            try:
+                json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
+                json_status = json.loads(json_response.text)['status']
+            except:
+                print 'JSON get error'
+                time.sleep(sleep_time)
+                continue
             if json_status in ['Success', 'Salvaged', 'Error']:
                 self.job_status = json_status
             else:
@@ -155,6 +159,8 @@ class TestCase(object):
            
             # Data is a dict that will match the key dict if test is passed
             self.data = {}
+            points = 0
+            points_failed = 0
             
             try:
                 db = MySQLdb.connect(host = db_args['host'],
@@ -164,56 +170,64 @@ class TestCase(object):
                      db = db_args['db']
                      )
                 cursor = db.cursor()
-                points = 0
-                points_failed = 0
                 # Loop through the key dictionary, row is used as primary index, SQL col name as secondary index
                 for row in self.key:
                     self.data[row] = {}
                     for col in self.key[row]:
                         points += 1
-                        query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                %(col, self.job_id, self.desc['tab'], self.sql_key, row)
-                        cursor.execute(query)
-                        # Datapoint and keypoint are the result and answer key entries at the current row and column
-                        datapoint = cursor.fetchone()[0]
                         keypoint = self.key[row][col]
-                        # If there are special verification methods listed in verify_rules, assign those methods for their columns.
-                        # Default to string_exact
-                        if type(self.desc['verify_rules']) is dict:
-                            if keypoint == None or datapoint == None or datapoint == ():
-                                method = 'string_exact'
-                                modifier = None 
-                            elif col in self.desc['verify_rules'].keys():
-                                method = self.desc['verify_rules'][col]['method']
-                                modifier = self.desc['verify_rules'][col]['modifier']
+                        try:
+                            query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                    %(col, self.job_id, self.desc['tab'], self.sql_key, row)
+                            cursor.execute(query)
+                            # Datapoint and keypoint are the result and answer key entries at the current row and column
+                            datatuple = cursor.fetchone()
+                            if type(datatuple)==tuple: datapoint = datatuple[0]
+                            else: datapoint = 'Error: Entry Not Found'
+                            # If there are special verification methods listed in verify_rules, assign those methods for their columns.
+                            # Default to string_exact
+                            if type(self.desc['verify_rules']) is dict:
+                                if keypoint == None or datapoint == None or datapoint == () or 'Error' in str(datapoint):
+                                    method = 'string_exact'
+                                    modifier = None 
+                                elif col in self.desc['verify_rules'].keys():
+                                    method = self.desc['verify_rules'][col]['method']
+                                    modifier = self.desc['verify_rules'][col]['modifier']
+                                else:
+                                    method = 'string_exact'
+                                    modifier = None 
                             else:
                                 method = 'string_exact'
-                                modifier = None 
-                        else:
-                            method = 'string_exact'
-                            modifier = None
-                        # Use self.__compare, with method assigned above, to check if datapoint matches keypoint
-                        correct = self._compare(datapoint, keypoint, method, modifier)
-                        if not(correct):
-                            points_failed += 1
+                                modifier = None
+                            # Use self.__compare, with method assigned above, to check if datapoint matches keypoint
+                            correct = self._compare(datapoint, keypoint, method, modifier)
+                            if not(correct):
+                                points_failed += 1
+                                self.result = False
+                                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
+                                                    %(row, col, keypoint, datapoint, method, modifier)
+                            self.data[row][col] = datapoint
+                        except:
                             self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
-                                                %(row, col, keypoint, datapoint, method, modifier)
-                        self.data[row][col] = datapoint
-            except Exception:
-                print traceback.format_exc()
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
+                                             %(row,col,keypoint,traceback.format_exc())
+            except:
                 self.result = False
-                self.log_text += traceback.format_exc()
+                points_failed += 1
+                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
+                                    %(row,col,keypoint,traceback.format_exc())
             finally:
                 if self.result:
                     self.log_text = 'Passed\n'
                 else:
                     self.log_text = 'Failed %d of %d\n' %(points_failed,points) + self.log_text
+                
                 try:
                     cursor.close()
                     db.close()
                 except Exception:
                     pass
+        
         else:
             self.data = 'Submission Failed'
             self.result = False
