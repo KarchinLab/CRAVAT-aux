@@ -5,25 +5,28 @@ import xml.etree.ElementTree as ET
 from XML_conversions import recurse_to_dict
 
 ### Define tests to run ###
-test_cases = ['cravat\\errors'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['all\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
 # Generate list of tests to run
 test_list = []
 for case in test_cases:
-    if 'all' in case:
-        case_split = case.split('\\')
-        if case_split[0] == 'all':
-            suites = [d for d in os.listdir(test_cases_dir) if os.path.isdir(os.path.join(test_cases_dir,d))]
-            for s in suites:
-                test_list.append(os.path.join(s,case_split[1]))
-        elif case_split[1] == 'all':
-            suite_path = os.path.join(test_cases_dir,case_split[0])
-            tests = [d for d in os.listdir(suite_path) if os.path.isdir(os.path.join(suite_path,d))]
-            for t in tests:
-                test_list.append(os.path.join(case_split[0],t))
+    case_args = case.split('\\')
+    target = case_args[0]
+    input_codes = case_args[1].split(',')
+    if target == 'all':
+        target_dirs = [d for d in os.listdir(test_cases_dir) if os.path.isdir(os.path.join(test_cases_dir,d))]
     else:
-        test_list.append(case)
+        target_dirs = [target]
+    for target_dir in target_dirs:
+        dirs_in_target = os.listdir(os.path.join(test_cases_dir,target_dir))
+        for input_dir in dirs_in_target:
+            if 'all' in input_codes:
+                test_list.append('%s\\%s' %(target_dir,input_dir))
+            else:
+                for code in input_codes:
+                    if input_dir.endswith('_%s' % code):
+                        test_list.append('%s\\%s' %(target_dir,input_dir))
 
 ### Perform startup tasks ###
 # Read in the TestArguments file containing pointers to docker container and results database
@@ -46,16 +49,16 @@ total_time = 0
 ######################################################################
 for test in test_list:
     start_time = time.time()
-    print '%s\nStarting: %s' %('-'*25,test)
     test_dir = os.path.join(test_cases_dir,test)
+    test_name = test.split('\\')[1]
+    print '%s\nStarting: %s' %('-'*25,test_name)
     
     # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
-    curTest = TestCase(test,test_dir)
+    curTest = TestCase(test_name,test_dir)
     
     # Submit job 
     curTest.submitJob(args['url'],args['email'])
     print 'Job Sent: %s' %curTest.job_id
-    
     # Test will not continue until checkStatus() is complete
     curTest.checkStatus(args['url'],1) 
     print 'Submission %s: %s' %(curTest.job_status, curTest.job_id)
@@ -78,7 +81,7 @@ for test in test_list:
     total_time += curTest.elapsed_time
 
     # Enter the test object into the dict   
-    tests[test] = curTest  
+    tests[test_name] = curTest  
 ######################################################################
    
 # Print closing comments to command line
