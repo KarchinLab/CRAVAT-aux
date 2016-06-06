@@ -6,7 +6,7 @@ $xml_text = "<desc>
 		<analyses />
 	</sub_params>
 	<verify_rules />
-	<tab>variants</tab>
+	<tab>variant</tab>
 </desc>"
 $files = "desc.xml", "input.txt", "key.csv"
 

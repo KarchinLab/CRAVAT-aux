@@ -7,27 +7,40 @@ import collections
 
 ### Define tests to run ###
 test_cases = ['all\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+exclude_cases = [] # These test will not be run. Format same as test_cases
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
+def parse_test_list(cases,main_dir):
+    t_list = []
+    for case in cases:
+        case_args = case.split('\\')
+        target = case_args[0]
+        input_codes = case_args[1].split(',')
+        if target == 'all':
+            target_dirs = [d for d in os.listdir(main_dir) if os.path.isdir(os.path.join(main_dir,d))]
+        else:
+            target_dirs = [target]
+        for target_dir in target_dirs:
+            dirs_in_target = [d for d in os.listdir(os.path.join(main_dir,target_dir)) if os.path.isdir(os.path.join(main_dir,target_dir,d))]
+            for input_dir in dirs_in_target:
+                if 'all' in input_codes:
+                    t_list.append('%s\\%s' %(target_dir,input_dir))
+                else:
+                    for code in input_codes:
+                        if input_dir.endswith('_%s' % code):
+                            t_list.append('%s\\%s' %(target_dir,input_dir))
+    return t_list
+
+
 # Generate list of tests to run
-test_list = []
-for case in test_cases:
-    case_args = case.split('\\')
-    target = case_args[0]
-    input_codes = case_args[1].split(',')
-    if target == 'all':
-        target_dirs = [d for d in os.listdir(test_cases_dir) if os.path.isdir(os.path.join(test_cases_dir,d))]
-    else:
-        target_dirs = [target]
-    for target_dir in target_dirs:
-        dirs_in_target = os.listdir(os.path.join(test_cases_dir,target_dir))
-        for input_dir in dirs_in_target:
-            if 'all' in input_codes:
-                test_list.append('%s\\%s' %(target_dir,input_dir))
-            else:
-                for code in input_codes:
-                    if input_dir.endswith('_%s' % code):
-                        test_list.append('%s\\%s' %(target_dir,input_dir))
+test_list = parse_test_list(test_cases,test_cases_dir)
+if exclude_cases:
+    exclude_list = parse_test_list(exclude_cases,test_cases_dir)
+else:
+    exclude_list = []
+for test in test_list[:]:
+    if test in exclude_list:
+        test_list.remove(test)
 
 ### Perform startup tasks ###
 # Read in the TestArguments file containing pointers to docker container and results database
