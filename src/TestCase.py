@@ -175,58 +175,68 @@ class TestCase(object):
                     self.data[row] = {}
                     for col in self.key[row]:
                         points += 1
-                        keypoint = self.key[row][col]
+                        # If key at this entry has a value, assign it to keypoint.  Otherwise, skip this entry
+                        if self.key[row][col]:
+                            keypoint = self.key[row][col]
+                        else:
+                            self.data[row][col] = self.key[row][col]
+                            continue
+                        
+                        # If verification for this entry errors, the error will be logged and execution will continue
                         try:
+                            # Run the correct query on the SQL table that the row exists in
                             for table in self.desc['tab'].split(','):
-                                try:
-                                    query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                          %(col, self.job_id, table, self.sql_key, row)
-                                    cursor.execute(query)
-                                    datatuple = cursor.fetchone()
-                                except:
-                                    datatuple = None
-                                if type(datatuple)==tuple: 
-                                    datapoint = datatuple[0]
+                                row_found = False
+                                row_count_query = 'SELECT count(*) FROM %s_%s WHERE %s = \'%s\';' \
+                                                %(self.job_id, table, self.sql_key, row)
+                                data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                    %(col, self.job_id, table, self.sql_key, row)
+                                cursor.execute(row_count_query)
+                                row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
+                                if row_count == 1:
+                                    row_found = True
+                                    cursor.execute(data_query)
+                                    datapoint = cursor.fetchone()[0]
                                     break
-                            try:
-                                datapoint
-                            except:
-                                datapoint = 'Error: SQL entry not found.'
+                            # If row was not found in given SQL tables, assign an Error string to it.
+                            if not(row_found):
+                                datapoint = 'Error: row not found'
                             
-                            # If there are special verification methods listed in verify_rules, assign those methods for their columns.
-                            # Default to string_exact
+                            # If there are special verification methods listed in verify_rules and neither datapoint nor
+                            # keypoint are None or Error, use the method in desc. Otherwise, default to string_exact.
                             if type(self.desc['verify_rules']) is dict:
-                                if keypoint == None or datapoint == None or datapoint == () or 'Error' in str(datapoint):
-                                    method = 'string_exact'
-                                    modifier = None 
-                                elif col in self.desc['verify_rules'].keys():
+                                if (keypoint != None and datapoint != None and 'Error' not in str(datapoint))\
+                                    and (col in self.desc['verify_rules'].keys()):
                                     method = self.desc['verify_rules'][col]['method']
                                     modifier = self.desc['verify_rules'][col]['modifier']
                                 else:
                                     method = 'string_exact'
-                                    modifier = None 
+                                    modifier = None
                             else:
-                                method = 'string_exact'
-                                modifier = None
-                            # Use self.__compare, with method assigned above, to check if datapoint matches keypoint
+                                    method = 'string_exact'
+                                    modifier = None
+                                      
+                            # Use self._compare, with method assigned above, to check if datapoint matches keypoint
                             correct = self._compare(datapoint, keypoint, method, modifier)
                             if not(correct):
-                                points_failed += 1
                                 self.result = False
-                                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tMethod: %s\n\tModifier: %r\n' \
-                                                    %(row, col, keypoint, datapoint, method, modifier)
+                                points_failed += 1
+                                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tQuery: %s\n\tMethod: %s\n\tModifier: %r\n' \
+                                                %(row, col, keypoint, datapoint, data_query, method, modifier)
                             self.data[row][col] = datapoint
                         except:
-                            print traceback.format_exc()
                             self.result = False
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
-                                             %(row,col,keypoint,traceback.format_exc())
+                            points_failed += 1
+                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
+                                          %(row, col, keypoint, data_query, traceback.format_exc())
             except:
                 self.result = False
                 points_failed += 1
-                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tError: \n%s\n'\
-                                    %(row,col,keypoint,traceback.format_exc())
-                print traceback.format_exc()
+                try:
+                    self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
+                                 %(row, col, keypoint, data_query, traceback.format_exc())
+                except:
+                    self.log_text += traceback.format_exc()
             finally:
                 if self.result:
                     self.log_text = 'Passed\n'
@@ -239,7 +249,6 @@ class TestCase(object):
                 except Exception:
                     print traceback.format_exc()
                     pass
-        
         else:
             self.data = 'Submission Failed'
             self.result = False

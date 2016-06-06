@@ -52,4 +52,4 @@
 			<modifier>0.01</modifier>
 		</column>		
 	</verify_rules>
-<tab>variant</tab></desc>
+<tab>variant,noncoding</tab></desc>
