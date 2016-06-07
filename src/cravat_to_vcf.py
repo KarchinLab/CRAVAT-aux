@@ -15,9 +15,9 @@ def switch_strand(seq, strand):
         out = seq
     return out
 
-c_test = 'dbsnp_c'
-top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\dbsnp'
-v_test = c_test.split('_')[0]+'_v'
+c_test = 'so_best_c'
+top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\so_best'
+v_test = '_'.join(c_test.split('_')[:-1])+'_v'
 
 c_dir = os.path.join(top_dir, c_test)
 v_dir = os.path.join(top_dir, v_test)

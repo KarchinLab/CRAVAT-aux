@@ -3,10 +3,10 @@ import os
 import xml.etree.ElementTree as ET
 import shutil
 
-hg19_test = 'dbsnp_c'
-top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\dbsnp'
+hg19_test = 'so_best_c'
+top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\so_best'
 lo = LiftOver('hg19','hg18')
-hg18_test = hg19_test.split('_')[0] + '_18'
+hg18_test = '_'.join(hg19_test.split('_')[:-1]) + '_18'
 
 hg19_dir = os.path.join(top_dir, hg19_test)
 hg18_dir = os.path.join(top_dir, hg18_test)
