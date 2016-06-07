@@ -1,0 +1,492 @@
+Date: 16-06-06
+Time: 17:52:37
+Tests: 38
+['chasm\\chasm_c', 'cosmic\\cosmic_18', 'cosmic\\cosmic_c', 'cosmic\\cosmic_v', 'dbsnp\\dbsnp_18', 'dbsnp\\dbsnp_c', 'dbsnp\\dbsnp_v', 'error\\error_c', 'gene_tab\\gene_tab_18', 'gene_tab\\gene_tab_c', 'gene_tab\\gene_tab_v', 'hugo\\hugo_18', 'hugo\\hugo_c', 'hugo\\hugo_v', 'mappability\\mappability_18', 'mappability\\mappability_c', 'mappability\\mappability_v', 'oncogenes\\oncogenes_18', 'oncogenes\\oncogenes_c', 'oncogenes\\oncogenes_v', 'parsing\\parsing_v', 'pop_stats\\pop_stats_18', 'pop_stats\\pop_stats_c', 'pop_stats\\pop_stats_v', 'prot_change\\prot_change_18', 'prot_change\\prot_change_c', 'prot_change\\prot_change_v', 'pubmed\\pubmed_18', 'pubmed\\pubmed_c', 'pubmed\\pubmed_v', 'so_best\\so_best_18', 'so_best\\so_best_c', 'so_best\\so_best_v', 'tcga\\tcga_c', 'transcript\\transcript_18', 'transcript\\transcript_c', 'transcript\\transcript_v', 'vest\\vest_c']
+Successes: 29
+['chasm_c', 'cosmic_18', 'cosmic_c', 'cosmic_v', 'error_c', 'gene_tab_18', 'gene_tab_c', 'gene_tab_v', 'hugo_18', 'hugo_c', 'hugo_v', 'mappability_18', 'mappability_c', 'mappability_v', 'parsing_v', 'prot_change_18', 'prot_change_c', 'prot_change_v', 'pubmed_18', 'pubmed_c', 'pubmed_v', 'so_best_18', 'so_best_c', 'so_best_v', 'tcga_c', 'transcript_18', 'transcript_c', 'transcript_v', 'vest_c']
+Unexpected Successes: 3
+['gene_tab_18', 'gene_tab_c', 'gene_tab_v']
+Failures: 9
+['dbsnp_18', 'dbsnp_c', 'dbsnp_v', 'oncogenes_18', 'oncogenes_c', 'oncogenes_v', 'pop_stats_18', 'pop_stats_c', 'pop_stats_v']
+Unexpected Failures: 0
+[]
+Time: 163.8 seconds
+
+Test Details
+================================================================================
+------------------------- 
+chasm_c 
+kmoad_20160606_175237 
+Passed
+ 
+Time: 35.31
+
+------------------------- 
+cosmic_18 
+kmoad_20160606_175312 
+Passed
+ 
+Time: 6.55
+
+------------------------- 
+cosmic_c 
+kmoad_20160606_175319 
+Passed
+ 
+Time: 2.25
+
+------------------------- 
+cosmic_v 
+kmoad_20160606_175321 
+Passed
+ 
+Time: 2.24
+
+------------------------- 
+dbsnp_18 
+kmoad_20160606_175323 
+Failed 1 of 5
+Variant UID: PPP2R1A
+	Column: dbsnp
+	Expected: 'rs786205227'
+	Recieved: None
+	Query: SELECT dbsnp FROM kmoad_20160606_175323_variant WHERE uid = 'PPP2R1A';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 5.38
+
+------------------------- 
+dbsnp_c 
+kmoad_20160606_175329 
+Failed 1 of 5
+Variant UID: PPP2R1A
+	Column: dbsnp
+	Expected: 'rs786205227'
+	Recieved: None
+	Query: SELECT dbsnp FROM kmoad_20160606_175329_variant WHERE uid = 'PPP2R1A';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.23
+
+------------------------- 
+dbsnp_v 
+kmoad_20160606_175331 
+Failed 1 of 5
+Variant UID: PPP2R1A
+	Column: dbsnp
+	Expected: 'rs786205227'
+	Recieved: None
+	Query: SELECT dbsnp FROM kmoad_20160606_175331_variant WHERE uid = 'PPP2R1A';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.23
+
+------------------------- 
+error_c 
+kmoad_20160606_175333 
+Passed
+ 
+Time: 3.29
+
+------------------------- 
+gene_tab_18 
+kmoad_20160606_175337 
+Passed
+ 
+Time: 5.45
+
+------------------------- 
+gene_tab_c 
+kmoad_20160606_175342 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+gene_tab_v 
+kmoad_20160606_175344 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+hugo_18 
+kmoad_20160606_175346 
+Passed
+ 
+Time: 3.21
+
+------------------------- 
+hugo_c 
+kmoad_20160606_175350 
+Passed
+ 
+Time: 2.21
+
+------------------------- 
+hugo_v 
+kmoad_20160606_175352 
+Passed
+ 
+Time: 2.22
+
+------------------------- 
+mappability_18 
+kmoad_20160606_175354 
+Passed
+ 
+Time: 3.34
+
+------------------------- 
+mappability_c 
+kmoad_20160606_175357 
+Passed
+ 
+Time: 2.19
+
+------------------------- 
+mappability_v 
+kmoad_20160606_175400 
+Passed
+ 
+Time: 2.19
+
+------------------------- 
+oncogenes_18 
+kmoad_20160606_175402 
+Failed 1 of 10
+Variant UID: BRAF
+	Column: target
+	Expected: 'Gefitinib, Erlotinib, EGFR inhibitors\nVemurafenib, Dabrafenib, RAF inhibitors\nDasatinib, SRC inhibitors'
+	Recieved: 'Vemurafenib, Dabrafenib, RAF inhibitors'
+	Query: SELECT target FROM kmoad_20160606_175402_variant WHERE uid = 'BRAF';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 3.29
+
+------------------------- 
+oncogenes_c 
+kmoad_20160606_175405 
+Failed 1 of 10
+Variant UID: BRAF
+	Column: target
+	Expected: 'Gefitinib, Erlotinib, EGFR inhibitors\nVemurafenib, Dabrafenib, RAF inhibitors\nDasatinib, SRC inhibitors'
+	Recieved: 'Vemurafenib, Dabrafenib, RAF inhibitors'
+	Query: SELECT target FROM kmoad_20160606_175405_variant WHERE uid = 'BRAF';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.2
+
+------------------------- 
+oncogenes_v 
+kmoad_20160606_175407 
+Failed 1 of 10
+Variant UID: BRAF
+	Column: target
+	Expected: 'Gefitinib, Erlotinib, EGFR inhibitors\nVemurafenib, Dabrafenib, RAF inhibitors\nDasatinib, SRC inhibitors'
+	Recieved: 'Vemurafenib, Dabrafenib, RAF inhibitors'
+	Query: SELECT target FROM kmoad_20160606_175407_variant WHERE uid = 'BRAF';
+	Method: string_exact
+	Modifier: None
+ 
+Time: 2.24
+
+------------------------- 
+parsing_v 
+kmoad_20160606_175410 
+Passed
+ 
+Time: 3.44
+
+------------------------- 
+pop_stats_18 
+kmoad_20160606_175413 
+Failed 8 of 96
+Variant UID: LCT_1
+	Column: exac_nfe
+	Expected: '1.00E-01'
+	Recieved: 0.7003
+	Query: SELECT exac_nfe FROM kmoad_20160606_175413_variant WHERE uid = 'LCT_1';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: LCT_NC
+	Column: kg
+	Expected: '2.60E-01'
+	Recieved: 0.739617
+	Query: SELECT kg FROM kmoad_20160606_175413_noncoding WHERE uid = 'LCT_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_NC
+	Column: kg
+	Expected: '9.10E-02'
+	Recieved: 0.908546
+	Query: SELECT kg FROM kmoad_20160606_175413_noncoding WHERE uid = 'PCSK9_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_ea
+	Expected: '1.12E-01'
+	Recieved: 0.149762
+	Query: SELECT esp_ea FROM kmoad_20160606_175413_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_fin
+	Expected: '1.29E-01'
+	Recieved: 0.141177
+	Query: SELECT exac_fin FROM kmoad_20160606_175413_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_aa
+	Expected: '1.45E-01'
+	Recieved: 0.185065
+	Query: SELECT esp_aa FROM kmoad_20160606_175413_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_lat
+	Expected: '1.09E-01'
+	Recieved: 0.122776
+	Query: SELECT exac_lat FROM kmoad_20160606_175413_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_avg
+	Expected: '5.76E-01'
+	Recieved: 0.167413
+	Query: SELECT esp_avg FROM kmoad_20160606_175413_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+ 
+Time: 3.76
+
+------------------------- 
+pop_stats_c 
+kmoad_20160606_175417 
+Failed 8 of 96
+Variant UID: LCT_1
+	Column: exac_nfe
+	Expected: '1.00E-01'
+	Recieved: 0.7003
+	Query: SELECT exac_nfe FROM kmoad_20160606_175417_variant WHERE uid = 'LCT_1';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: LCT_NC
+	Column: kg
+	Expected: '2.60E-01'
+	Recieved: 0.739617
+	Query: SELECT kg FROM kmoad_20160606_175417_noncoding WHERE uid = 'LCT_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_NC
+	Column: kg
+	Expected: '9.10E-02'
+	Recieved: 0.908546
+	Query: SELECT kg FROM kmoad_20160606_175417_noncoding WHERE uid = 'PCSK9_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_ea
+	Expected: '1.12E-01'
+	Recieved: 0.149762
+	Query: SELECT esp_ea FROM kmoad_20160606_175417_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_fin
+	Expected: '1.29E-01'
+	Recieved: 0.141177
+	Query: SELECT exac_fin FROM kmoad_20160606_175417_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_aa
+	Expected: '1.45E-01'
+	Recieved: 0.185065
+	Query: SELECT esp_aa FROM kmoad_20160606_175417_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_lat
+	Expected: '1.09E-01'
+	Recieved: 0.122776
+	Query: SELECT exac_lat FROM kmoad_20160606_175417_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_avg
+	Expected: '5.76E-01'
+	Recieved: 0.167413
+	Query: SELECT esp_avg FROM kmoad_20160606_175417_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+ 
+Time: 2.31
+
+------------------------- 
+pop_stats_v 
+kmoad_20160606_175419 
+Failed 8 of 96
+Variant UID: LCT_1
+	Column: exac_nfe
+	Expected: '1.00E-01'
+	Recieved: 0.7003
+	Query: SELECT exac_nfe FROM kmoad_20160606_175419_variant WHERE uid = 'LCT_1';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: LCT_NC
+	Column: kg
+	Expected: '2.60E-01'
+	Recieved: 0.739617
+	Query: SELECT kg FROM kmoad_20160606_175419_noncoding WHERE uid = 'LCT_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_NC
+	Column: kg
+	Expected: '9.10E-02'
+	Recieved: 0.908546
+	Query: SELECT kg FROM kmoad_20160606_175419_noncoding WHERE uid = 'PCSK9_NC';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_ea
+	Expected: '1.12E-01'
+	Recieved: 0.149762
+	Query: SELECT esp_ea FROM kmoad_20160606_175419_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_fin
+	Expected: '1.29E-01'
+	Recieved: 0.141177
+	Query: SELECT exac_fin FROM kmoad_20160606_175419_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_aa
+	Expected: '1.45E-01'
+	Recieved: 0.185065
+	Query: SELECT esp_aa FROM kmoad_20160606_175419_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: exac_lat
+	Expected: '1.09E-01'
+	Recieved: 0.122776
+	Query: SELECT exac_lat FROM kmoad_20160606_175419_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+Variant UID: PCSK9_2
+	Column: esp_avg
+	Expected: '5.76E-01'
+	Recieved: 0.167413
+	Query: SELECT esp_avg FROM kmoad_20160606_175419_variant WHERE uid = 'PCSK9_2';
+	Method: float_numeric_range
+	Modifier: '0.01'
+ 
+Time: 2.96
+
+------------------------- 
+prot_change_18 
+kmoad_20160606_175422 
+Passed
+ 
+Time: 2.19
+
+------------------------- 
+prot_change_c 
+kmoad_20160606_175424 
+Passed
+ 
+Time: 2.22
+
+------------------------- 
+prot_change_v 
+kmoad_20160606_175426 
+Passed
+ 
+Time: 2.18
+
+------------------------- 
+pubmed_18 
+kmoad_20160606_175429 
+Passed
+ 
+Time: 4.38
+
+------------------------- 
+pubmed_c 
+kmoad_20160606_175433 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+pubmed_v 
+kmoad_20160606_175435 
+Passed
+ 
+Time: 2.31
+
+------------------------- 
+so_best_18 
+kmoad_20160606_175437 
+Passed
+ 
+Time: 2.2
+
+------------------------- 
+so_best_c 
+kmoad_20160606_175440 
+Passed
+ 
+Time: 2.32
+
+------------------------- 
+so_best_v 
+kmoad_20160606_175442 
+Passed
+ 
+Time: 2.21
+
+------------------------- 
+tcga_c 
+kmoad_20160606_175444 
+Passed
+ 
+Time: 3.21
+
+------------------------- 
+transcript_18 
+kmoad_20160606_175447 
+Passed
+ 
+Time: 2.43
+
+------------------------- 
+transcript_c 
+kmoad_20160606_175450 
+Passed
+ 
+Time: 2.23
+
+------------------------- 
+transcript_v 
+kmoad_20160606_175452 
+Passed
+ 
+Time: 2.42
+
+------------------------- 
+vest_c 
+kmoad_20160606_175455 
+Passed
+ 
+Time: 26.41
+
