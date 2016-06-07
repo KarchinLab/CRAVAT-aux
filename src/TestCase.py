@@ -68,7 +68,6 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
-        
     def _compare(self,datapoint, keypoint, method, modifier):    
         # Exact string comparison
         if method == 'string_exact':
@@ -151,6 +150,7 @@ class TestCase(object):
         return out
             
     # Verify that the entries in the key dictionary match the entries in the output SQL table
+
     def verify(self,db_args):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
@@ -191,8 +191,11 @@ class TestCase(object):
                                                 %(self.job_id, table, self.sql_key, row)
                                 data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
                                     %(col, self.job_id, table, self.sql_key, row)
-                                cursor.execute(row_count_query)
-                                row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
+                                try:
+                                    cursor.execute(row_count_query)
+                                    row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
+                                except:
+                                    row_count = 0
                                 if row_count == 1:
                                     row_found = True
                                     cursor.execute(data_query)

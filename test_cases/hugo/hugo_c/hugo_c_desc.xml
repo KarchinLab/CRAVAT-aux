@@ -3,4 +3,5 @@
 		<analyses />
 	</sub_params>
 	<verify_rules />
-<tab>variant,noncoding</tab></desc>
+	<tab>variant,noncoding</tab>
+</desc>
