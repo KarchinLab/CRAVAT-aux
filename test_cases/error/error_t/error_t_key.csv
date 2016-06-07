@@ -1,0 +1,4 @@
+uid,error
+noMix,Genomic and transcript coordinate should not be mixed
+refAA,Reference AA error
+altAA,Alternate AA error

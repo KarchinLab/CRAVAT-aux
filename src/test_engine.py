@@ -6,7 +6,7 @@ from XML_conversions import recurse_to_dict
 import collections
 
 ### Define tests to run ###
-test_cases = ['seqont\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['vest_gene\\all','chasm_gene\\all'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 exclude_cases = [] # These test will not be run. Format same as test_cases
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
