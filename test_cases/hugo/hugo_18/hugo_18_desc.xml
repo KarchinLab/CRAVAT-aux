@@ -3,4 +3,5 @@
 		<analyses />
 	<hg18>on</hg18></sub_params>
 	<verify_rules />
-<tab>variant,noncoding</tab></desc>
+	<tab>variant,noncoding</tab>
+</desc>

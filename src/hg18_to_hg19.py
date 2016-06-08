@@ -3,8 +3,8 @@ import os
 import xml.etree.ElementTree as ET
 import shutil
 
-hg19_test = 'chasm_gene_c'
-top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\chasm_gene'
+hg19_test = 'hugo_c'
+top_dir = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\hugo'
 lo = LiftOver('hg19','hg18')
 hg18_test = '_'.join(hg19_test.split('_')[:-1]) + '_18'
 
