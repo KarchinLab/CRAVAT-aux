@@ -12,6 +12,10 @@
 			<method>float_numeric_range</method>
 			<modifier>0.01</modifier>
 		</column>
+		<column name = "chasm_best_fdr">
+			<method>float_numeric_range</method>
+			<modifier>0.01</modifier>
+		</column>
 		<column name = "chasm_all">
 			<method>string_included</method>
 			<modifier>,</modifier>
