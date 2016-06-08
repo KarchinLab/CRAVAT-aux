@@ -224,19 +224,19 @@ class TestCase(object):
                             if not(correct):
                                 self.result = False
                                 points_failed += 1
-                                self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tQuery: %s\n\tMethod: %s\n\tModifier: %r\n' \
+                                self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tQuery: %s\n\tMethod: %s\n\tModifier: %r\n' \
                                                 %(row, col, keypoint, datapoint, data_query, method, modifier)
                             self.data[row][col] = datapoint
                         except:
                             self.result = False
                             points_failed += 1
-                            self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
+                            self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
                                           %(row, col, keypoint, data_query, traceback.format_exc())
             except:
                 self.result = False
                 points_failed += 1
                 try:
-                    self.log_text += 'Variant UID: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
+                    self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
                                  %(row, col, keypoint, data_query, traceback.format_exc())
                 except:
                     self.log_text += traceback.format_exc()

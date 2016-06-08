@@ -1,4 +1,9 @@
-uid,error
-noMix,Genomic and transcript coordinate should not be mixed
-refAA,Reference AA error
-altAA,Alternate AA error
+input_line_number,error
+2,Genomic and transcript coordinate should not be mixed
+3,Reference AA error
+4,Alternate AA error
+5,AA position error
+6,Transcript name error
+7,UID should not contain a comma
+8,AA change error
+9,Variant ID error

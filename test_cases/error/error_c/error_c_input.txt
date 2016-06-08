@@ -8,3 +8,6 @@ missCols	chr13	32915005	G	C
 refB	chr13	32915005	+	T	C	s1
 strand	chr13	32915005	-	G	C	s1
 altB	chr13	32915005	+	G	F	s1
+chrom	ch13	32915005	+	G	C	s1
+posit	chr13	b32915005	+	G	C	s1
+	chr13	32915005	+	G	C	s1
