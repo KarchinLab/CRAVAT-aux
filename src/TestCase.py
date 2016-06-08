@@ -5,9 +5,8 @@ import traceback
 import math
 import csv
 import os
-import xml.etree.ElementTree as ET
 import MySQLdb
-from XML_conversions import recurse_to_dict
+from XML_conversions import xml_to_dict
 
 
 class TestCase(object):
@@ -15,10 +14,10 @@ class TestCase(object):
     def __init__(self,name,path):
         self.name = name
         self.path = path
-        bottom_dir = os.path.split(self.path)[1]
-        self.input_path = os.path.join(self.path,'%s_input.txt' %bottom_dir)
-        self.key_path = os.path.join(self.path,'%s_key.csv' %bottom_dir)
-        self.desc_path = os.path.join(self.path, '%s_desc.xml' %bottom_dir)
+        test_dir = os.path.split(self.path)[1]
+        self.input_path = os.path.join(self.path,'%s_input.txt' %test_dir)
+        self.key_path = os.path.join(self.path,'%s_key.csv' %test_dir)
+        self.desc_path = os.path.join(self.path, '%s_desc.xml' %test_dir)
         self.desc = {}
         self.key = {}
         self.job_id = ''
@@ -27,12 +26,10 @@ class TestCase(object):
         self.result = False
         self.log_text = ''
 
-        # Open up the desc file and read the test attributes
-        with open(self.desc_path) as desc_file:
-            desc_xml = ET.parse(desc_file).getroot()
-            self.desc = recurse_to_dict(desc_xml)
+        # Read test desc file to a dict
+        self.desc = xml_to_dict(self.desc_path)
         
-        # Read the key file into a 2D dictionary
+        # Read the key file into a 2D dict
         with open(self.key_path) as r:
             key_csv = csv.DictReader(r)
             # Key goes in a 2 layer dict with layer 1 indexed by first column of the sql file
@@ -68,24 +65,28 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
+   
     def _compare(self,datapoint, keypoint, method, modifier):    
         # Exact string comparison
         if method == 'string_exact':
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint == keypoint
+            
         # True if first <modifier> characters in data string equal key string
         elif method == 'string_truncate':
             modifier = int(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = datapoint[:modifier] == keypoint[:modifier]
+        
         # True if data string up to <modifier> character is equal to key string
         elif method == 'string_parse':
             modifier = str(modifier)
             datapoint = str(datapoint)
             keypoint = str(keypoint)
             out = keypoint == datapoint.split(modifier)[0] 
+        
         # True if key string is present in data string. Multiple unique strings in key can be separated with <modifier> character
         elif method == 'string_included':
             modifier = str(modifier)
@@ -96,6 +97,7 @@ class TestCase(object):
                 correct = key_string in datapoint
                 if not(correct):
                     out = False
+        
         # True if key and data match when rounded to <modifier> decimal points
         elif method == 'float_round':
             datapoint = float(datapoint)
@@ -104,6 +106,7 @@ class TestCase(object):
             data_rounded = round(datapoint,modifier)
             key_rounded = out = round(keypoint,modifier)
             out = data_rounded == key_rounded
+        
         # True if key and data match when rounded to <modifier> sigfigs. Will ignore preceding zeros in decimals.
         elif method == 'float_sigfig':
             datapoint = float(datapoint)
@@ -115,6 +118,7 @@ class TestCase(object):
                 out = data_rounded == key_rounded
             else:
                 out = round(datapoint,modifier) == round(keypoint,modifier)
+        
         # True if key and data match when truncated at the <modifier> decimal point
         elif method == 'float_truncate':
             datapoint = float(datapoint)
@@ -127,6 +131,7 @@ class TestCase(object):
             temp[1] = temp[1][:modifier]
             key_rounded = float('.'.join(temp))
             out = data_rounded == key_rounded
+        
         # True if data is within <modifier> integers of key. Inclusive
         elif method == 'float_numeric_range':
             datapoint = float(datapoint)
@@ -134,6 +139,7 @@ class TestCase(object):
             modifier = float(modifier)
             diff = abs(datapoint - keypoint)
             out = diff <= modifier
+        
         # True if data is within <modifier> percentage range of key. Inclusive
         elif method == 'float_percentage_range':
             datapoint = float(datapoint)
@@ -144,31 +150,32 @@ class TestCase(object):
             else:
                 out = False
         
+        
         else:
             raise BaseException('Improper comparison method: %r. Check the syntax in the desc file.' %method)
         
         return out
             
-    # Verify that the entries in the key dictionary match the entries in the output SQL table
 
+    # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self,db_args):
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
-        
+        # Only attempt verification if job was successfully processed
         if self.job_status != 'Error':
-           
-            # Data is a dict that will match the key dict if test is passed
+            # Data is a dict that will store values from SQL.  May use it later
             self.data = {}
+            # These will count points tried and points failed
             points = 0
             points_failed = 0
             
             try:
                 db = MySQLdb.connect(host = db_args['host'],
-                     port = int(db_args['port']),
-                     user = db_args['user'],
-                     passwd = db_args['password'],
-                     db = db_args['db']
-                     )
+                                     port = int(db_args['port']),
+                                     user = db_args['user'],
+                                     passwd = db_args['password'],
+                                     db = db_args['db']
+                                     )
                 cursor = db.cursor()
                 # Loop through the key dictionary, row is used as primary index, SQL col name as secondary index
                 for row in self.key:
@@ -185,12 +192,10 @@ class TestCase(object):
                         # If verification for this entry errors, the error will be logged and execution will continue
                         try:
                             # Run the correct query on the SQL table that the row exists in
-                            for table in self.desc['tab'].split(','):
+                            for table in self.desc['tab'].strip().split(','):
                                 row_found = False
                                 row_count_query = 'SELECT count(*) FROM %s_%s WHERE %s = \'%s\';' \
                                                 %(self.job_id, table, self.sql_key, row)
-                                data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                    %(col, self.job_id, table, self.sql_key, row)
                                 try:
                                     cursor.execute(row_count_query)
                                     row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
@@ -198,24 +203,25 @@ class TestCase(object):
                                     row_count = 0
                                 if row_count == 1:
                                     row_found = True
+                                    data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                        %(col, self.job_id, table, self.sql_key, row)
                                     cursor.execute(data_query)
                                     datapoint = cursor.fetchone()[0]
                                     break
-                            # If row was not found in given SQL tables, assign an Error string to it.
+                            # If row was not found in given SQL tables, throw an error
                             if not(row_found):
-                                datapoint = 'Error: row not found'
+                                raise LookupError('Row not found')
                             
                             # If there are special verification methods listed in verify_rules and neither datapoint nor
                             # keypoint are None or Error, use the method in desc. Otherwise, default to string_exact.
-                            if type(self.desc['verify_rules']) is dict:
-                                if (keypoint != None and datapoint != None and 'Error' not in str(datapoint))\
-                                    and (col in self.desc['verify_rules'].keys()):
+                            try:
+                                if keypoint != None and datapoint != None and col in self.desc['verify_rules'].keys():
                                     method = self.desc['verify_rules'][col]['method']
                                     modifier = self.desc['verify_rules'][col]['modifier']
                                 else:
                                     method = 'string_exact'
                                     modifier = None
-                            else:
+                            except:
                                     method = 'string_exact'
                                     modifier = None
                                       
@@ -226,34 +232,39 @@ class TestCase(object):
                                 points_failed += 1
                                 self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %r\n\tRecieved: %r\n\tQuery: %s\n\tMethod: %s\n\tModifier: %r\n' \
                                                 %(row, col, keypoint, datapoint, data_query, method, modifier)
+                           
                             self.data[row][col] = datapoint
+                        # Error in SQL selection. Log exception and continue
                         except:
                             self.result = False
                             points_failed += 1
                             self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
                                           %(row, col, keypoint, data_query, traceback.format_exc())
+            # Loop breaking error. Log exception and close.
             except:
                 self.result = False
                 points_failed += 1
                 try:
-                    self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tExpected: %s\n\tQuery: %s\n\tError: \n%s\n'\
-                                 %(row, col, keypoint, data_query, traceback.format_exc())
+                    self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tVerification Error: \n%s\n'\
+                                 %(row, col, traceback.format_exc())
                 except:
                     self.log_text += traceback.format_exc()
             finally:
+                # Print test summary comments to test log
                 if self.result:
                     self.log_text = 'Passed\n'
                 else:
                     self.log_text = 'Failed %d of %d\n' %(points_failed,points) + self.log_text
-                
+                # Close the db
                 try:
                     cursor.close()
                     db.close()
                 except Exception:
                     print traceback.format_exc()
                     pass
+        # Go here if submission was not successful
         else:
-            self.data = 'Submission Failed'
             self.result = False
+            self.data = 'Submission Failure'
             self.log_text = 'Submission Failure'
         

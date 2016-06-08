@@ -1,12 +1,11 @@
 from TestCase import TestCase
 import os
 import time
-import xml.etree.ElementTree as ET
-from XML_conversions import recurse_to_dict
+from XML_conversions import xml_to_dict
 import collections
 
 ### Define tests to run ###
-test_cases = ['transcript\\t'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['hugo\\c'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 exclude_cases = [] # These test will not be run. Format same as test_cases
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
@@ -44,9 +43,7 @@ for test in test_list[:]:
 
 ### Perform startup tasks ###
 # Read in the TestArguments file containing pointers to docker container and results database
-with open(os.path.join(test_cases_dir,'TestArguments.xml'),'r') as args_file:
-            args_xml = ET.parse(args_file).getroot()
-args = recurse_to_dict(args_xml)
+args = xml_to_dict(os.path.join(test_cases_dir,'TestArguments.xml'))           
 for char in ['[',']','\'',' ']:
     args['expected_failures'] = args['expected_failures'].replace(char,'')
 args['expected_failures'] = args['expected_failures'].strip().split(',')
@@ -57,11 +54,13 @@ log_name = time.strftime('%y-%m-%d-%H-%M-%S')
 log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
 
 # Results will store names of tests that passed or failed, used later to summarize test
-results = {'pass':[],'fail':[]}
+results = {'pass':[], 'unexp_pass':[], 'fail':[], 'unexp_fail':[]}
 
 ### Run tests ###
 tests = collections.OrderedDict() # Will store resulting test objects in order they were run  
 print 'Test Started'
+print 'Tests: %r' %test_cases
+print 'Excluding: %r' %exclude_cases
 total_time = 0
 ######################################################################
 for test in test_list:
@@ -78,9 +77,9 @@ for test in test_list:
     print 'Job Sent: %s' %curTest.job_id
     # Test will not continue until checkStatus() is complete
     curTest.checkStatus(args['url'],1) 
-    print 'Submission %s: %s' %(curTest.job_status, curTest.job_id)
+    print 'Submission %s' %curTest.job_status
     
-    # Check that data matches key
+     # Check that data matches key
     curTest.verify(args['db_info'])
     
     # curTest.result is a logical T/F for a fully passed test.  Tests names are recorded to results dict here    
@@ -99,38 +98,37 @@ for test in test_list:
 
     # Enter the test object into the dict   
     tests[test] = curTest  
+    
 ######################################################################
 
+### Summarize and print test suite log file ###
 results['unexp_fail'] = [t for t in results['fail'] if t not in args['expected_failures']]
-results['unexp_pass'] = [t for t in args['expected_failures'] if t in results['pass']]
-   
-# Print closing comments to command line
-print '-'*25
-print 'Passed: %d\n%r' %(len(results['pass']),results['pass'])
-print 'Unexpected Sucesses: %d\n%r' %(len(results['unexp_pass']), results['unexp_pass'])
-print 'Failed: %d\n%r' %(len(results['fail']),results['fail'])
-print 'Unexpected Failures: %d\n%r' %(len(results['unexp_fail']), results['unexp_fail'])
-print '%s seconds\n%s\nTest Complete' %(total_time,'-'*25)
-
-### Print log file ###
-log_text += """Tests: %d
+results['unexp_pass'] = [t for t in args['expected_failures'] if t in results['pass']] 
+summary = """Tests: %d
 %r
-Successes: %d
+Passed: %d
 %r
-Unexpected Successes: %d
+Unexpected Passes: %d
 %r
-Failures: %d
+Failed: %d
 %r
 Unexpected Failures: %d
 %r
-Time: %s seconds
-""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['unexp_pass']), results['unexp_pass'],\
-      len(results['fail']), results['fail'], len(results['unexp_fail']), results['unexp_fail'], total_time)
+Time: %s seconds""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['unexp_pass']), \
+                      results['unexp_pass'], len(results['fail']), results['fail'], len(results['unexp_fail']), \
+                      results['unexp_fail'], total_time)
+# Print summary
+print '-'*25
+print summary
+print '-'*25
+print 'Test Complete'
+
+# Print log file
+log_text += summary
 # Log then contains details of each test
-log_text += '\nTest Details\n' + '='*80 + '\n'
+log_text += '\n\nTest Details\n' + '='*80 + '\n'
 for curTest in tests.values():
-    log_text += '%s \n%s \n%s \n%s \nTime: %s\n\n' %('-'*25,curTest.name,curTest.job_id,curTest.log_text,curTest.elapsed_time)
+    log_text += '%s \n%s \n%s \n%s \nTime: %s\n\n' %('-'*25, curTest.name, curTest.job_id, curTest.log_text, curTest.elapsed_time)
     
-# Write log text to file
 with open(os.path.join(log_dir,'%s.txt' %log_name),'w') as log_file:
     log_file.write(log_text)
