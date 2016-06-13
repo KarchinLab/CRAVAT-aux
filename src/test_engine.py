@@ -5,7 +5,7 @@ from XML_conversions import xml_to_dict
 import collections
 
 ### Define tests to run ###
-test_cases = ['hugo\\c'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
+test_cases = ['chasm\\c'] # Input tests to run as list of strings, or use ['all'] to run every test in suite
 exclude_cases = [] # These test will not be run. Format same as test_cases
 test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
 
