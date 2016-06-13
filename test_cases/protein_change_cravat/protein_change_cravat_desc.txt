@@ -1,3 +1,0 @@
-columns:so_best_protein_change
-mut_format:cravat
-analyses:VEST

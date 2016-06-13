@@ -1,0 +1,30 @@
+#Has many errors and correct input
+TR1 chr22 30421786 + A T sample_1
+TR2 chr22 40814500 - A G sample_1
+TR3 chr22 40815256 + C T sample_1
+TR4 chr22 25115450 + - AGG sample_2
+TR5 chr22 25115450 + AGA - sample_2
+TR6 chr22 25115450 + AG T sample_2
+TR7 chr2 219134766 + G - sample_3
+TR81 chr2 219134767 + - G sample_3
+TR82 chr2 219134767 + - G sample_3
+TR83 chr2 219134767 + - G sample_3
+TR84 chr2 219134767 + - G sample_3
+TR85 chr2 219134767 + - G sample_3
+
+wrongRef11	chr2	219134766	-	G	-
+wrongRef12	chr2	219134766	-	G	-
+wrongRef13	chr2	219134766	-	G	-
+wrongRef14	chr2	219134766	-	G	-
+wrongRef2	chr16	67693689	+	AAG	-
+err3 chr22 30421786 - A T sample_1
+err3CORRECT chr22 30421786 - T A sample_1
+err31 chr22 30421786 - A T sample_1
+err4 chr22 40814500 + A G sample_1
+err41 chr22 40814500 + A G sample_1
+err5 chr22 40815256 - C T sample_1
+err6 chr22 25115450 - AGA - sample_2
+err61 chr22 25115450 - AGA - sample_2
+err7 chr22 25115450 - AG T sample_2
+err8 chr2 219134766 - G - sample_3
+ReallyBad sdfa asdfad ewd chr2 219134766 - G - sample_3

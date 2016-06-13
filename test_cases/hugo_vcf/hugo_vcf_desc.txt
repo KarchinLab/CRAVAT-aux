@@ -1,3 +1,0 @@
-columns:hugo
-mut_format:vcf
-analyses:VEST

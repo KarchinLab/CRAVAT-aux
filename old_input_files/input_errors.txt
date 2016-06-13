@@ -1,0 +1,11 @@
+#These inputs give the wrong base as the reference input
+
+wrongRef1	chr2	219134766	-	G	-
+wrongRef2	chr16	67693689	+	AAG	-
+err3 chr22 30421786 - A T sample_1
+err4 chr22 40814500 + A G sample_1
+err5 chr22 40815256 - C T sample_1
+err6 chr22 25115450 - AGA - sample_2
+err7 chr22 25115450 - AG T sample_2
+err8 chr2 219134766 - G - sample_3
+ReallyBad sdfa asdfad ewd chr2 219134766 - G - sample_3

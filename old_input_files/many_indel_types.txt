@@ -1,0 +1,276 @@
+# Many different indel types
+
+
+#MAKE ALL THESE HAVE INFRAME AND FRAMESHIFT EXAMPLES
+#MAKE A DELETION AND INSERTION FOR EACH ONE OF THESE
+#MAKE ALL OF THESE ON + AND - STRAND TOO
+#HOW ABOUT FOR A GENE THAT GOES + AND A GENE THAT GOES -
+
+
+#MOST EVERYTHING YOU HAVE HEAR IS FINE. EXCEPT DOWN BELOW YOU SAY YOU HAVE TO RENAME CERTAIN VARIANTS USING THE KEY!!!!! MAKE USRE YOU DO THIS!!! AND ACTUALLY TEST YOUR MANUAL STUFF FORM WHAT CRAVAT GIVES YOU.
+
+
+
+#KEY:
+# E: exon
+# I: intron
+# S: splice site
+
+# 0: means it stayed in the same place. Like inside the same exon
+# 2: read as to. Like intron to exon: I2E
+#	I2I: intron to intron over exon - Same idea for all other things like this
+# 3: means staying in a splice site at the beginning of an exon. So ending splice site. The way you are doing this needs to be in reference to the direction the gene runs.
+# 4: means staying in a splice site at the beginning of an intron. So beginning splice site. The way you are doing this needs to be in reference to the direction the gene runs.
+# 5: means splice site to splice site OVER an exon
+# 6: means splice site to splice site OVER an intron
+
+
+# f: frameshift
+# i: inframe
+# z: in intron only (or intron and splice site) so can't be frameshift based on coding region BUT if in splice site it will cause a similar problem
+# b: means something bad, like an entire exon is deleted
+
+# D: deletion
+# N: insertion
+
+# P: plus input
+# M: minus input
+
+# W: means there is something different about that input and investigate further
+
+
+#Genes
+# BRCA2: chr13:32,887,617-32,975,809
+# FRY: chr13:32,603,437-32,872,776
+# LAMA2: chr6:129,202,286-129,839,710
+# SAG: chr2:234,214,309-234,257,701
+
+
+
+
+# Plus input
+#Start Exon
+#Within Exon
+E0EfDP	chr13	32911120	+	T	-
+E0EfNP	chr13	32911120	+	-	TG
+E0EiDP	chr13	32911120	+	TCC	-
+E0EiNP	chr13	32911120	+	-	AAA
+
+#Start exon go to intron - Because this goes from exon to inton. Inframe is NOT always a multiple of three
+#Insertion can't span from one to the other - worry about later
+E2IfDP	chr13	32907521	+	TCAGGTAC	-
+E2IiDP	chr13	32907522	+	CAGGTAC	-
+
+#Start exon go to splice site
+#Frameshift gets rid of coding nucleotides not a multiple of 3
+#Inframe makes them a mulitple of 3
+E2SfDP1	chr13	32907523	+	AGG	-
+E2SfDP2	chr13	32907523	+	AGGT	-
+E2SiDP1	chr13	32907522	+	CAGG	-
+E2SiDP2	chr13	32907522	+	CAGGT	-
+
+#Exon to Exon over whole intron
+E2EfDP	chr13	32709130	+	TGCTGTGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCAGGCT	-
+E2EiDP	chr13	32709131	+	GCTGTGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCAGGCT	-
+
+
+
+
+
+#Start Intron
+#Within Intron. 
+I0IzDP	chr13	32908740	+	G	-
+I0IzNP	chr13	32908740	+	-	GT
+I0IzDP2	chr13	32908740	+	GAC	-
+I0IzNP2	chr13	32908740	+	-	CCC
+
+
+#Intron to Intron over whole exon
+I2IbDP	chr6	129763363	+	CCTCAAATCAAATCCT	-
+
+#Start intron go to splice site
+I2SzDP1	chr13	32910397	+	TTTA	-
+I2SzDP2	chr13	32910397	+	TTTAG	-
+
+#Start intron go to exon
+I2EfDP	chr13	32910395	+	TGTTTAGGT	-
+I2EiDP	chr13	32910395	+	TGTTTAGGTT	-
+
+
+
+
+
+#Start Splice Site
+
+#Within Splice site at the beginning of intron
+S4SzDP1	chr13	32907525	+	G	-
+S4SzDP2	chr13	32907526	+	T	-
+S4SzDP3	chr13	32907525	+	GT	-
+S4SzNP	chr13	32907526	+	-	A
+
+#Should be a frameshift insertion because the insertion takes place at the beginning of the splice site. Therefore the splice site is maintained and the insertion will be before it in the coding region.
+#S4SfNP	chr13	32907525	+	-	A
+#S4SiNP	chr13	32907525	+	-	ACC
+1weirdP	chr13	32907525	+	-	A
+2weirdP	chr13	32907525	+	-	ACC
+
+
+#Within Splice site at the beginning of exon
+#S3SzDP2 will actually result in a frameshift most likely because the next base after 32906408 is also a 'G'. So splicing is still likely and then the coding frame will be shifted
+S3SzDP1 chr13	32906407	+	A	-
+S3SzDP2W	chr13	32906408	+	G	-
+S3SzDP2W	chr13	32906407	+	AG	-
+S3SzNP1	chr13	32906408	+	-	T
+
+#Splice site to intron. For S2IzDP1 the first T is the last nucleotide in the two for the splice site. If the number of nucleotides shown gets deleted a T results back in the place so the splice site may mantain functionality. That is why we have two copies of that variants. One is one nucleotide longer than the other. Also S2IzDP4 technically will result in mainting the splice site sequence because a GT results after the deletion
+S2IzDP1W	chr13	32907526	+	TACC	-
+S2IzDP2	chr13	32907526	+	TACCT	-
+S2IzDP3	chr13	32907525	+	GTACCT	-
+S2IzDP4W	chr13	32907525	+	GTACCTCT	-
+
+#Insertion at splice site with correct nucleotides so maintains a splice site and then affects the intron code
+S2IzNPW	chr13	32907526	+	-	TGGG
+
+#Splice site to Splice site over exon
+#1-4 are abnormal splice site sequences. 
+S5SzDP1	chr6	129763365	+	TCAAATCAAA	-
+S5SzDP2	chr6	129763365	+	TCAAATCAA	-
+S5SzDP3	chr6	129763366	+	CAAATCAAA	-
+S5SzDP4	chr6	129763366	+	CAAATCAA	-
+#5-8 are more normal splice site sequences. For gene SAG
+S5SzDP5	chr2	234255047	+	AGCTAAGGAAAGGT	-
+S5SzDP6	chr2	234255047	+	AGCTAAGGAAAGG	-
+S5SzDP7	chr2	234255048	+	GCTAAGGAAAGGT	-
+S5SzDP8	chr2	234255048	+	GCTAAGGAAAGG	-
+
+#Splice site to Splice site over intron
+S6SzDP1	chr13	32709134	+	GTGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCAG	-
+S6SzDP2	chr13	32709134	+	GTGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCA	-
+S6SzDP3	chr13	32709135	+	TGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCAG	-
+S6SzDP4	chr13	32709135	+	TGAGTTTCATTTCTAAAAACTCCTTCAAATTGTATCACAAAATCAACAATTTTATTAATATAATATTCACATGCATCTCTATTTCA	-
+
+#Splice site to exon
+S2EfDP1	chr13	32906407	+	AGGATT	-
+S2EfDP2	chr13	32906408	+	GGATT	-
+S2EiDP1	chr13	32906407	+	AGGAT	-
+S2EiDP2	chr13	32906408	+	GGAT	-
+
+#Insertion at splice site with correct nucleotides inserted so maintains a splice site and then affects the exon code. So need inframe and frameshift
+S2EfNPW	chr13	32906408	+	-	GT
+S2EiNPW	chr13	32906408	+	-	GTA
+
+
+
+
+
+
+# Minus input
+#Start Exon
+#Within Exon
+E0EfDM	chr13	32911120	-	A	-
+E0EfNM	chr13	32911120	-	-	AA
+E0EiDM	chr13	32911120	-	ATT	-
+E0EiNM	chr13	32911120	-	-	GGG
+
+#Exon to Intron
+E2IfDM	chr13	32910405	-	AAACCTAAA	-
+E2IiDM	chr13	32910404	-	AACCTAAA
+
+#Exon to splice site
+E2SfDM1	chr13	32910405	-	AAACCT	-
+E2SfDM2	chr13	32910405	-	AAACC	-
+E2SiDM1	chr13	32910404	-	AACCT	-
+E2SiDM2	chr13	32910404	-	AACC	-
+
+#Exon to Exon over whole intron
+E2EfDM	chr13	32709224	-	AGCCTGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCACAGCA	-
+E2EiDM	chr13	32709224	-	AGCCTGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCACAGC	-
+
+
+
+#Intron Start
+#Within Intron
+I0IzDM1	chr13	32908740	-	C	-
+I0IzNM1	chr13	32908740	-	-	AC
+I0IzDM2	chr13	32908740	-	CAC	-
+I0IzNM2	chr13	32908740	-	-	TTT
+
+#Intron to Intron over whole exon
+I2IzDM	chr6	129763378	-	AGGATTTGATTTGAGG	-
+
+#Intron to Splice Site
+I2SzDM1	chr13	32915338	-	CTTAC	-
+I2SzDM1	chr13	32915338	-	CTTA	-
+
+#Intron to Exon
+I2EfDM	chr13	32915338	-	CTTACCCAC	-
+I2EiDM	chr13	32915338	-	CTTACCCA	-
+
+#Start Splice Site
+#Within Splice site at the beginning of intron
+S4SzDM1	chr13	32907525	-	C	-
+S4SzDM2	chr13	32907526	-	A	-
+S4SzDM3	chr13	32907526	-	AC	-
+
+S4SzNM	chr13	32907525	-	-	G
+
+#Should be a frameshift insertion because the insertion takes place at the beginning of the splice site. Therefore the splice site is maintained and the insertion will be before it in the coding region.
+1weird	chr13	32907524	-	-	A
+2weird	chr13	32907524	-	-	AAA
+
+#Within Splice site at the beginning of exon
+S3SzDM1	chr13	32906407	-	T	-
+S3SzDM2	chr13	32906408	-	C	-
+S3SzDM3	chr13	32906408	-	CT	-
+S3SzNM1	chr13	32906407	-	-	G
+
+#Should be inframe and frameshift insertions
+#3weird should be a frame shift insertion
+#4 weird should be inframe insertion
+3weird	chr13	32906408	-	-	T
+4weird	chr13	32906408	-	-	TTT
+
+#Splice site to Intron
+S2IzDM1	chr13	32906407	-	TGTT	-
+S2IzDM2	chr13	32906408	-	CTGTT	-
+
+#Insertion at splice site with correct nucleotides so maintains a splice site and affects intron code
+S2IzNM	chr13	32906407	-	-	TGGGGG
+
+#Splice site to splice site over exon
+#1-4 are abnormals splice site sequences
+S5SzDM1	chr6	129763374	-	TTTGATTTGA	-
+S5SzDM2	chr6	129763374	-	TTTGATTTG	-
+S5SzDM3	chr6	129763373	-	TTGATTTGA
+S5SzDM4	chr6	129763373	-	TTGATTTG
+#5-8 are normal splice site sequences
+S5SzDM5	chr2	234255060	-	ACCTTTCCTTAGCT	-
+S5SzDM6	chr2	234255060	-	ACCTTTCCTTAGC	-
+S5SzDM7	chr2	234255059	-	CCTTTCCTTAGCT
+S5SzDM8	chr2	234255059	-	CCTTTCCTTAGC
+
+#Splice site to Splice site over intron
+S6SzDM1	chr13	32709221	-	CTGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCAC	-
+S6SzDM2	chr13	32709221	-	CTGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCA	-
+S6SzDM3	chr13	32709220	-	TGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCAC	-
+S6SzDM4	chr13	32709220	-	TGAAATAGAGATGCATGTGAATATTATATTAATAAAATTGTTGATTTTGTGATACAATTTGAAGGAGTTTTTAGAAATGAAACTCA	-
+
+#Splice site to Exon
+S2EfDM1	chr13	32907526	-	ACCTGA	-
+S2EfDM2	chr13	32907525	-	CCTGA	-
+S2EiDM1	chr13	32907526	-	ACCTG	-
+S2EiDM2	chr13	32907525	-	CCTG	-
+
+#Insertion at splice site with correct nucleotides inserted so maintains a splice site and then affects the exon code. So need inframe and frameshift
+#5weird will cause a frameshift insertion because nucleotides that cause a splice site will be inserted at a splice site along with nucleotides that affect the exon and are NOT a multiple of 3
+#6weird will cause an inframe insertion because nucleotides that cause a splice site will be inserted at a splice site along with nucleotides that affect the exon and are a multiple of 3
+
+5weird	chr13	32907525	-	-	CA
+6weird	chr13	32907525	-	-	CAC
+########### In the plus section change the indels like this to be called #weird. TAKE AWAY THE OTHER NAME!!! IT IS NOT CORRECT!!
+
+#Make variants that are a - input with a + gene and + input with - gene
+
+
+#Whole thing with gene having more than one transcript and influencing two transcripts differently
+

@@ -1,0 +1,146 @@
+# SNV
+TR1 chr22 30421786 + A T 1
+TR2 chr22 29446079 + A G 1
+TR3 chr22 29446079 + A G 1
+TR4 chr22 40814500 - A G 1
+TR5 chr22 40815256 + C T 1
+TR6 chr12 10853951 + G C 1
+TR7 chr18 72997828 + C A 1
+TR8 chr5 140762533 + C A 1
+TR9 chr1 153748012 + A C 1
+TR10 chr12 125561060 + C T 1
+TR11 chr2 202142443 + A G 1
+TR12 chr17 41116258 + A G 1
+TR13 chr16 855610 + G A 1
+TR14 chr4 87968515 + G T 1
+TR15 chr2 73435586 + G A 1
+
+# Alternate score
+sg chr1 12322045 + T A 1
+
+# Insertion
+3_fi chr22 25115449 + A AGG 1
+4_ii chr22 25115449 + A AGTC 1
+
+# Deletion
+5_id chr22 25115449 + AAGA A 1
+6_fd chr22 25115449 + AAG A 1
+8_fd chr19 7675768 + TC T 1
+
+# Complex
+7 chr22 25115449 + AAG AT 1
+ii_plus_2 chr11 1092619 + C CCAA 1
+ii_plus_2_6 chr11 1092619 + C CCAATGG 1
+ii_plus_2_9 chr11 1092619 + C CCAATGGTCC 1
+ii_plus_1 chr11 1092618 + T TCAA 1
+ii_plus_0 chr11 1092617 + C CCAA 1
+ii_minus_2 chr11 1092620 - G GTTG 1
+ii_minus_0 chr11 1092619 - G GTTG 1
+ii_minus_1 chr11 1092618 - A ATTG 1
+id_plus_0 chr3 42251577 + CGGA C 1
+id_plus_2 chr3 42251576 + ACGG A 1
+id_plus_1 chr3 42251575 + CACG C 1
+id_minus_0 chr3 42251581 - CTCC C 1
+id_minus_2 chr3 42251580 - TCCG T 1
+id_minus_1 chr3 42251579 - CCGT C 1
+ii_plus_2_long chr11 1092618 + T TCAATCGCCTAAAGCCCAGGGTCGGGGTAAACCCGGGTAAATT 1
+fv_1_of_2 chr2 219134765 + TG T 1
+fv_2_of_2 chr2 219134766 + G GG 1
+same_pos_fv_1_of_2 chr6 30545853 + CAA C 1
+same_pos_fv_2_of_2 chr6 30545853 + CA C 1
+same_pos_ii_1_of_3 chr18 72223608 + G GATG 1
+same_pos_ii_2_of_3 chr18 72223608 + G GCTG 1
+same_pos_ii_3_of_3 chr18 72223608 + G GCTGCTG 1
+same_pos_id_1_of_2 chr12 123466292 + GGAA G 1
+same_pos_id_2_of_2 chr12 123466292 + GGAAGAAGAA G 1
+
+# Complex New Format
+7_new chr22 25115450 + AG T 2
+ii_plus_2_new chr11 1092620 + - CAA 2
+ii_plus_2_6_new chr11 1092620 + - CAATGG 2
+ii_plus_2_9_new chr11 1092620 + - CAATGGTCC 2
+ii_plus_1_new chr11 1092619 + - CAA 2
+ii_plus_0_new chr11 1092618 + - CAA 2
+ii_minus_2_new chr11 1092619 - - TTG 2
+ii_minus_0_new chr11 1092618 - - TTG 2
+ii_minus_1_new chr11 1092617 - - TTG 2
+id_plus_0_new chr3 42251578 + GGA - 2
+id_plus_2_new chr3 42251577 + CGG - 2
+id_plus_1_new chr3 42251576 + ACG - 2
+id_minus_0_new chr3 42251580 - TCC - 2
+id_minus_2_new chr3 42251579 - CCG - 2
+id_minus_1_new chr3 42251578 - CGT - 2
+ii_plus_2_long_new chr11 1092619 + - CAATCGCCTAAAGCCCAGGGTCGGGGTAAACCCGGGTAAATT 2
+fv_1_of_2_new chr2 219134766 + G - 2
+fv_2_of_2_new chr2 219134767 + - G 2
+same_pos_fv_1_of_2_new chr6 30545854 + AA - 2
+same_pos_fv_2_of_2_new chr6 30545854 + A - 2
+same_pos_ii_1_of_3_new chr18 72223609 + - ATG 2
+same_pos_ii_2_of_3_new chr18 72223609 + - CTG 2
+same_pos_ii_3_of_3_new chr18 72223609 + - CTGCTG 2
+same_pos_id_1_of_2_new chr12 123466293 + GAA - 2
+same_pos_id_2_of_2_new chr12 123466293 + GAAGAAGAA - 2
+
+# Mappability
+map1 chr1 10001 + A T 1
+map2 chr1 10001 + T C 1
+map3 chr1 10001 + G T 1
+map4 chr1 10001 + C T 1
+map5 chrY 20403581 + A T 1
+map6 chrY 20403581 + T C 1
+map7 chrY 20403581 + G T 1
+map8 chrY 20403581 + C T 1
+
+# dbSNP
+dbsnp_single_plus_rs201752861 chr1 10177 + A C 1
+dbsnp_single_minus_rs2363296 chr1 11692 - T G 1
+dbsnp_deletion_plus_rs201106462 chr1 10328 + AACCCCTAACCCTAACCCTAACCCT A 1
+dbsnp_indel_plus_rs77426996 chr1 63737 + TACT TCTA 1
+dbsnp_indel_minus_rs71309400 chr1 30903 - TAG TAGAG 1
+dbsnp_mnp_plus_rs71273379 chr1 70244 + ACA ATG 1
+dbsnp_mnp_minus_rs71219848 chr1 32386 - CGGAGGGAAG CAGAGGGAAA 1
+
+# dbSNP New Format
+dbsnp_deletion_plus_rs201106462_new chr1 10329 + ACCCCTAACCCTAACCCTAACCCT - 2
+dbsnp_indel_plus_rs77426996_new chr1 63738 + ACT CTA 2
+dbsnp_indel_minus_rs71309400_new chr1 30902 - AG AGAG 2
+dbsnp_mnp_plus_rs71273379_new chr1 70245 + CA TG 2
+dbsnp_mnp_minus_rs71219848_new chr1 32385 - GGAGGGAAG AGAGGGAAA 2
+
+# MuPIT
+mupitlink1 chr10 123279680 + C T 1
+mupitlink2 chr10 123279671 + T T 1
+mupitlink3 chr10 123279650 + C T 1
+
+# Vogelstein
+vogelstein_brca1_1 chr17 41244435 + T C 1
+
+# Target (DB)
+targetdb_1 chr4 153250831 - C T 1
+
+# Insertion New Format
+3_ii_new chr22 25115450 + - AGG 2
+4_fi_new chr22 25115450 + - AGTC 2
+
+# Deletion New Format
+5_id_new chr22 25115450 + AGA - 2
+6_fd_new chr22 25115450 + AG - 2
+8_fd_new chr19 7675767 + C - 2
+
+# Splice sits
+ss1 chr12 9220436 - A T 3
+ss2 chr1 115218625 - T C 3
+ss3_with_af chr1 247719769 + G A 3
+
+# p-value test
+p_0.946_0.00514457387501 chr10 100013382 + A G 3
+
+# Unknown gene name
+TR12033	chrX	88009322	+	A	G 3
+
+# Reference base error and wrong strand
+TR1_wrong_ref chr22 30421786 + C T sample_1
+TR1_wrong_ref_and_wrong_strand chr22 30421786 - C T sample_1
+
+# Hotspot
+hotspot_input_3 chr9 22006159 + G C sample_4
