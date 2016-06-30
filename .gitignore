@@ -1,0 +1,8 @@
+#ignore all log files since they will update often
+logs/
+
+#ignore all top level xlsx files except for 
+*.xlsx
+!TestCasesList.xlsx
+# Ignore everything in old_input_files
+old_input_files/
