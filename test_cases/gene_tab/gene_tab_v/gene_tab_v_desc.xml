@@ -3,14 +3,14 @@
 		<analyses />
 	</sub_params>
 	<verify_rules>
-		<column name = 'num_sample'>
+		<column name="num_sample">
 			<method>float_round</method>
 			<modifier>0</modifier>
 		</column>
-		<column name = 'variants'>
+		<column name="variants">
 			<method>string_included</method>
 			<modifier>,</modifier>
 		</column>
 	</verify_rules>
 	<tab>gene</tab>
-</desc>
+<sub_method>post</sub_method></desc>

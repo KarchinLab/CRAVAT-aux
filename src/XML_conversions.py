@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-# xml_to_dict will move recursively through an xml.etree.ElementTree object and transform it into a nested dictionary.
+# ET_to_dict will move recursively through an xml.etree.ElementTree object and transform it into a nested dictionary.
 def ET_to_dict(d):
     out = {}
     if len(d):
@@ -19,6 +19,7 @@ def ET_to_dict(d):
                 out = out.replace(old,rep_dict[old])
     return out
 
+# xml to dict will use either a path or a file container for an xml document and generate a nested dictionary
 def xml_to_dict(f):
     if type(f) == 'str':
         path = f

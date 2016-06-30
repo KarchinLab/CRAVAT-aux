@@ -29,18 +29,10 @@ class TestCase(object):
         # Read test desc file to a dict
         self.desc = xml_to_dict(self.desc_path)
         
-        # Read the key file into a 2D dict
-        with open(self.key_path) as r:
-            key_csv = csv.DictReader(r)
-            # Key goes in a 2 layer dict with layer 1 indexed by first column of the sql file
-            # and layer 2 indexed by results db column name
-            self.sql_key = key_csv.fieldnames[0]
-            for row in key_csv:
-                self.key[row[self.sql_key]] = row
-                del self.key[row[self.sql_key]][self.sql_key]     
+        
             
     # Submit the job to cravat   
-    def submitJob(self,url_base,email):
+    def submitJobPOST(self,url_base,email):
         data = {'email': email}
         for param in self.desc['sub_params']:
             data[param] = self.desc['sub_params'][param]
@@ -50,7 +42,45 @@ class TestCase(object):
         r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
         self.job_id = json.loads(r.text)['jobid']
-   
+    
+    # Submit the job line-by-line using GET, store the json outputs as subdicts in the self.data dict
+    def submitJobGET(self,url_base):
+        self.result = True
+        with open(self.input_path) as f:
+            lines = f.read().split('\n')
+        req_url = url_base + '/rest/service/query?mutation='
+        self.data = {}
+        uid = ''
+        for line in lines:
+            line_as_list = None
+            response = None
+            full_get_url = None
+            line_as_list = line.split('\t')
+            uid = line_as_list.pop(0)
+            if len(line_as_list) > 5: line_as_list = line_as_list[:5]
+            if not(line_as_list[0].startswith('chr')): line_as_list[0] = 'chr' + line_as_list[0]
+            full_get_url = req_url + '_'.join(line_as_list)
+            try:
+                response = requests.get(full_get_url)
+                self.data[uid] = json.loads(response.content)
+            except:
+                self.result = False
+                error_text = 'Error: %s\n\tURL: %s\n\tHTTP Code: %s\n\t%s' \
+                %(uid, full_get_url, response.status_code, traceback.format_exc())
+                self.log_text += error_text
+                print error_text
+                self.data[uid] = error_text
+                continue
+        out_filename = '%s_%s.txt' %('json_output',time.strftime('%y-%m-%d-%H-%M-%S'))
+        with open(os.path.join(self.path, out_filename),'w') as f:
+            for uid in sorted(self.data):
+                f.write('%s\n' %uid)
+                print type(self.data[uid])
+                if type(self.data[uid]) is dict:
+                    for field in sorted(self.data[uid]):
+                        f.write('\t%s: %s\n' %(field, self.data[uid][field]))
+                elif type(self.data[uid]) is str:
+                    f.write(self.data[uid])
     # Check the status of the job.  Hold execution until job complete
     def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
@@ -159,6 +189,15 @@ class TestCase(object):
 
     # Verify that the entries in the key dictionary match the entries in the output SQL table
     def verify(self,db_args):
+        # Read the key file into a 2D dict
+        with open(self.key_path) as r:
+            key_csv = csv.DictReader(r)
+            # Key goes in a 2 layer dict with layer 1 indexed by first column of the sql file
+            # and layer 2 indexed by results db column name
+            self.sql_key = key_csv.fieldnames[0]
+            for row in key_csv:
+                self.key[row[self.sql_key]] = row
+                del self.key[row[self.sql_key]][self.sql_key]     
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
         # Only attempt verification if job was successfully processed

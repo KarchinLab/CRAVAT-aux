@@ -3,4 +3,4 @@
 		<analyses />
 	<hg18>on</hg18></sub_params>
 	<verify_rules />
-<tab>variant</tab></desc>
+<tab>variant</tab><sub_method>post</sub_method></desc>

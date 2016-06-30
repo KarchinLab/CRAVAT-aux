@@ -3,10 +3,10 @@
 		<analyses />
 	</sub_params>
 	<verify_rules>
-		<column name = 'error'>
+		<column name="error">
 			<method>string_included</method>
 			<modifier>,</modifier>
 		</column>
 	</verify_rules>
 	<tab>error</tab>
-</desc>
+<sub_method>post</sub_method></desc>
