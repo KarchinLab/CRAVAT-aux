@@ -28,8 +28,8 @@ def parse_test_list(cases,main_dir):
 
 if __name__ == '__main__':
     ### Define tests to run ###
-	# Put tests to run as list of strings, or use ['all'] to run every test in suite
-    test_cases = ['cosmic\\c','gene_tab\\18','dbsnp\\v','parsing\\v','error\\t'] 
+    # Put tests to run as list of strings, or use ['all'] to run every test in suite
+    test_cases = ['chasm_gene\\c','cosmic\\c','pop_stats\\v','gene_tab\\18','parsing\\v','error\\t','seqont\\t'] 
     exclude_cases = [] # These test will not be run. Format same as test_cases
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
