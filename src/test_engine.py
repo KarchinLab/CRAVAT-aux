@@ -3,12 +3,13 @@ import os
 import time
 from XML_conversions import xml_to_dict
 import collections
+import argparse
 
 
 def parse_test_list(cases,main_dir):
     t_list = []
     for case in cases:
-        case_args = case.split(';')
+        case_args = case.split('/')
         target = case_args[0]
         try:input_codes = case_args[1].split(',')
         except: input_codes = 'all'
@@ -30,8 +31,18 @@ def parse_test_list(cases,main_dir):
 if __name__ == '__main__':
     ### Define tests to run ###
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
-    test_cases = ['all\\all'] 
-    exclude_cases = ['all\\t'] # These test will not be run. Format same as test_cases
+    sys_args_parser = argparse.ArgumentParser()
+    sys_args_parser.add_argument('include', 
+                          help='List of cases to include.  Format as "case_name/input1,input2". Separate with ":".')
+    sys_args_parser.add_argument('-ex','--exclude',
+                          help='List of cases to exclude.  Format as "case_name/input1,input2". Separate with ":".')
+    sys_args = sys_args_parser.parse_args()
+    test_cases = sys_args.include.split(':')
+    if sys_args.exclude:
+        exclude_cases = sys_args.exclude.split(':')
+    else:
+        exclude_cases = ''
+    
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
     # Generate list of tests to run
