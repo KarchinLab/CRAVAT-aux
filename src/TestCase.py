@@ -221,6 +221,15 @@ class TestCase(object):
                     self.data[row] = {}
                     for col in self.key[row]:
                         points += 1
+                        data_query = ''
+                        keypoint = None
+                        datapoint = None
+                        row_count_query = ''
+                        row_count = 0
+                        method = ''
+                        modifier = None
+                        correct = False
+                        
                         # If key at this entry has a value, assign it to keypoint.  Otherwise, skip this entry
                         if self.key[row][col]:
                             keypoint = self.key[row][col]
@@ -243,10 +252,11 @@ class TestCase(object):
                                 if row_count == 1:
                                     row_found = True
                                     data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                        %(col, self.job_id, table, self.sql_key, row)
+                                                 %(col, self.job_id, table, self.sql_key, row)
                                     cursor.execute(data_query)
                                     datapoint = cursor.fetchone()[0]
                                     break
+                            
                             # If row was not found in given SQL tables, throw an error
                             if not(row_found):
                                 raise LookupError('Row not found')
