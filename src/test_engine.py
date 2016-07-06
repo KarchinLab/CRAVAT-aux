@@ -30,8 +30,8 @@ def parse_test_list(cases,main_dir):
 if __name__ == '__main__':
     ### Define tests to run ###
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
-    test_cases = ['seqont;all'] 
-    exclude_cases = ['seqont;c'] # These test will not be run. Format same as test_cases
+    test_cases = ['all\\all'] 
+    exclude_cases = ['all\\t'] # These test will not be run. Format same as test_cases
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
     # Generate list of tests to run
@@ -64,6 +64,7 @@ if __name__ == '__main__':
     print 'Test Started'
     print 'Tests: %r' %test_cases
     print 'Excluding: %r' %exclude_cases
+    print 'Test Dirs: %s' %', '.join(test_list)
     total_time = 0
     ######################################################################
     for test in test_list:
