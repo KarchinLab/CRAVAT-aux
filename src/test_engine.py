@@ -30,7 +30,7 @@ if __name__ == '__main__':
     ### Define tests to run ###
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
     test_cases = ['all\\all'] 
-    exclude_cases = [] # These test will not be run. Format same as test_cases
+    exclude_cases = ['all\\t'] # These test will not be run. Format same as test_cases
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
     # Generate list of tests to run

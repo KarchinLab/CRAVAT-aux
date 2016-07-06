@@ -1,9 +1,9 @@
 <arguments>
 	<email>kmoad@insilico.us.com</email>
-	<url>http://192.168.99.100:8889/CRAVAT</url>
+	<url>http://192.168.99.100:8888/CRAVAT</url>
 	<db_info>
 		<host>192.168.99.100</host>
-		<port>3307</port>
+		<port>3306</port>
 		<user>root</user>
 		<password>1</password>
 		<db>cravat_results</db>
