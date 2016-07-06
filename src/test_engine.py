@@ -29,7 +29,7 @@ def parse_test_list(cases,main_dir):
 if __name__ == '__main__':
     ### Define tests to run ###
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
-    test_cases = ['vest\\t'] 
+    test_cases = ['all\\all'] 
     exclude_cases = [] # These test will not be run. Format same as test_cases
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
@@ -111,21 +111,34 @@ if __name__ == '__main__':
     ######################################################################
     
     ### Summarize and print test suite log file ###
-    results['unexp_fail'] = [t for t in results['fail'] if t not in args['expected_failures']]
-    results['unexp_pass'] = [t for t in args['expected_failures'] if t in results['pass']] 
-    summary = """Tests: %d
-    %r
-    Passed: %d
-    %r
-    Unexpected Passes: %d
-    %r
-    Failed: %d
-    %r
-    Unexpected Failures: %d
-    %r
-    Time: %s seconds""" %(len(test_list), test_list, len(results['pass']), results['pass'], len(results['unexp_pass']), \
-                          results['unexp_pass'], len(results['fail']), results['fail'], len(results['unexp_fail']), \
-                          results['unexp_fail'], total_time)
+    summary = 'Tests: %d\n\n' %len(test_list)
+    col_start = 10
+    col_space = 10
+    result_categories = ['UF','US','EF','ES']
+    summary += 'TEST'.ljust(col_start)
+    for h in result_categories:
+        summary += h.rjust(col_space)
+    summary += '\n'
+    for test in tests:
+        curTest = tests[test]
+        success = curTest.result
+        expected_fail = curTest.name in args['expected_failures']
+        if not(success) and not(expected_fail):
+            dist_in = col_start + (result_categories.index('UF') + 1) * col_space - len(curTest.name)
+        elif success and expected_fail:
+            dist_in = col_start + (result_categories.index('US') + 1) * col_space - len(curTest.name)
+        elif not(success) and expected_fail:
+            dist_in = col_start + (result_categories.index('EF') + 1) * col_space - len(curTest.name)
+        elif success and not(expected_fail):
+            dist_in = col_start + (result_categories.index('ES') + 1) * col_space - len(curTest.name)
+        else:
+            dist_in = 0
+        
+        summary += curTest.name
+        summary += 'x'.rjust(dist_in)
+        summary += '\n'
+            
+    summary += '\nTotal Time: %s' %total_time
     # Print summary
     print '-'*25
     print summary

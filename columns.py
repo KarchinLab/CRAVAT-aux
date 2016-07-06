@@ -11,8 +11,7 @@ head_start = 'TESTS'
 col_start = 25
 col_space = 10
 head_text = head_start.ljust(col_start)
-spaces = 10
-spaces = 10
+
 
 with open('columns.txt','w') as f:
 	# head_text += header[0].ljust(tabs_in, '-')
