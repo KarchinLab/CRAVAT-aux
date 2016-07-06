@@ -63,6 +63,7 @@ if __name__ == '__main__':
     print 'Test Started'
     print 'Tests: %r' %test_cases
     print 'Excluding: %r' %exclude_cases
+    print 'Test Dirs: %s' %', '.join(test_list)
     total_time = 0
     ######################################################################
     for test in test_list:
