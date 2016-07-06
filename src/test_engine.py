@@ -8,9 +8,10 @@ import collections
 def parse_test_list(cases,main_dir):
     t_list = []
     for case in cases:
-        case_args = case.split('\\')
+        case_args = case.split(';')
         target = case_args[0]
-        input_codes = case_args[1].split(',')
+        try:input_codes = case_args[1].split(',')
+        except: input_codes = 'all'
         if target == 'all':
             target_dirs = [d for d in os.listdir(main_dir) if os.path.isdir(os.path.join(main_dir,d))]
         else:
@@ -29,8 +30,8 @@ def parse_test_list(cases,main_dir):
 if __name__ == '__main__':
     ### Define tests to run ###
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
-    test_cases = ['all\\all'] 
-    exclude_cases = [] # These test will not be run. Format same as test_cases
+    test_cases = ['seqont;all'] 
+    exclude_cases = ['seqont;c'] # These test will not be run. Format same as test_cases
     test_cases_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'test_cases'))
     
     # Generate list of tests to run
