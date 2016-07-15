@@ -33,13 +33,13 @@ if __name__ == '__main__':
     # Put tests to run as list of strings, or use ['all'] to run every test in suite
     sys_args_parser = argparse.ArgumentParser()
     sys_args_parser.add_argument('include', 
-                          help='List of cases to include.  Format as "case_name/input1,input2". Separate with ";".')
+                          help='List of cases to include.  Format as "case_name/input1,input2". Separate with ":".')
     sys_args_parser.add_argument('-ex','--exclude',
-                          help='List of cases to exclude.  Format as "case_name/input1,input2". Separate with ";".')
+                          help='List of cases to exclude.  Format as "case_name/input1,input2". Separate with ":".')
     sys_args = sys_args_parser.parse_args()
-    test_cases = sys_args.include.split(';')
+    test_cases = sys_args.include.split(':')
     if sys_args.exclude:
-        exclude_cases = sys_args.exclude.split(';')
+        exclude_cases = sys_args.exclude.split(':')
     else:
         exclude_cases = ''
     curdir = os.path.dirname(os.path.abspath(__file__))
