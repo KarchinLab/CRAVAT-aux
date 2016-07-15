@@ -43,7 +43,7 @@ if __name__ == '__main__':
     else:
         exclude_cases = ''
     curdir = os.path.dirname(os.path.abspath(__file__))
-    test_cases_dir = os.path.normpath(curdir,os.path.pardir,'test_cases')
+    test_cases_dir = os.path.normpath(os.path.join(curdir,os.path.pardir,'test_cases'))
     
     # Generate list of tests to run
     test_list = parse_test_list(test_cases,test_cases_dir)
