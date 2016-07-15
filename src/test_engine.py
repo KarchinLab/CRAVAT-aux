@@ -63,7 +63,7 @@ if __name__ == '__main__':
     args['expected_failures'] = args['expected_failures'].strip().split(',')
         
     # Define log filename and start log writing.
-    log_dir = os.path.normpath(os.path.join(os.getcwd(),os.path.pardir,'logs'))
+    log_dir = os.path.normpath(os.path.join(curdir,os.path.pardir,'logs'))
     log_name = time.strftime('%y-%m-%d-%H-%M-%S')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
     
