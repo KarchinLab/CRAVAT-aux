@@ -8,3 +8,5 @@ logs/
 old_input_files/
 
 presentation for rachel.pptx
+
+*.pyc
