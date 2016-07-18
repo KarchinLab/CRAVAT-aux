@@ -11,6 +11,7 @@ from XML_conversions import xml_to_dict
 
 class TestCase(object):
     
+    
     def __init__(self,name,path):
         self.name = name
         self.path = path
@@ -42,6 +43,7 @@ class TestCase(object):
         r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
         self.job_id = json.loads(r.text)['jobid']
+    
     
     # Submit the job line-by-line using GET, store the json outputs as subdicts in the self.data dict
     def submitJobGET(self,url_base):
@@ -81,6 +83,8 @@ class TestCase(object):
                         f.write('\t%s: %s\n' %(field, self.data[uid][field]))
                 elif type(self.data[uid]) is str:
                     f.write(self.data[uid])
+    
+    
     # Check the status of the job.  Hold execution until job complete
     def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
@@ -95,6 +99,7 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
+   
    
     def _compare(self,datapoint, keypoint, method, modifier):    
         # Exact string comparison
