@@ -1,8 +1,9 @@
 input_line_number,error
-2,Duplicate ID error
-3,UID should not contain a comma
-4,Reference base error
-5,Alternate base error
-6,Chromosome error
-7,Position exceeds chromosome size
-8,No GT Field
+4,Duplicate ID error
+5,UID should not contain a comma
+6,ID column is blank
+7,Reference base error
+8,Alternate base error
+9,Chromosome error
+10,Position exceeds chromosome size
+11,No GT Field
