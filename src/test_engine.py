@@ -66,6 +66,7 @@ if __name__ == '__main__':
     log_dir = os.path.normpath(os.path.join(curdir,os.path.pardir,'logs'))
     log_name = time.strftime('%y-%m-%d-%H-%M-%S')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
+    log_text += 'CRAVAT URL: %s\n' %args['url']
     
     # Results will store names of tests that passed or failed, used later to summarize test
     results = {'pass':[], 'unexp_pass':[], 'fail':[], 'unexp_fail':[]}
@@ -73,6 +74,7 @@ if __name__ == '__main__':
     ### Run tests ###
     tests = collections.OrderedDict() # Will store resulting test objects in order they were run  
     print 'Test Started'
+    print 'CRAVAT URL: %s/n' %args['url']
     print 'Tests: %r' %test_cases
     print 'Excluding: %r' %exclude_cases
     print 'Test Dirs: %s' %', '.join(test_list)
