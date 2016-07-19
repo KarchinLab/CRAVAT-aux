@@ -207,25 +207,25 @@ class TestCase(object):
         self.result = True
         # Only attempt verification if job was successfully processed
         if self.job_status != 'Error':
-            # Data is a dict that will store values from SQL.  May use it later
+            # Data is a dict that will store values from SQL.  May use it later.
             self.data = {}
             # These will count points tried and points failed
-            points = 0
+            points_tried = 0
             points_failed = 0
             
-            try:
-                db = MySQLdb.connect(host = db_args['host'],
-                                     port = int(db_args['port']),
-                                     user = db_args['user'],
-                                     passwd = db_args['password'],
-                                     db = db_args['db']
-                                     )
-                cursor = db.cursor()
+            db = MySQLdb.connect(host = db_args['host'],
+                                 port = int(db_args['port']),
+                                 user = db_args['user'],
+                                 passwd = db_args['password'],
+                                 db = db_args['db']
+                                 )
+            cursor = db.cursor()
+            try: # Catches failures that hat this case, but shouldn't halt other case execution
                 # Loop through the key dictionary, row is used as primary index, SQL col name as secondary index
                 for row in self.key:
                     self.data[row] = {}
                     for col in self.key[row]:
-                        points += 1
+                        points_tried += 1
                         data_query = ''
                         keypoint = None
                         datapoint = None
@@ -245,10 +245,11 @@ class TestCase(object):
                         # If verification for this entry errors, the error will be logged and execution will continue
                         try:
                             # Run the correct query on the SQL table that the row exists in
-                            for table in self.desc['tab'].strip().split(','):
+                            valid_table_suffixes = self.desc['tab'].strip().split(',')
+                            for suffix in valid_table_suffixes:
                                 row_found = False
                                 row_count_query = 'SELECT count(*) FROM %s_%s WHERE %s = \'%s\';' \
-                                                %(self.job_id, table, self.sql_key, row)
+                                                %(self.job_id, suffix, self.sql_key, row)
                                 try:
                                     cursor.execute(row_count_query)
                                     row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
@@ -257,14 +258,18 @@ class TestCase(object):
                                 if row_count == 1:
                                     row_found = True
                                     data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
-                                                 %(col, self.job_id, table, self.sql_key, row)
+                                                 %(col, self.job_id, suffix, self.sql_key, row)
                                     cursor.execute(data_query)
                                     datapoint = cursor.fetchone()[0]
                                     break
                             
                             # If row was not found in given SQL tables, throw an error
                             if not(row_found):
-                                raise LookupError('Row not found')
+                                self.result = False
+                                points_failed += 1
+                                self.log_text += 'Variant Key: %s\n\tColumn: %s\n\tError: Row not found in tables: %s\n' \
+                                                %(row, col, ', '.join(valid_table_suffixes))
+                                continue
                             
                             # If there are special verification methods listed in verify_rules and neither datapoint nor
                             # keypoint are None or Error, use the method in desc. Otherwise, default to string_exact.
@@ -308,7 +313,7 @@ class TestCase(object):
                 if self.result:
                     self.log_text = 'Passed\n'
                 else:
-                    self.log_text = 'Failed %d of %d\n' %(points_failed,points) + self.log_text
+                    self.log_text = 'Failed %d of %d\n' %(points_failed,points_tried) + self.log_text
                 # Close the db
                 try:
                     cursor.close()
