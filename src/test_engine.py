@@ -101,7 +101,6 @@ if __name__ == '__main__':
             
         elif curTest.desc['sub_method'] == 'get':
             print 'Submitting lines using GET'
-            karchin_url = 'http://karchin-web02.icm.jhu.edu:8889/CRAVAT'
             curTest.submitJobGET(args['url'])
         
         else:

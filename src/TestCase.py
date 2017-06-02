@@ -40,16 +40,22 @@ class TestCase(object):
         files = {
                 'inputfile': open(self.input_path, 'r')
                 }
+#         print url_base+'/rest/service/submit'
+#         print files
+#         print data
         r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
+#         print r.text
         self.job_id = json.loads(r.text)['jobid']
     
     
     # Submit the job line-by-line using GET, store the json outputs as subdicts in the self.data dict
     def submitJobGET(self,url_base):
         self.result = True
+        points_tried = 0
+        points_failed = 0
         with open(self.input_path) as f:
-            lines = f.read().split('\n')
+            lines = f.read().split('\n')    
         req_url = url_base + '/rest/service/query?mutation='
         self.data = {}
         uid = ''
@@ -58,7 +64,7 @@ class TestCase(object):
             response = None
             full_get_url = None
             line_as_list = line.split('\t')
-            uid = line_as_list.pop(0)
+            uid = line_as_list.pop(0) 
             if len(line_as_list) > 5: line_as_list = line_as_list[:5]
             if not(line_as_list[0].startswith('chr')): line_as_list[0] = 'chr' + line_as_list[0]
             full_get_url = req_url + '_'.join(line_as_list)
@@ -68,21 +74,13 @@ class TestCase(object):
             except:
                 self.result = False
                 error_text = 'Error: %s\n\tURL: %s\n\tHTTP Code: %s\n\t%s' \
-                %(uid, full_get_url, response.status_code, traceback.format_exc())
+                            %(uid, full_get_url, response.status_code, traceback.format_exc())
                 self.log_text += error_text
                 print error_text
                 self.data[uid] = error_text
+                points_tried += len(self.key[uid].keys());
+                points_failed += len(self.key[uid].keys());
                 continue
-        out_filename = '%s_%s.txt' %('json_output',time.strftime('%y-%m-%d-%H-%M-%S'))
-        with open(os.path.join(self.path, out_filename),'w') as f:
-            for uid in sorted(self.data):
-                f.write('%s\n' %uid)
-                print type(self.data[uid])
-                if type(self.data[uid]) is dict:
-                    for field in sorted(self.data[uid]):
-                        f.write('\t%s: %s\n' %(field, self.data[uid][field]))
-                elif type(self.data[uid]) is str:
-                    f.write(self.data[uid])
     
     
     # Check the status of the job.  Hold execution until job complete
@@ -90,6 +88,9 @@ class TestCase(object):
         while self.job_status == '':
             try:
                 json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
+#                 print 'Response'
+#                 print json_response.text
+#                 print '</Response>'
                 json_status = json.loads(json_response.text)['status']
             except:
                 print traceback.format_exc()

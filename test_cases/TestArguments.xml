@@ -1,8 +1,8 @@
 <arguments>
 	<email>kmoad@insilico.us.com</email>
-	<url>http://karchin-web04.icm.jhu.edu:8888/CRAVAT</url>
+	<url>http://karchin-web02.icm.jhu.edu/CRAVAT</url>
 	<db_info>
-		<host>karchin-web04.icm.jhu.edu</host>
+		<host>karchin-web02.icm.jhu.edu</host>
 		<port>8895</port>
 		<user>root</user>
 		<password>1</password>

@@ -1,0 +1,44 @@
+<desc>
+	<sub_params>
+		<analyses>VEST</analyses>
+	<hg18>on</hg18></sub_params>
+	<verify_rules>
+		<column name="vest_best_pvalue">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_missense">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_frameshift">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_inframe">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_stopgain">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_stoploss">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_score_splice">
+			<method>float_round</method>
+			<modifier>3</modifier>
+		</column>
+		<column name="vest_best_fdr">
+			<method>float_round</method>
+			<modifier>2</modifier>
+		</column>
+		<column name="vest_all">
+			<method>string_included</method>
+			<modifier>,</modifier>
+		</column>
+	</verify_rules>
+	<tab>variant</tab>
+<sub_method>post</sub_method></desc>
