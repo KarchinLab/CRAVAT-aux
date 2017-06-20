@@ -1,15 +1,9 @@
 #ignore all log files since they will update often
 logs/
 
-#ignore all top level xlsx files except for 
+# Ignore all .xlsx files
 *.xlsx
-!TestCasesList.xlsx
-# Ignore everything in old_input_files
-old_input_files/
-
-test_cases/TestArguments.xml
-
-presentation for rachel.pptx
 
 # Ignore .pyc files since they keep changing
 *.pyc
+*/*.pyc
