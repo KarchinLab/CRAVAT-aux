@@ -1,0 +1,21 @@
+TESTS                            UF        US        EF        ES
+chasm                             x
+chasm_gene                                            x
+cosmic                                      x
+dbsnp                             x
+error                                                           x
+gene_tab                                    x
+hugo                                        x
+mappability                                                     x
+New-Test.ps1                                x
+oncogenes                                             x
+parsing                           x
+pop_stats                                             x
+pubmed                                                x
+seqont                                                          x
+tcga                              x
+TestArguments.xml                                               x
+transcript                                            x
+vest                                        x
+vest_gene                                             x
+web_service                                           x

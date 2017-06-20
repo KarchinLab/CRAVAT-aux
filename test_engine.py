@@ -1,7 +1,7 @@
 from TestCase import TestCase
 import os
 import time
-from XML_conversions import xml_to_dict
+import XMLConverter
 import collections
 import argparse
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     
     ### Perform startup tasks ###
     # Read in the TestArguments file containing pointers to docker container and results database
-    args = xml_to_dict(os.path.join(test_cases_dir,'TestArguments.xml'))           
+    args = XMLConverter.xml_to_dict(os.path.join(test_cases_dir,'TestArguments.xml'))           
     for char in ['[',']','\'',' ']:
         args['expected_failures'] = args['expected_failures'].replace(char,'')
     args['expected_failures'] = args['expected_failures'].strip().split(',')

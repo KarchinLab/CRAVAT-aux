@@ -6,7 +6,7 @@ import math
 import csv
 import os
 import MySQLdb
-from XML_conversions import xml_to_dict
+import XMLConverter
 
 
 class TestCase(object):
@@ -28,7 +28,7 @@ class TestCase(object):
         self.log_text = ''
 
         # Read test desc file to a dict
-        self.desc = xml_to_dict(self.desc_path)
+        self.desc = XMLConverter.xml_to_dict(self.desc_path)
         
         
             

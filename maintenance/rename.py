@@ -1,6 +1,5 @@
 import os
 
-
 path = 'C:\\Users\\Kyle\\cravat\\testing\\test_cases\\hg18'
 add = '18'
 os.chdir(path)
@@ -18,4 +17,3 @@ for d in dirs:
     print os.listdir(os.getcwd())
     os.chdir(os.path.pardir)
     os.rename(d,d + '_' + add)
-    

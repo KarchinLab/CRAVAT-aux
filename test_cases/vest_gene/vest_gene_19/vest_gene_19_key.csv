@@ -1,0 +1,5 @@
+hugo,vest_available,vest_score,vest_composite_pvalue,vest_composite_fdr
+CFTR,1,1,3.3549E-08,0.05
+KIF11,1,0.607,0.175026,1
+F8,1,0.924,0.000572483,0.05
+HBB,1,0.988,0.000430266,0.05

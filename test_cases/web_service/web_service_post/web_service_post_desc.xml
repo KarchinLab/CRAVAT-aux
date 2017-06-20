@@ -1,0 +1,12 @@
+<desc>
+	<sub_method>post</sub_method>
+	<sub_params>
+		<analyses>CHASM;VEST</analyses>
+		<chasmclassifier>Colon</chasmclassifier>
+		<functionalannotation>on</functionalannotation>
+		<mupitinput>on</mupitinput>
+		<tsvreport>on</tsvreport>
+	</sub_params>
+	<verify_rules></verify_rules>
+	<tab>variant</tab>
+</desc>
