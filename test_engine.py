@@ -6,7 +6,7 @@ import collections
 import argparse
 
 
-def parse_test_list(cases,main_dir):
+def parse_test_list(cases, main_dir):
     t_list = []
     for case in cases:
         case_args = case.split('/')
@@ -82,16 +82,16 @@ if __name__ == '__main__':
     ######################################################################
     for test in test_list:
         start_time = time.time()
-        test_dir = os.path.join(test_cases_dir,test)
+        test_dir = os.path.join(test_cases_dir, test)
         test_name = test.split('\\')[1]
-        print '%s\nStarting: %s' %('-'*25,test_name)
+        print '%s\nStarting: %s' %('-'*25, test_name)
         
         # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
         curTest = TestCase(test_name,test_dir)
         
         # Submit job
         if curTest.desc['sub_method'] == 'post':
-            curTest.submitJobPOST(args['url'],args['email'])
+            curTest.submitJobPOST(args['url'], args['email'])
             print 'Job Sent via POST: %s' %curTest.job_id
             # Test will not continue until checkStatus() is complete
             curTest.checkStatus(args['url'],1) 
