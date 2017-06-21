@@ -7,17 +7,15 @@ import csv
 import os
 import MySQLdb
 import XMLConverter
-
+from pprint import pprint
 
 class TestCase(object):
-    
-    
-    def __init__(self,name,path):
+    def __init__(self, name, path):
         self.name = name
         self.path = path
         test_dir = os.path.split(self.path)[1]
         self.input_path = os.path.join(self.path,'%s_input.txt' %test_dir)
-        self.key_path = os.path.join(self.path,'%s_key.csv' %test_dir)
+        self.key_path = os.path.join(self.path,'%s_key.tsv' %test_dir)
         self.desc_path = os.path.join(self.path, '%s_desc.xml' %test_dir)
         self.desc = {}
         self.key = {}
@@ -29,8 +27,6 @@ class TestCase(object):
 
         # Read test desc file to a dict
         self.desc = XMLConverter.xml_to_dict(self.desc_path)
-        
-        
             
     # Submit the job to cravat   
     def submitJobPOST(self,url_base,email):
@@ -40,14 +36,9 @@ class TestCase(object):
         files = {
                 'inputfile': open(self.input_path, 'r')
                 }
-#         print url_base+'/rest/service/submit'
-#         print files
-#         print data
         r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
-#         print r.text
         self.job_id = json.loads(r.text)['jobid']
-    
     
     # Submit the job line-by-line using GET, store the json outputs as subdicts in the self.data dict
     def submitJobGET(self,url_base):
@@ -82,7 +73,6 @@ class TestCase(object):
                 points_failed += len(self.key[uid].keys());
                 continue
     
-    
     # Check the status of the job.  Hold execution until job complete
     def checkStatus(self,url_base,sleep_time):
         while self.job_status == '':
@@ -100,7 +90,6 @@ class TestCase(object):
                 self.job_status = json_status
             else:
                 time.sleep(sleep_time)
-   
    
     def _compare(self,datapoint, keypoint, method, modifier):    
         # Exact string comparison
@@ -191,19 +180,24 @@ class TestCase(object):
             raise BaseException('Improper comparison method: %r. Check the syntax in the desc file.' %method)
         
         return out
-            
 
     # Verify that the entries in the key dictionary match the entries in the output SQL table
-    def verify(self,db_args):
+    def verify(self, dbconn):
         # Read the key file into a 2D dict
-        with open(self.key_path) as r:
-            key_csv = csv.DictReader(r)
-            # Key goes in a 2 layer dict with layer 1 indexed by first column of the sql file
-            # and layer 2 indexed by results db column name
-            self.sql_key = key_csv.fieldnames[0]
-            for row in key_csv:
-                self.key[row[self.sql_key]] = row
-                del self.key[row[self.sql_key]][self.sql_key]     
+        with open(self.key_path,'rU') as f:
+            headers = f.readline().rstrip('\n').split('\t')
+            self.sql_key = headers[0]
+            headers = headers[1:]
+            for l in f:
+                toks = l.strip().split('\t')
+                self.key[toks[0]] = {}
+                for i,tok in enumerate(toks[1:]):
+                    if tok == '.':
+                        self.key[toks[0]][headers[i]] = None
+                    else:
+                        self.key[toks[0]][headers[i]] = tok
+        pprint(self.key)
+        return
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
         # Only attempt verification if job was successfully processed
@@ -214,13 +208,7 @@ class TestCase(object):
             points_tried = 0
             points_failed = 0
             
-            db = MySQLdb.connect(host = db_args['host'],
-                                 port = int(db_args['port']),
-                                 user = db_args['user'],
-                                 passwd = db_args['password'],
-                                 db = db_args['db']
-                                 )
-            cursor = db.cursor()
+            cursor = dbconn.cursor()
             try: # Catches failures that hat this case, but shouldn't halt other case execution
                 # Loop through the key dictionary, row is used as primary index, SQL col name as secondary index
                 for row in self.key:
@@ -315,10 +303,9 @@ class TestCase(object):
                     self.log_text = 'Passed\n'
                 else:
                     self.log_text = 'Failed %d of %d\n' %(points_failed,points_tried) + self.log_text
-                # Close the db
+                # Close the cursor
                 try:
                     cursor.close()
-                    db.close()
                 except Exception:
                     print traceback.format_exc()
                     pass

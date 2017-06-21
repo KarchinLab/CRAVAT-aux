@@ -1,108 +1,111 @@
 from TestCase import TestCase
 import os
 import time
-import XMLConverter
 import collections
 import argparse
+import MySQLdb
 
-
-def parse_test_list(cases, main_dir):
-    t_list = []
-    for case in cases:
-        case_args = case.split('/')
-        target = case_args[0]
-        try:input_codes = case_args[1].split(',')
-        except: input_codes = 'all'
-        if target == 'all':
-            target_dirs = [d for d in os.listdir(main_dir) if os.path.isdir(os.path.join(main_dir,d))]
-        else:
-            target_dirs = [target]
-        for target_dir in target_dirs:
-            dirs_in_target = [d for d in os.listdir(os.path.join(main_dir,target_dir)) if os.path.isdir(os.path.join(main_dir,target_dir,d))]
-            for input_dir in dirs_in_target:
-                if 'all' in input_codes:
-                    t_list.append('%s\\%s' %(target_dir,input_dir))
-                else:
-                    for code in input_codes:
-                        if input_dir.endswith('_%s' % code):
-                            t_list.append('%s\\%s' %(target_dir,input_dir))
-    return t_list
+class ConfReader(object):
+    def __init__(self, path):
+        self.__dict__ = {}
+        with open(path) as f:
+            for l in f:
+                if l.strip().startswith('#'): 
+                    continue
+                k, v = l.strip().split('=')
+                self.__dict__[k] = v
+    def __getitem__(self, k):
+        return self.__dict__[k]
+    def __str__(self):
+        return str(self.__dict__)
 
 if __name__ == '__main__':
-    ### Define tests to run ###
-    # Put tests to run as list of strings, or use ['all'] to run every test in suite
+    ### Define test environment
+    #
+    #
+    #
+    fdir = os.path.dirname(os.path.abspath(__file__))
+    test_cases_dir = os.path.join(fdir,'test_cases')
+    valid_cases = []
+    for item_name in os.listdir(test_cases_dir):
+        item_path = os.path.join(test_cases_dir, item_name)
+        if os.path.isdir(item_path):
+            valid_cases.append(item_name)
     sys_args_parser = argparse.ArgumentParser()
-    sys_args_parser.add_argument('include', 
-                          help='List of cases to include.  Format as "case_name/input1,input2". Separate with ":".')
-    sys_args_parser.add_argument('-ex','--exclude',
-                          help='List of cases to exclude.  Format as "case_name/input1,input2". Separate with ":".')
+    sys_args_parser.add_argument('-i', '--include', 
+                          help='List of cases to include. Comma seperated.')
+    sys_args_parser.add_argument('-e','--exclude',
+                          help='List of cases to exclude.  Comma seperated.')
     sys_args = sys_args_parser.parse_args()
-    test_cases = sys_args.include.split(':')
+    
+    ### Define tests to run
+    #
+    #
+    #
+    if sys_args.include:
+        include_cases = sys_args.include.split(',')
+        invalid_cases = set(include_cases) - set(valid_cases)
+        if invalid_cases: raise Exception('Invalid cases:%s' %', '.join(invalid_cases))
+    else:
+        include_cases = valid_cases
     if sys_args.exclude:
-        exclude_cases = sys_args.exclude.split(':')
+        exclude_cases = sys_args.exclude.split(',')
     else:
-        exclude_cases = ''
-    curdir = os.path.dirname(os.path.abspath(__file__))
-    test_cases_dir = os.path.normpath(os.path.join(curdir,os.path.pardir,'test_cases'))
+        exclude_cases = []
+    test_cases = list(set(include_cases) - set(exclude_cases))
     
-    # Generate list of tests to run
-    test_list = parse_test_list(test_cases,test_cases_dir)
-    if exclude_cases:
-        exclude_list = parse_test_list(exclude_cases,test_cases_dir)
-    else:
-        exclude_list = []
-    for test in test_list[:]:
-        if test in exclude_list:
-            test_list.remove(test)
+    ### Perform startup tasks
+    #
+    #
+    #
+    conf = ConfReader('test_engine.conf')
+    dbconn = MySQLdb.connect(host=conf['dbhost'],
+                             port=int(conf['dbport']),
+                             user=conf['dbuser'],
+                             passwd=conf['dbpasswd'],
+                             db='cravat_results')
+    expected_failures = conf['expected_failures'].split(',')
     
-    ### Perform startup tasks ###
-    # Read in the TestArguments file containing pointers to docker container and results database
-    args = XMLConverter.xml_to_dict(os.path.join(test_cases_dir,'TestArguments.xml'))           
-    for char in ['[',']','\'',' ']:
-        args['expected_failures'] = args['expected_failures'].replace(char,'')
-    args['expected_failures'] = args['expected_failures'].strip().split(',')
-        
     # Define log filename and start log writing.
-    log_dir = os.path.normpath(os.path.join(curdir,os.path.pardir,'logs'))
+    log_dir = os.path.join(fdir, 'logs')
     log_name = time.strftime('%y-%m-%d-%H-%M-%S')
     log_text = time.strftime('Date: %y-%m-%d\nTime: %H:%M:%S\n')
-    log_text += 'CRAVAT URL: %s\n' %args['url']
+    log_text += 'CRAVAT URL: %s\n' %conf['url']
     
     # Results will store names of tests that passed or failed, used later to summarize test
     results = {'pass':[], 'unexp_pass':[], 'fail':[], 'unexp_fail':[]}
     
     ### Run tests ###
+    #
+    #
+    #
     tests = collections.OrderedDict() # Will store resulting test objects in order they were run  
     print 'Test Started'
-    print 'CRAVAT URL: %s/n' %args['url']
-    print 'Tests: %r' %test_cases
-    print 'Excluding: %r' %exclude_cases
-    print 'Test Dirs: %s' %', '.join(test_list)
+    print 'CRAVAT URL: %s' %conf['url']
+    print 'Tests: %r' %', '.join(test_cases)
     total_time = 0
-    ######################################################################
-    for test in test_list:
+    for test_name in test_cases:
         start_time = time.time()
-        test_dir = os.path.join(test_cases_dir, test)
-        test_name = test.split('\\')[1]
+        test_dir = os.path.join(test_cases_dir, test_name)
         print '%s\nStarting: %s' %('-'*25, test_name)
         
         # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
         curTest = TestCase(test_name,test_dir)
+        curTest.verify(dbconn)
+        continue
         
         # Submit job
         if curTest.desc['sub_method'] == 'post':
-            curTest.submitJobPOST(args['url'], args['email'])
+            curTest.submitJobPOST(conf['url'], conf['email'])
             print 'Job Sent via POST: %s' %curTest.job_id
             # Test will not continue until checkStatus() is complete
-            curTest.checkStatus(args['url'],1) 
+            curTest.checkStatus(conf['url'],1) 
             print 'Submission %s' %curTest.job_status
             # Check that data matches key
-            curTest.verify(args['db_info'])
-            
+            curTest.verify(dbconn)
         elif curTest.desc['sub_method'] == 'get':
             print 'Submitting lines using GET'
-            curTest.submitJobGET(args['url'])
-        
+            curTest.submitJobGET(conf['url'])
         else:
             print 'Error: Unknown job submission method.'
          
@@ -120,12 +123,13 @@ if __name__ == '__main__':
         total_time += curTest.elapsed_time
         print "%s seconds" %curTest.elapsed_time
         # Enter the test object into the dict   
-        tests[test] = curTest  
+        tests[test_name] = curTest  
         
-    ######################################################################
-    
     ### Summarize and print test suite log file ###
-    summary = 'Tests: %d\n\n' %len(test_list)
+    #
+    #
+    #
+    summary = 'Tests: %d\n\n' %len(test_cases)
     col_start = 10
     col_space = 10
     result_categories = ['UF','US','EF','ES']
@@ -136,7 +140,7 @@ if __name__ == '__main__':
     for test in tests:
         curTest = tests[test]
         success = curTest.result
-        expected_fail = curTest.name in args['expected_failures']
+        expected_fail = curTest.name in expected_failures
         if not(success) and not(expected_fail):
             dist_in = col_start + (result_categories.index('UF') + 1) * col_space - len(curTest.name)
         elif success and expected_fail:
