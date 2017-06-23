@@ -10,7 +10,7 @@ class ConfReader(object):
         self.__dict__ = {}
         with open(path) as f:
             for l in f:
-                if l.strip().startswith('#'): 
+                if l.strip().startswith('#') or l.strip() == '': 
                     continue
                 k, v = l.strip().split('=')
                 self.__dict__[k] = v
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     valid_cases = []
     for item_name in os.listdir(test_cases_dir):
         item_path = os.path.join(test_cases_dir, item_name)
-        if os.path.isdir(item_path):
+        if os.path.isdir(item_path) and os.listdir(item_path):
             valid_cases.append(item_name)
     sys_args_parser = argparse.ArgumentParser()
     sys_args_parser.add_argument('-i', '--include', 
@@ -88,18 +88,14 @@ if __name__ == '__main__':
         start_time = time.time()
         test_dir = os.path.join(test_cases_dir, test_name)
         print '%s\nStarting: %s' %('-'*25, test_name)
-        
         # Make a TestCase object with a temporary name. It gets stored in the tests dict at the end.
-        curTest = TestCase(test_name,test_dir)
-        curTest.verify(dbconn)
-        continue
-        
+        curTest = TestCase(test_name, test_dir)
         # Submit job
         if curTest.desc['sub_method'] == 'post':
             curTest.submitJobPOST(conf['url'], conf['email'])
             print 'Job Sent via POST: %s' %curTest.job_id
             # Test will not continue until checkStatus() is complete
-            curTest.checkStatus(conf['url'],1) 
+            curTest.checkStatus(conf['url'], 1)
             print 'Submission %s' %curTest.job_status
             # Check that data matches key
             curTest.verify(dbconn)

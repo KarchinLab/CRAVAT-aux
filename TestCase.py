@@ -3,11 +3,8 @@ import json
 import time
 import traceback
 import math
-import csv
 import os
-import MySQLdb
 import XMLConverter
-from pprint import pprint
 
 class TestCase(object):
     def __init__(self, name, path):
@@ -196,8 +193,6 @@ class TestCase(object):
                         self.key[toks[0]][headers[i]] = None
                     else:
                         self.key[toks[0]][headers[i]] = tok
-        pprint(self.key)
-        return
         # Result is logical pass/fail.  Initially set to pass and set to fail if a result does not match the key.
         self.result = True
         # Only attempt verification if job was successfully processed
@@ -237,22 +232,22 @@ class TestCase(object):
                             valid_table_suffixes = self.desc['tab'].strip().split(',')
                             for suffix in valid_table_suffixes:
                                 row_found = False
-                                row_count_query = 'SELECT count(*) FROM %s_%s WHERE %s = \'%s\';' \
+                                row_count_query = 'select count(*) from %s_%s where %s = "%s";' \
                                                 %(self.job_id, suffix, self.sql_key, row)
                                 try:
                                     cursor.execute(row_count_query)
                                     row_count = cursor.fetchone()[0] # Will be 0 if row not found in current SQL table
-                                except:
+                                except Exception, e:
+                                    print e
                                     row_count = 0
                                 if row_count == 1:
                                     row_found = True
-                                    data_query = 'SELECT %s FROM %s_%s WHERE %s = \'%s\';' \
+                                    data_query = 'select %s from %s_%s where %s="%s";' \
                                                  %(col, self.job_id, suffix, self.sql_key, row)
                                     cursor.execute(data_query)
                                     datapoint = cursor.fetchone()[0]
                                     break
-                            
-                            # If row was not found in given SQL tables, throw an error
+                            # If row was not found in given SQL tables, log it
                             if not(row_found):
                                 self.result = False
                                 points_failed += 1
@@ -306,6 +301,7 @@ class TestCase(object):
                 # Close the cursor
                 try:
                     cursor.close()
+                    dbconn.commit()
                 except Exception:
                     print traceback.format_exc()
                     pass

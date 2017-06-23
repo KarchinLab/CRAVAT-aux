@@ -2,6 +2,7 @@ import subprocess
 import os
 import sys
 import shutil
+import argparse
 
 ''' This program will use USCS liftOver to change test cases from hg19 to hg18 or hg38.
     It must be run within a linux environment to properly use the liftOver utility.
@@ -82,6 +83,7 @@ def bed_to_cravat(bed_path, cravat_path):
                 toks_out[0], toks_out[4], toks_out[5] = bed_id_info
 #             print 'CRV:',toks_out
             fout.write('\t'.join(toks_out)+'\n')
+                
             
 if __name__ == '__main__':
     test_cases_dir = sys.argv[1]
@@ -121,13 +123,7 @@ if __name__ == '__main__':
                         bed38_path = cravat19_path + '.38.bed'
                         cravat38_path = cravat19_path+'.38'
                         liftover_fail_path = cravat19_path + '.liftover.fail'
-                        # print 'Convert CRAVAT19 to BED19'
-                        # print 'cravat19:',cravat19_path
-                        # print 'bed19:',bed19_path
                         cravat_to_bed(cravat19_path, bed19_path)
-                        # print 'liftOver BED19 to BED38'
-                        # print 'bed38:',bed38_path
-                        # print 'fails:',liftover_fail_path
                         liftover('liftOver', bed19_path, chain_path, bed38_path, liftover_fail_path)
                         fail_lines = count_lines(liftover_fail_path)
                         if fail_lines:
