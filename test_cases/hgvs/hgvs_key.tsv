@@ -1,0 +1,5 @@
+input_line_number	uid	chrom	position	ref_base	alt_base
+1	VAR1	chr22	30025797	A	T
+2	VAR2	chr22	40418496	T	C
+3	VAR3	chr22	40419252	C	T
+4	VAR4	chr2	218270044	-	G
