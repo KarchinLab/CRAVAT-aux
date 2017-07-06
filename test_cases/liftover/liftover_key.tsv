@@ -1,0 +1,9 @@
+uid	chrom	position	strand	ref_base	alt_base
+TR1	chr22	30421786	+	A	T
+TR2	chr22	40814500	-	A	G
+TR3	chr22	40815256	+	C	T
+TR4	chr22	25115450	+	-	AGG
+TR5	chr22	25115450	+	AGA	-
+TR6	chr22	25115450	+	AG	T
+TR7	chr2	219134766	+	G	-
+TR8	chr2	219134767	+	-	G
