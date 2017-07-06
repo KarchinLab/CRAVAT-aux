@@ -7,6 +7,6 @@ input_line_number	error
 8	Input reference base is incorrect for the specified chromosome and position.
 9	Gene is on the opposite strand to the input strand.
 10	Alternate base error
-11	Chromosome error
+11	Chromosome not in CRAVAT
 12	Position error
 13	Variant ID error

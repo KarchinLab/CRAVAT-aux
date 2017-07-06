@@ -1,3 +1,3 @@
-KRAS	chr12	25245348	-	G	A
-SPOP	chr17	49619327	-	T	C
-GNA11	chr19	3118944	+	A	T
+TP53    chr17   7675077 -   C   G
+PIK3CA  chr3    179234302   +   G   T
+MAP2K1  chr15   66436830    +   A   T

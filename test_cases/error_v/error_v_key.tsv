@@ -4,6 +4,6 @@ input_line_number	error
 6	ID column is blank
 7	Reference base error
 8	Alternate base error
-9	Chromosome error
+9	Chromosome not in CRAVAT
 10	Position exceeds chromosome size
 11	No GT Field
