@@ -1,5 +1,5 @@
 #ignore all log files since they will update often
-logs/
+logs/*
 
 # Ignore all .xlsx files
 *.xlsx
