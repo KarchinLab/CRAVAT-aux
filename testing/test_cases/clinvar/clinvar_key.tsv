@@ -1,0 +1,5 @@
+uid	clinvar_sig	clinvar_disease	clinvar_xref
+ACACA	Pathogenic, risk factor	Thyrotoxic periodic paralysis;Thyrotoxic periodic paralysis 2	MedGen:C0268446,OMIM:188580,Orphanet:ORPHA79102,SNOMED CT:C0268446;MedGen:C2750473,OMIM:613239
+GATM	Pathogenic/Likely pathogenic	Primary autosomal recessive microcephaly 9;not provided	MedGen:C3553886,OMIM:614852;MedGen:CN221809
+VAR0	Pathogenic	Heterotopia, periventricular, autosomal recessive	MedGen:C1842563,OMIM:608097
+VAR1	Pathogenic	CHARGE association	MedGen:C0265354,OMIM:214800,Orphanet:ORPHA138,SNOMED CT:C0265354

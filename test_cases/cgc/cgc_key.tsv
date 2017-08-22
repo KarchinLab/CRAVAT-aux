@@ -1,6 +1,0 @@
-uid	role_cgc	inheritance_cgc	tumor_types_somatic	tumor_types_germline
-TTL	.	somatic	ALL	.
-AKT1	Oncogene	somatic	breast, colorectal, ovarian, NSCLC	.
-MED12	.	somatic	uterine leiomyoma	.
-TRIP11	.	somatic	AML	.
-NAB2	Oncogene	somatic	solitary fibrous tumour, meningeal haemangiopericytoma	.

@@ -1,0 +1,9 @@
+-=- How to find unprocessed transcript UIDs -=-
+
+hn01 MySQL:
+	>truncate table sam_processed;
+	>insert into sam_processed select distinct UID from Sam_MSA;
+	>select Transcript.UID from sam_processed RIGHT JOIN Transcript ON 
+	 sam_processed.UID = Transcript.UID 
+	 where sam_processed.UID is null into outfile '/tmp/sam_unprocessed.txt';
+

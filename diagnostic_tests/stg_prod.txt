@@ -1,0 +1,120 @@
+# Job: transcript_sample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: strange_repetition_spanning_errors
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: errors_and_corrects_input
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: hg19_nosample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: hg19_sample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: hg18_sample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: vcf_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: hg18_nosample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: input_errors
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: transcript_nosample_all
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: many_indel_types
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+
+# Job: reverse_complements
+#  Tab: SNVBox
+#  Tab: Input errors
+#  Tab: Variant
+#  Tab: Variant Additional Details
+#  Tab: Gene Level Analysis
+#  Tab: Variant Non-coding
+
+
+

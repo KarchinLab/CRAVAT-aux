@@ -1,0 +1,23 @@
+!CHASM_classifier=Ovary
+!functionalannot=on
+!tsvreport=on
+!mupitinput=on
+!analysis_type=all
+
+hg19_sample_all genomic_mutations_hg19_with_sampleid.txt hg19
+hg19_nosample_all genomic_mutations_hg19_without_sampleid.txt hg19
+
+vcf_all vcf_input.txt hg19 
+
+hg18_sample_all genomic_mutations_hg18_with_sampleid.txt hg18
+hg18_nosample_all genomic_mutations_hg18_without_sampleid.txt hg18
+
+transcript_sample_all transcript_mutations_with_sampleid.txt hg19
+transcript_nosample_all transcript_mutations_without_sampleid.txt hg19
+
+many_indel_types many_indel_types.txt hg19
+reverse_complements reverse_complements.txt hg19
+strange_repetition_spanning_errors strange_repetition_spanning_errors.txt hg19
+errors_and_corrects_input errors_and_corrects_input.txt hg19
+input_errors input_errors.txt hg19
+$

@@ -1,0 +1,66 @@
+1. run code in read.data.st to get score data into a dataframe
+2. copy functions from, gege-code--1.r in.  Copy from 
+
+> ## Use mixture of normal to approximate data distribution  ## when running Gibbs sampler, recommendation is at least 10,000 iterations
+
+> normal_compo = function(dat, iter, n, plotdistri){
+
+. . .
+
+To:
+
+legend("topright", legend = c("Data", "Gibbs"), col = c("black", "green"), lty = 1)
+}
+return(list(y, p0, N0, theta0, sigmasq0, data, test))
+}
+
+3. install.packages("gtools")
+
+4. fs.gibbs = gibbs_sample(FrameShift,10000,3,10000, 1) #10000 sampling iterations of the gibbs sampler, with three Gaussian components and 10000 samples, plot flag set
+
+Note: for mutation types that don't have lots of nulls, I had to reduce sampling and sample size to get results that matched the null distribution.
+
+5. copy in ptab:
+
+pval_tab = function(y, deci, p_val_deci){  #function to make p-value table
+  tol = 10^(deci)
+  tab = as.data.frame(rep(0, tol + 1))
+  colnames(tab) = "p-value"
+  y = y[y>=0 & y<=1]
+  for (i in 1:(tol)){
+    input = 1/tol * i - 1/tol
+    rownames(tab)[i] = input
+    tab[i, 1] = round((length(c(input, y)) - (rank(c(input, y), ties.method = "first")[1] - 1))/length(c(input, y)), p_val_deci)
+  }
+  rownames(tab)[tol+1] = 1
+  return(tab)
+}
+
+6. table.pvals.fs.gibbs.100.score2dp.pval4dp <- pval_tab(fs.gibbs.100[[1]], 2, 4) #num dig score, num dig p-value
+
+7. write.csv(sl.table, 'stoploss_hg38.pval.csv')
+
+sl.gibbs <- gibbs_sample(StopLoss,1000,4,10000, 1)
+sl.table <- pval_tab(sl.gibbs[[1]], 3, 5)
+write.csv(sl.table, 'stoploss_hg38.pval.csv')
+
+ss.gibbs <- gibbs_sample(SpliceSite,500,3,1000, 1)
+ss.table <- pval_tab(ss.gibbs[[1]], 3, 5)
+write.csv(ss.table, 'splicesite_hg38.pval.csv')
+
+sg.gibbs <- gibbs_sample(StopGain,5000,3,5000, 1)
+sg.table <- pval_tab(sg.gibbs[[1]], 3, 5)
+write.csv(sg.table, 'stopgain_hg38.pval.csv')
+
+if.gibbs <- gibbs_sample(Inframe,10000,3,10000, 1)
+if.table <- pval_tab(if.gibbs[[1]], 2, 5)
+write.csv(if.table, 'inframe_hg38.pval.csv')
+
+fs.gibbs <- gibbs_sample(FrameShift,10000,3,10000, 1)
+fs.table <- pval_tab(fs.gibbs[[1]], 3, 5)
+write.csv(fs.table, 'frameshift_hg38.pval.csv')
+
+ms.gibbs <- gibbs_sample(Missense,10000,3,10000, 1)
+ms.table <- pval_tab(ms.gibbs[[1]], 3, 5)
+write.csv(ms.table, 'missense_hg38.pval.csv')
+

@@ -1,0 +1,14 @@
+<arguments>
+	<email>kmoad@insilico.us.com</email>
+	<url>http://karchin-web04.icm.jhu.edu:8888/CRAVAT</url>
+	<db_info>
+		<host>karchin-web04.icm.jhu.edu</host>
+		<port>8895</port>
+		<user>root</user>
+		<password>1</password>
+		<db>cravat_results</db>
+	</db_info>
+	<expected_failures>
+		['dbsnp_18', 'dbsnp_c', 'dbsnp_v', 'errors_c', 'gene_tab_18', 'gene_tab_c', 'gene_tab_v', 'oncogenes_18', 'oncogenes_c', 'oncogenes_v', 'pop_stats_18', 'pop_stats_c', 'pop_stats_v']
+	</expected_failures>
+</arguments>

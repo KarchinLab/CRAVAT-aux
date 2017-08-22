@@ -1,3 +1,0 @@
-cravat1	chr5	25011	+	T	G
-cravat2	chr1	156216772	+	T	G
-cravat3	chr4	21582017	-	T	A

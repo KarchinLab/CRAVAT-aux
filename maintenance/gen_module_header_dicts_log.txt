@@ -1,0 +1,467 @@
+===============Raw Headers===============
+{'cgc': {'gene': ['Role',
+                  'Inheritance',
+                  'Tumor Types Somatic',
+                  'Tumor Types Germline']},
+ 'clinvar': {'gene': ['ClinVar Disease', 'ClinVar XRef'],
+             'summary': ['ClinVar Clinical Significance'],
+             'variant': ['ClinVar Disease', 'ClinVar XRef']},
+ 'cosmic': {'gene': ['Occurrences in COSMIC',
+                     'Occurrences in COSMIC by primary sites'],
+            'summary': ['COSMIC ID',
+                        'Occurrences in COSMIC by primary sites'],
+            'variant': ['Transcript in COSMIC',
+                        'Protein sequence change in COSMIC',
+                        'Occurrences in COSMIC']},
+ 'count': {'gene': ['Number of samples in study having the gene mutated'],
+           'summary': ['Number of samples in study having the exact nucleotide change']},
+ 'dbsnp': {'summary': ['dbSNP']},
+ 'esp': {'summary': ['ESP6500 allele frequency (average)'],
+         'variant': ['ESP6500 allele frequency (European American)',
+                     'ESP6500 allele frequency (African American)']},
+ 'exac': {'summary': ['ExAC total allele frequency'],
+          'variant': ['ExAC allele frequency (African/African American)',
+                      'ExAC allele frequency (Latino)',
+                      'ExAC allele frequency (East Asian)',
+                      'ExAC allele frequency (Finnish)',
+                      'ExAC allele frequency (Non-Finnish European)',
+                      'ExAC allele frequency (Other)',
+                      'ExAC allele frequency (South Asian)']},
+ 'info': {'gene': ['HUGO symbol',
+                   'HUGO symbol',
+                   'Number of variants',
+                   'Most severe sequence ontology'],
+          'summary': ['ID',
+                      'Input line',
+                      'ID',
+                      'Chrom',
+                      'Position',
+                      'Strand',
+                      'Ref. base(s)',
+                      'Alt. base(s)',
+                      'Sample ID',
+                      'HUGO symbol',
+                      'Sequence ontology',
+                      'Protein sequence change'],
+          'variant': ['ID',
+                      'Input line',
+                      'ID',
+                      'Chrom',
+                      'Position',
+                      'Strand',
+                      'Ref. base(s)',
+                      'Alt. base(s)',
+                      'Sample ID',
+                      'HUGO symbol',
+                      'Sequence ontology',
+                      'Sequence ontology transcript',
+                      'Sequence ontology transcript strand',
+                      'Protein sequence change',
+                      'Sequence ontology all transcripts']},
+ 'mappability': {'summary': ['Mappability Warning']},
+ 'mupit': {'gene': ['MuPIT Link',
+                    'Has a mutation in a TCGA Mutation Cluster'],
+           'summary': ['MuPIT Link', 'In TCGA Mutation Cluster']},
+ 'ndex_module': {'gene': ['NDEx Matches', 'NDEx Enrichments']},
+ 'target': {'gene': ['TARGET'], 'summary': ['TARGET']},
+ 'thousandgenomes': {'summary': ['1000 Genomes allele frequency']},
+ 'vogelstein': {'gene': ['Driver genes'], 'summary': ['Driver genes']}}
+===============clinvar===============
+gene
+	ClinVar Disease
+	['gene', 'Disease Association', 'ClinVar Disease', 'clinvar_disease', 'varchar(200)', '0', '22']
+	ClinVar XRef
+	['gene', 'Disease Association', 'ClinVar XRef', 'clinvar_xref', 'varchar(200)', '1', '23']
+variant
+	ClinVar Disease
+	['variant', 'Disease Association', 'ClinVar Disease', 'clinvar_disease', 'varchar(200)', '1', '63']
+	ClinVar XRef
+	['variant', 'Disease Association', 'ClinVar XRef', 'clinvar_xref', 'varchar(200)', '1', '64']
+summary
+	ClinVar Clinical Significance
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'ClinVar Disease': {'column_group': 'Disease Association',
+                              'column_order': 22,
+                              'hidden': 0,
+                              'sql_col': 'clinvar_disease',
+                              'value_type': 'varchar(200)'},
+          'ClinVar XRef': {'column_group': 'Disease Association',
+                           'column_order': 23,
+                           'hidden': 1,
+                           'sql_col': 'clinvar_xref',
+                           'value_type': 'varchar(200)'}},
+ 'summary': {},
+ 'variant': {'ClinVar Disease': {'column_group': 'Disease Association',
+                                 'column_order': 63,
+                                 'hidden': 1,
+                                 'sql_col': 'clinvar_disease',
+                                 'value_type': 'varchar(200)'},
+             'ClinVar XRef': {'column_group': 'Disease Association',
+                              'column_order': 64,
+                              'hidden': 1,
+                              'sql_col': 'clinvar_xref',
+                              'value_type': 'varchar(200)'}}}
+===============info===============
+gene
+	HUGO symbol
+	['gene', 'Gene Info', 'HUGO symbol', 'hugo', 'varchar(20)', '0', '0']
+	HUGO symbol
+	['gene', 'Gene Info', 'HUGO symbol', 'hugo', 'varchar(20)', '0', '0']
+	Number of variants
+	['gene', 'Gene Info', 'Number of variants', 'num_variants', 'int', '0', '2']
+	Most severe sequence ontology
+	['gene', 'Variant Impact', 'Most severe sequence ontology', 'so', 'char(2)', '0', '5']
+variant
+	ID
+	['variant', 'Variant Info', 'ID', 'uid', 'varchar(100)', '0', '1']
+	Input line
+	['variant', 'Variant Info', 'Input line', 'input_line_number', 'int', '0', '0']
+	ID
+	['variant', 'Variant Info', 'ID', 'uid', 'varchar(100)', '0', '1']
+	Chrom
+	['variant', 'Variant Info', 'Chrom', 'chrom', 'varchar(5)', '0', '2']
+	Position
+	['variant', 'Variant Info', 'Position', 'position', 'int', '0', '3']
+	Strand
+	['variant', 'Variant Info', 'Strand', 'strand', 'char(1)', '0', '4']
+	Ref. base(s)
+	['variant', 'Variant Info', 'Ref. base(s)', 'ref_base', 'varchar(100)', '0', '5']
+	Alt. base(s)
+	['variant', 'Variant Info', 'Alt. base(s)', 'alt_base', 'varchar(100)', '0', '6']
+	Sample ID
+	['variant', 'Variant Info', 'Sample ID', 'sample_id', 'varchar(100)', '0', '8']
+	HUGO symbol
+	['variant', 'Variant Info', 'HUGO symbol', 'hugo', 'varchar(100)', '0', '9']
+	Sequence ontology
+	['variant', 'Variant Impact', 'Sequence ontology', 'so_best', 'char(2)', '0', '13']
+	Sequence ontology transcript
+	['variant', 'Variant Impact', 'Sequence ontology transcript', 'so_best_transcript', 'varchar(20)', '1', '15']
+	Sequence ontology transcript strand
+		NO MATCH IN HEADER_TO_COL
+	Protein sequence change
+	['variant', 'Variant Impact', 'Protein sequence change', 'so_best_protein_change', 'varchar(20)', '0', '14']
+	Sequence ontology all transcripts
+	['variant', 'Variant Impact', 'Sequence ontology all transcripts', 'so_best_all', 'varchar(300)', '1', '16']
+summary
+	ID
+		NO MATCH IN HEADER_TO_COL
+	Input line
+		NO MATCH IN HEADER_TO_COL
+	ID
+		NO MATCH IN HEADER_TO_COL
+	Chrom
+		NO MATCH IN HEADER_TO_COL
+	Position
+		NO MATCH IN HEADER_TO_COL
+	Strand
+		NO MATCH IN HEADER_TO_COL
+	Ref. base(s)
+		NO MATCH IN HEADER_TO_COL
+	Alt. base(s)
+		NO MATCH IN HEADER_TO_COL
+	Sample ID
+		NO MATCH IN HEADER_TO_COL
+	HUGO symbol
+		NO MATCH IN HEADER_TO_COL
+	Sequence ontology
+		NO MATCH IN HEADER_TO_COL
+	Protein sequence change
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'HUGO symbol': {'column_group': 'Gene Info',
+                          'column_order': 0,
+                          'hidden': 0,
+                          'sql_col': 'hugo',
+                          'value_type': 'varchar(20)'},
+          'Most severe sequence ontology': {'column_group': 'Variant Impact',
+                                            'column_order': 5,
+                                            'hidden': 0,
+                                            'sql_col': 'so',
+                                            'value_type': 'char(2)'},
+          'Number of variants': {'column_group': 'Gene Info',
+                                 'column_order': 2,
+                                 'hidden': 0,
+                                 'sql_col': 'num_variants',
+                                 'value_type': 'int'}},
+ 'summary': {},
+ 'variant': {'Alt. base(s)': {'column_group': 'Variant Info',
+                              'column_order': 6,
+                              'hidden': 0,
+                              'sql_col': 'alt_base',
+                              'value_type': 'varchar(100)'},
+             'Chrom': {'column_group': 'Variant Info',
+                       'column_order': 2,
+                       'hidden': 0,
+                       'sql_col': 'chrom',
+                       'value_type': 'varchar(5)'},
+             'HUGO symbol': {'column_group': 'Variant Info',
+                             'column_order': 9,
+                             'hidden': 0,
+                             'sql_col': 'hugo',
+                             'value_type': 'varchar(100)'},
+             'ID': {'column_group': 'Variant Info',
+                    'column_order': 1,
+                    'hidden': 0,
+                    'sql_col': 'uid',
+                    'value_type': 'varchar(100)'},
+             'Input line': {'column_group': 'Variant Info',
+                            'column_order': 0,
+                            'hidden': 0,
+                            'sql_col': 'input_line_number',
+                            'value_type': 'int'},
+             'Position': {'column_group': 'Variant Info',
+                          'column_order': 3,
+                          'hidden': 0,
+                          'sql_col': 'position',
+                          'value_type': 'int'},
+             'Protein sequence change': {'column_group': 'Variant Impact',
+                                         'column_order': 14,
+                                         'hidden': 0,
+                                         'sql_col': 'so_best_protein_change',
+                                         'value_type': 'varchar(20)'},
+             'Ref. base(s)': {'column_group': 'Variant Info',
+                              'column_order': 5,
+                              'hidden': 0,
+                              'sql_col': 'ref_base',
+                              'value_type': 'varchar(100)'},
+             'Sample ID': {'column_group': 'Variant Info',
+                           'column_order': 8,
+                           'hidden': 0,
+                           'sql_col': 'sample_id',
+                           'value_type': 'varchar(100)'},
+             'Sequence ontology': {'column_group': 'Variant Impact',
+                                   'column_order': 13,
+                                   'hidden': 0,
+                                   'sql_col': 'so_best',
+                                   'value_type': 'char(2)'},
+             'Sequence ontology all transcripts': {'column_group': 'Variant Impact',
+                                                   'column_order': 16,
+                                                   'hidden': 1,
+                                                   'sql_col': 'so_best_all',
+                                                   'value_type': 'varchar(300)'},
+             'Sequence ontology transcript': {'column_group': 'Variant Impact',
+                                              'column_order': 15,
+                                              'hidden': 1,
+                                              'sql_col': 'so_best_transcript',
+                                              'value_type': 'varchar(20)'},
+             'Strand': {'column_group': 'Variant Info',
+                        'column_order': 4,
+                        'hidden': 0,
+                        'sql_col': 'strand',
+                        'value_type': 'char(1)'}}}
+===============ndex_module===============
+gene
+	NDEx Matches
+	['gene', 'NDEx', 'NDEx Matches', 'ndex_matches', 'int', '1', '27']
+	NDEx Enrichments
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'NDEx Matches': {'column_group': 'NDEx',
+                           'column_order': 27,
+                           'hidden': 1,
+                           'sql_col': 'ndex_matches',
+                           'value_type': 'int'}}}
+===============target===============
+gene
+	TARGET
+	['gene', 'Disease Association', 'TARGET', 'target', 'varchar(100)', '0', '14']
+summary
+	TARGET
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'TARGET': {'column_group': 'Disease Association',
+                     'column_order': 14,
+                     'hidden': 0,
+                     'sql_col': 'target',
+                     'value_type': 'varchar(100)'}},
+ 'summary': {}}
+===============esp===============
+variant
+	ESP6500 allele frequency (European American)
+	['variant', 'Population Stats', 'ESP6500 allele frequency (European American)', 'esp_ea', 'float', '1', '44']
+	ESP6500 allele frequency (African American)
+	['variant', 'Population Stats', 'ESP6500 allele frequency (African American)', 'esp_aa', 'float', '1', '45']
+summary
+	ESP6500 allele frequency (average)
+		NO MATCH IN HEADER_TO_COL
+{'summary': {},
+ 'variant': {'ESP6500 allele frequency (African American)': {'column_group': 'Population Stats',
+                                                             'column_order': 45,
+                                                             'hidden': 1,
+                                                             'sql_col': 'esp_aa',
+                                                             'value_type': 'float'},
+             'ESP6500 allele frequency (European American)': {'column_group': 'Population Stats',
+                                                              'column_order': 44,
+                                                              'hidden': 1,
+                                                              'sql_col': 'esp_ea',
+                                                              'value_type': 'float'}}}
+===============cgc===============
+gene
+	Role
+		NO MATCH IN HEADER_TO_COL
+	Inheritance
+		NO MATCH IN HEADER_TO_COL
+	Tumor Types Somatic
+		NO MATCH IN HEADER_TO_COL
+	Tumor Types Germline
+		NO MATCH IN HEADER_TO_COL
+{'gene': {}}
+===============exac===============
+variant
+	ExAC allele frequency (African/African American)
+	['variant', 'Population Stats', 'ExAC allele frequency (African/African American)', 'exac_afr', 'float', '1', '46']
+	ExAC allele frequency (Latino)
+	['variant', 'Population Stats', 'ExAC allele frequency (Latino)', 'exac_lat', 'float', '1', '47']
+	ExAC allele frequency (East Asian)
+	['variant', 'Population Stats', 'ExAC allele frequency (East Asian)', 'exac_eas', 'float', '1 ', '48']
+	ExAC allele frequency (Finnish)
+	['variant', 'Population Stats', 'ExAC allele frequency (Finnish)', 'exac_fin', 'float', '1', '49']
+	ExAC allele frequency (Non-Finnish European)
+	['variant', 'Population Stats', 'ExAC allele frequency (Non-Finnish European)', 'exac_nfe', 'float', '1', '50']
+	ExAC allele frequency (Other)
+	['variant', 'Population Stats', 'ExAC allele frequency (Other)', 'exac_oth', 'float', '1', '51']
+	ExAC allele frequency (South Asian)
+	['variant', 'Population Stats', 'ExAC allele frequency (South Asian)', 'exac_sas', 'float', '1', '52']
+summary
+	ExAC total allele frequency
+		NO MATCH IN HEADER_TO_COL
+{'summary': {},
+ 'variant': {'ExAC allele frequency (African/African American)': {'column_group': 'Population Stats',
+                                                                  'column_order': 46,
+                                                                  'hidden': 1,
+                                                                  'sql_col': 'exac_afr',
+                                                                  'value_type': 'float'},
+             'ExAC allele frequency (East Asian)': {'column_group': 'Population Stats',
+                                                    'column_order': 48,
+                                                    'hidden': 1,
+                                                    'sql_col': 'exac_eas',
+                                                    'value_type': 'float'},
+             'ExAC allele frequency (Finnish)': {'column_group': 'Population Stats',
+                                                 'column_order': 49,
+                                                 'hidden': 1,
+                                                 'sql_col': 'exac_fin',
+                                                 'value_type': 'float'},
+             'ExAC allele frequency (Latino)': {'column_group': 'Population Stats',
+                                                'column_order': 47,
+                                                'hidden': 1,
+                                                'sql_col': 'exac_lat',
+                                                'value_type': 'float'},
+             'ExAC allele frequency (Non-Finnish European)': {'column_group': 'Population Stats',
+                                                              'column_order': 50,
+                                                              'hidden': 1,
+                                                              'sql_col': 'exac_nfe',
+                                                              'value_type': 'float'},
+             'ExAC allele frequency (Other)': {'column_group': 'Population Stats',
+                                               'column_order': 51,
+                                               'hidden': 1,
+                                               'sql_col': 'exac_oth',
+                                               'value_type': 'float'},
+             'ExAC allele frequency (South Asian)': {'column_group': 'Population Stats',
+                                                     'column_order': 52,
+                                                     'hidden': 1,
+                                                     'sql_col': 'exac_sas',
+                                                     'value_type': 'float'}}}
+===============cosmic===============
+gene
+	Occurrences in COSMIC
+	['gene', 'Disease Association', 'Occurrences in COSMIC', 'cosmic_occur', 'int', '0', '15']
+	Occurrences in COSMIC by primary sites
+	['gene', 'Disease Association', 'Occurrences in COSMIC by primary sites', 'cosmic_site', 'varchar(200)', '1', '16']
+variant
+	Transcript in COSMIC
+	['variant', 'Disease Association', 'Transcript in COSMIC', 'cosmic_transcript', 'varchar(20)', '1', '37']
+	Protein sequence change in COSMIC
+	['variant', 'Disease Association', 'Protein sequence change in COSMIC', 'cosmic_protein_change', 'varchar(200)', '1', '38']
+	Occurrences in COSMIC
+	['variant', 'Disease Association', 'Occurrences in COSMIC', 'cosmic_occur', 'int', '0', '36']
+summary
+	COSMIC ID
+		NO MATCH IN HEADER_TO_COL
+	Occurrences in COSMIC by primary sites
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'Occurrences in COSMIC': {'column_group': 'Disease Association',
+                                    'column_order': 15,
+                                    'hidden': 0,
+                                    'sql_col': 'cosmic_occur',
+                                    'value_type': 'int'},
+          'Occurrences in COSMIC by primary sites': {'column_group': 'Disease Association',
+                                                     'column_order': 16,
+                                                     'hidden': 1,
+                                                     'sql_col': 'cosmic_site',
+                                                     'value_type': 'varchar(200)'}},
+ 'summary': {},
+ 'variant': {'Occurrences in COSMIC': {'column_group': 'Disease Association',
+                                       'column_order': 36,
+                                       'hidden': 0,
+                                       'sql_col': 'cosmic_occur',
+                                       'value_type': 'int'},
+             'Protein sequence change in COSMIC': {'column_group': 'Disease Association',
+                                                   'column_order': 38,
+                                                   'hidden': 1,
+                                                   'sql_col': 'cosmic_protein_change',
+                                                   'value_type': 'varchar(200)'},
+             'Transcript in COSMIC': {'column_group': 'Disease Association',
+                                      'column_order': 37,
+                                      'hidden': 1,
+                                      'sql_col': 'cosmic_transcript',
+                                      'value_type': 'varchar(20)'}}}
+===============count===============
+gene
+	Number of samples in study having the gene mutated
+	['gene', 'Study', 'Number of samples in study having the gene mutated', 'num_sample', 'int', '1', '19']
+summary
+	Number of samples in study having the exact nucleotide change
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'Number of samples in study having the gene mutated': {'column_group': 'Study',
+                                                                 'column_order': 19,
+                                                                 'hidden': 1,
+                                                                 'sql_col': 'num_sample',
+                                                                 'value_type': 'int'}},
+ 'summary': {}}
+===============thousandgenomes===============
+summary
+	1000 Genomes allele frequency
+		NO MATCH IN HEADER_TO_COL
+{'summary': {}}
+===============mappability===============
+summary
+	Mappability Warning
+		NO MATCH IN HEADER_TO_COL
+{'summary': {}}
+===============mupit===============
+gene
+	MuPIT Link
+	['gene', 'Structure', 'MuPIT Link', 'mupit', 'varchar(300)', '1', '3']
+	Has a mutation in a TCGA Mutation Cluster
+	['gene', 'Structure', 'Has a mutation in a TCGA Mutation Cluster', 'hotspot', 'varchar(3)', '0', '4']
+summary
+	MuPIT Link
+		NO MATCH IN HEADER_TO_COL
+	In TCGA Mutation Cluster
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'Has a mutation in a TCGA Mutation Cluster': {'column_group': 'Structure',
+                                                        'column_order': 4,
+                                                        'hidden': 0,
+                                                        'sql_col': 'hotspot',
+                                                        'value_type': 'varchar(3)'},
+          'MuPIT Link': {'column_group': 'Structure',
+                         'column_order': 3,
+                         'hidden': 1,
+                         'sql_col': 'mupit',
+                         'value_type': 'varchar(300)'}},
+ 'summary': {}}
+===============dbsnp===============
+summary
+	dbSNP
+		NO MATCH IN HEADER_TO_COL
+{'summary': {}}
+===============vogelstein===============
+gene
+	Driver genes
+	['gene', 'Disease Association', 'Driver genes', 'driver_genes', 'varchar(10)', '0', '12']
+summary
+	Driver genes
+		NO MATCH IN HEADER_TO_COL
+{'gene': {'Driver genes': {'column_group': 'Disease Association',
+                           'column_order': 12,
+                           'hidden': 0,
+                           'sql_col': 'driver_genes',
+                           'value_type': 'varchar(10)'}},
+ 'summary': {}}

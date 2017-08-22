@@ -1,0 +1,15 @@
+- "rick" MySQL account on web02 has ALL and GRANT privileges.
+
+- create database cravat_results;
+
+- grant create, insert, select on cravat_results.* to 'cravat'@'%';
+
+- create table result_tables (table_name varchar(200), creation_time datetime) engine=innodb;
+
+- grant insert, delete on cravat_results.result_tables to 'cravat'@'%';
+
+- create table header_to_col (level varchar(10), group varchar(100), header varchar(200), col varchar(100), definition varchar(30), hidden boolean, columnorder int) engine=innodb;
+
+- Copy Interactive_result_header_to_column_table_data.txt to the DB server.
+
+- load data local infile "/home/rkim/Interactive_result_header_to_column_table_data.txt" into table header_to_col;

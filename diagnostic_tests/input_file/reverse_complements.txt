@@ -1,0 +1,12 @@
+TR1F	chr22	30421786	+	A	T	sample_1
+
+TR2F chr22 40814500 - A G sample_1
+TR2R chr22 40814500 + T C sample_1
+
+TR3F chr22 40815256 + C T sample_1
+TR3R chr22 40815256 - G A sample_1
+
+TR7F chr2 219134766 + G - sample_3
+TR7R chr2 219134766 - C - sample_3
+
+TR1R	chr22	30421786	-	T	A	sample_2

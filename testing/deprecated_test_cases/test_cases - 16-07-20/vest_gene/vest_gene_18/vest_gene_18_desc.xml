@@ -1,0 +1,21 @@
+<desc>
+	<sub_params>
+		<analyses>VEST</analyses>
+	<hg18>on</hg18></sub_params>
+	<verify_rules>
+		<column name="vest_score">
+			<method>float_numeric_range</method>
+			<modifier>0.01</modifier>
+		</column>
+		<column name="vest_composite_pvalue">
+			<method>float_numeric_range</method>
+			<modifier>0.001</modifier>
+		</column>
+		<column name="vest_composite_fdr">
+			<method>float_numeric_range</method>
+			<modifier>0.01</modifier>
+		</column>
+		
+	</verify_rules>
+	<tab>gene</tab>
+<sub_method>post</sub_method></desc>

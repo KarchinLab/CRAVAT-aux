@@ -1,8 +1,5 @@
 #ignore all log files since they will update often
-logs/*
-
-# Ignore all .xlsx files
-*.xlsx
+testing/logs/*
 
 # Ignore .pyc files since they keep changing
 *.pyc

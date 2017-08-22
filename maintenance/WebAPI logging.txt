@@ -1,0 +1,2 @@
+create table webapilog (timestamp datetime, count int) engine=innodb;
+grant select, insert on CRAVAT_ADMIN.webapilog to 'cravat'@'karchin-web03-private'; (production server)

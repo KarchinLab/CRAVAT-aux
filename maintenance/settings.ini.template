@@ -1,0 +1,12 @@
+[MutationTest]
+; Location of the preprocessed TCGA mutation files (Please use absolute path)
+input_dir=/Users/andywong86/data/geman_v2/database
+
+; Where the output file will be generated (Please use absolute path)
+output_dir=/Users/andywong86/data/geman_v2/out
+
+; Gene length and Bin size options
+gene_length_lower_limit=10
+gene_length_upper_limit=3000
+bin_percent_width=10
+bin_min_width=40

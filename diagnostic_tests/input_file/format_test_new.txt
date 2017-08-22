@@ -1,0 +1,82 @@
+# SNV
+TR1 chr22 30421786 + A T 1
+TR2 chr22 29446079 + A G 1
+TR3 chr22 29446079 + A G 1
+TR4 chr22 40814500 - A G 1
+TR5 chr22 40815256 + C T 1
+TR6 chr12 10853951 + G C 1
+TR7 chr18 72997828 + C A 1
+TR8 chr5 140762533 + C A 1
+TR9 chr1 153748012 + A C 1
+TR10 chr12 125561060 + C T 1
+TR11 chr2 202142443 + A G 1
+TR12 chr17 41116258 + A G 1
+TR13 chr16 855610 + G A 1
+TR14 chr4 87968515 + G T 1
+TR15 chr2 73435586 + G A 1
+# Insertion
+3_fi chr22 25115449 + A AGG 1
+4_ii chr22 25115449 + A AGTC 1
+# Deletion
+5_id chr22 25115449 + AAGA A 1
+6_fd chr22 25115449 + AAG A 1
+8_fd chr19 7675768 + TC T 1
+# Complex
+7 chr22 25115449 + AAG AT 1
+# Insertion New Format
+3_fi_new chr22 25115450 + - AGG 2
+4_ii_new chr22 25115450 + - AGTC 2
+# Deletion New Format
+5_id_new chr22 25115450 + AGA - 2
+6_fd_new chr22 25115450 + AG - 2
+8_fd_new chr19 7675767 + C - 2
+# Complex New Format
+7_new chr22 25115450 + AG T 2
+ii_plus_2_new chr11 1092620 + - CAA 2
+ii_plus_2_6_new chr11 1092620 + - CAATGG 2
+ii_plus_2_9_new chr11 1092620 + - CAATGGTCC 2
+ii_plus_1_new chr11 1092619 + - CAA 2
+ii_plus_0_new chr11 1092618 + - CAA 2
+ii_minus_2_new chr11 1092619 - - TTG 2
+ii_minus_0_new chr11 1092618 - - TTG 2
+ii_minus_1_new chr11 1092617 - - TTG 2
+id_plus_0_new chr3 42251578 + GGA - 2
+id_plus_2_new chr3 42251577 + CGG - 2
+id_plus_1_new chr3 42251576 + ACG - 2
+id_minus_0_new chr3 42251580 - TCC - 2
+id_minus_2_new chr3 42251579 - CCG - 2
+id_minus_1_new chr3 42251578 - CGT - 2
+ii_plus_2_long_new chr11 1092619 + - CAATCGCCTAAAGCCCAGGGTCGGGGTAAACCCGGGTAAATT 2
+fv_1_of_2_new chr2 219134766 + G - 2
+fv_2_of_2_new chr2 219134767 + - G 2
+same_pos_fv_1_of_2_new chr6 30545854 + AA - 2
+same_pos_fv_2_of_2_new chr6 30545854 + A - 2
+same_pos_ii_1_of_3_new chr18 72223609 + - ATG 2
+same_pos_ii_2_of_3_new chr18 72223609 + - CTG 2
+same_pos_ii_3_of_3_new chr18 72223609 + - CTGCTG 2
+same_pos_id_1_of_2_new chr12 123466293 + GAA - 2
+same_pos_id_2_of_2_new chr12 123466293 + GAAGAAGAA - 2
+# Mappability
+map1 chr1 10001 + A T 1
+map2 chr1 10001 + T C 1
+map3 chr1 10001 + G T 1
+map4 chr1 10001 + C T 1
+map5 chrY 20403581 + A T 1
+map6 chrY 20403581 + T C 1
+map7 chrY 20403581 + G T 1
+map8 chrY 20403581 + C T 1
+# dbSNP
+dbsnp_single_plus_rs201752861 chr1 10177 + A C 1
+dbsnp_single_minus_rs2363296 chr1 11692 - T G 1
+dbsnp_deletion_plus_rs201106462_new chr1 10329 + ACCCCTAACCCTAACCCTAACCCT - 2
+dbsnp_indel_plus_rs77426996_new chr1 63738 + ACT CTA 2
+dbsnp_indel_minus_rs71309400_new chr1 30902 - AG AGAG 2
+dbsnp_mnp_plus_rs71273379_new chr1 70245 + CA TG 2
+dbsnp_mnp_minus_rs71219848_new chr1 32385 - GGAGGGAAG AGAGGGAAA 2
+# MuPIT
+mupitlink1 chr10 123279680 + C T 1
+mupitlink2 chr10 123279671 + - T 1
+mupitlink3 chr10 123279671 + - TTT 1
+mupitlink4 chr10 123279650 + C T 1
+# Vogelstein
+vogelstein_brca1_1 chr17 41244435 + T C 1

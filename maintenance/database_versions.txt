@@ -1,0 +1,16 @@
+Format:
+Database
+	-name, release, version	-date
+	
+1000genomes goes by hard coding release in the python extraction program, so I am going by release here. The others are more easily noted by the vcf file name, which contains what version they are
+	
+1000genomes
+	-Phase3 sequence freeze 20130502, release=20130502 on ftp, file=ALL.wgs.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf 	-date=01/23/2015
+	-Same as above except file name has changed to ALL.wgs.phase3_shapeit2_mvncall_integrated_v5a.20130502.sites.vcf - IDK why -Now trimming front of sequence before end  -date=06/29/2015
+	
+	
+ESP6500
+	-version=v0.0.30, file=ESP6500SI-V2-SSA137.GRCh38-liftover.snps_indels.vcf.gz (unpack separates into chrs)	-date=01/23/2015
+
+ExAC
+	-release=release0.3,  file=ExAC.r0.3.sites.vep.vcf	-date=01/23/2015
