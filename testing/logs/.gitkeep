@@ -1,0 +1,5 @@
+DO NOT DELETE
+
+The contents of this dir are ignored by git. 
+Git will not track an empty directory. 
+This file prevents the directory from being empty.

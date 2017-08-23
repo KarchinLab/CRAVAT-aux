@@ -1,6 +1,12 @@
 #ignore all log files since they will update often
 testing/logs/*
+!testing/logs/.gitkeep
 
 # Ignore .pyc files since they keep changing
 *.pyc
 */*.pyc
+/.project
+/.pydevproject
+
+scratch/*
+!scratch/.gitkeep
