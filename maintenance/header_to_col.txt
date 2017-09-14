@@ -1,0 +1,140 @@
+variant	Variant Info	Input line	input_line_number	int	1	0	0	NULL
+variant	Variant Info	ID	uid	varchar(100)	1	1	0	NULL
+variant	Variant Info	Chromosome	chrom	varchar(25)	0	2	1	multisel
+variant	Variant Info	Position	position	int	0	3	0	NULL
+variant	Variant Info	Strand	strand	char(1)	0	4	0	NULL
+variant	Variant Info	Reference base(s)	ref_base	varchar(100)	0	5	0	NULL
+variant	Variant Info	Alternate base(s)	alt_base	varchar(100)	0	6	0	NULL
+variant	Variant Info	Sample ID	sample_id	varchar(100)	0	7	1	multisel
+variant	Variant Info	HUGO symbol	hugo	varchar(100)	0	8	1	string
+variant	Variant Info	dbSNP	dbsnp	varchar(20)	1	9	1	hasvalue
+variant	Structure	Protein 3D variant	mupit	varchar(300)	1	10	1	hasvalue
+variant	Variant Impact	Sequence ontology	so_best	char(2)	0	11	1	multisel
+variant	Variant Impact	Protein sequence change	so_best_protein_change	varchar(20)	0	12	0	NULL
+variant	Variant Impact	S.O. transcript	so_best_transcript	varchar(20)	1	13	0	NULL
+variant	Variant Impact	S.O. all transcripts	so_best_all	varchar(300)	1	14	0	NULL
+variant	CHASM	CHASM p-value	chasm_best_pvalue	float	0	15	1	<=
+variant	CHASM	CHASM FDR	chasm_best_fdr	float	1	16	1	<=
+variant	CHASM	CHASM transcript	chasm_best_transcript	varchar(20)	1	17	0	NULL
+variant	CHASM	CHASM score	chasm_best_score	float	1	18	1	>=
+variant	CHASM	All transcripts CHASM results	chasm_all	varchar(200)	1	19	0	NULL
+variant	VEST	VEST p-value	vest_best_pvalue	float	0	20	1	<=
+variant	VEST	VEST FDR	vest_best_fdr	float	1	21	1	<=
+variant	VEST	VEST score transcript	vest_best_transcript	varchar(20)	1	22	0	NULL
+variant	VEST	VEST score (missense)	vest_best_score_missense	float	1	23	1	>=
+variant	VEST	VEST score (frameshift indels)	vest_best_score_frameshift	float	1	24	1	>=
+variant	VEST	VEST score (inframe indels)	vest_best_score_inframe	float	1	25	1	>=
+variant	VEST	VEST score (stop-gain)	vest_best_score_stopgain	float	1	26	1	>=
+variant	VEST	VEST score (stop-loss)	vest_best_score_stoploss	float	1	27	1	>=
+variant	VEST	VEST score (splice site)	vest_best_score_splice	float	1	28	1	>=
+variant	VEST	All transcripts VEST results	vest_all	varchar(200)	1	29	1	<=
+variant	Disease Association	CGL driver class	driver_genes	varchar(10)	1	30	1	hasvalue
+variant	Disease Association	TARGET	target	varchar(100)	1	31	1	hasvalue
+variant	Disease Association	COSMIC ID	cosmic_id	varchar(20)	1	32	1	hasvalue
+variant	Disease Association	COSMIC variant count (tissue)	cosmic_site_nt	varchar(5000)	1	33	1	hasvalue
+variant	Disease Association	COSMIC variant count	cosmic_occur	int	0	34	1	>=
+variant	Disease Association	COSMIC transcript	cosmic_transcript	varchar(20)	1	35	0	NULL
+variant	Disease Association	COSMIC protein change	cosmic_protein_change	varchar(200)	1	36	0	NULL
+variant	Disease Association	PubMed article count	pubmed_n	int	0	37	1	>=
+variant	Disease Association	PubMed search term	pubmed_link	varchar(5000)	1	38	1	hasvalue
+variant	Population Stats	1000 Genomes AF	kg	float	1	39	1	<=
+variant	Population Stats	ESP6500 AF (average)	esp_avg	float	1	40	1	<=
+variant	Population Stats	ExAC total AF	exac_total	float	1	41	1	<=
+variant	Population Stats	ESP6500 AF (European American)	esp_ea	float	1	42	0	NULL
+variant	Population Stats	ESP6500 AF (African American)	esp_aa	float	1	43	0	NULL
+variant	Population Stats	ExAC AF (African/African American)	exac_afr	float	1	44	0	NULL
+variant	Population Stats	ExAC AF (Latino)	exac_lat	float	1	45	0	NULL
+variant	Population Stats	ExAC AF (East Asian)	exac_eas	float	1	46	0	NULL
+variant	Population Stats	ExAC AF (Finnish)	exac_fin	float	1	47	0	NULL
+variant	Population Stats	ExAC AF (Non-Finnish European)	exac_nfe	float	1	48	0	NULL
+variant	Population Stats	ExAC AF (Other)	exac_oth	float	1	49	0	NULL
+variant	Population Stats	ExAC AF (South Asian)	exac_sas	float	1	50	0	NULL
+variant	Study	Number of samples with variant	num_sample	int	1	51	1	>=
+variant	Mutation Call Quality	Phred	qual	int	1	52	1	>=
+variant	Mutation Call Quality	VCF filters	filter	varchar(10)	1	53	1	hasvalue
+variant	Mutation Call Quality	Zygosity	zygosity	varchar(3)	1	54	0	NULL
+variant	Mutation Call Quality	Alternate reads	variant_reads	int	1	55	1	>=
+variant	Mutation Call Quality	Total reads	sample_reads	int	1	56	1	>=
+variant	Mutation Call Quality	Variant allele frequency	vaf	float	1	57	1	>=
+variant	CHASM	CHASM score available	chasm_available	boolean	1	58	0	NULL
+variant	VEST	VEST score available	vest_available	boolean	1	59	0	NULL
+variant	Disease Association	ClinVar	clinvar_sig	varchar(200)	1	60	1	hasvalue
+variant	Disease Association	ClinVar disease identifier	clinvar_disease	varchar(200)	1	61	1	hasvalue
+variant	Disease Association	ClinVar XRef	clinvar_xref	varchar(200)	1	62	1	hasvalue
+variant	Variant Impact	HGVS Genomic	hgvs_genomic	varchar(200)	1	63	0	NULL
+variant	Variant Impact	HGVS Protein	hgvs_protein	varchar(200)	1	64	0	NULL
+variant	Variant Impact	HGVS Protein All	hgvs_protein_all	varchar(5000)	1	65	0	NULL
+variant	NDEx	NCI pathway hits	ndex_matches	int	1	66	1	hasvalue
+variant	NDEx	NCI pathway IDs	ndex_pathway_ids	varchar(500)	1	67	0	NULL
+variant	NDEx	NCI pathway names	ndex_pathway_names	varchar(500)	1	68	0	NULL
+variant	Disease Association	CGC driver class	role_cgc	varchar(25)	1	69	0	NULL
+variant	Disease Association	CGC inheritance	inheritance_cgc	varchar(16)	1	70	0	NULL
+variant	Disease Association	CGC tumor types somatic	tumor_types_somatic	varchar(200)	1	71	0	NULL
+variant	Disease Association	CGC tumor types germline	tumor_types_germline	varchar(200)	1	72	0	NULL
+#variant	Structure	In TCGA Mutation Cluster	hotspot	varchar(3)	1	12	1	hasvalue
+#variant	Mutation Call Quality	Mappability Warning	mappability	varchar(20)	0	53	1	hasvalue
+#variant	Variant Info	Transcript	transcript	varchar(100)	1	7	0	NULL
+gene	Gene Info	HUGO symbol	hugo	varchar(20)	0	0	0	NULL
+gene	Gene Info	Variants	variants	varchar(300)	1	1	0	NULL
+gene	Gene Info	Number of variants	num_variants	int	0	2	0	NULL
+gene	Structure	Protein 3D gene	mupit	varchar(300)	1	3	0	NULL
+gene	Variant Impact	Sequence ontology	so	char(2)	0	4	0	NULL
+gene	CHASM	CHASM gene score	chasm_score	float	1	5	0	NULL
+gene	CHASM	CHASM gene p-value	chasm_composite_pvalue	float	0	6	0	NULL
+gene	CHASM	CHASM gene FDR	chasm_composite_fdr	float	1	7	0	NULL
+gene	VEST	VEST gene score (non-silent)	vest_score	float	1	8	0	NULL
+gene	VEST	VEST gene p-value	vest_composite_pvalue	float	0	9	0	NULL
+gene	VEST	VEST gene FDR	vest_composite_fdr	float	1	10	0	NULL
+gene	Disease Association	CGL driver class	driver_genes	varchar(10)	0	11	0	NULL
+gene	Disease Association	TARGET	target	varchar(100)	1	12	0	NULL
+gene	Disease Association	Occurrences in COSMIC	cosmic_occur	int	1	13	0	NULL
+gene	Disease Association	COSMIC gene count (tissue)	cosmic_site	varchar(200)	1	14	0	NULL
+gene	Disease Association	PubMed article count	pubmed_n	int	1	15	0	NULL
+gene	Disease Association	PubMed search term	pubmed_link	varchar(200)	1	16	0	NULL
+gene	Study	Number of samples with gene mutated	num_sample	int	0	17	0	NULL
+gene	CHASM	CHASM score available	chasm_available	boolean	1	18	0	NULL
+gene	VEST	VEST score available	vest_available	boolean	1	19	0	NULL
+gene	Disease Association	ClinVar disease identifier	clinvar_disease	varchar(200)	1	20	0	NULL
+gene	Disease Association	ClinVar XRef	clinvar_xref	varchar(200)	1	21	0	NULL
+gene	Disease Association	CGC driver class	role_cgc	varchar(25)	1	22	0	NULL
+gene	Disease Association	CGC inheritance	inheritance_cgc	varchar(16)	1	23	0	NULL
+gene	Disease Association	CGC tumor types somatic	tumor_types_somatic	varchar(200)	1	24	0	NULL
+gene	Disease Association	CGC tumor types germline	tumor_types_germline	varchar(200)	1	25	0	NULL
+gene	NDEx	NCI pathway hits	ndex_matches	int	1	26	1	hasvalue
+gene	NDEx	NCI pathway IDs	ndex_pathway_ids	varchar(500)	1	27	0	NULL
+gene	NDEx	NCI pathway names	ndex_pathway_names	varchar(500)	1	28	0	NULL
+#gene	Structure	Has a mutation in a TCGA Mutation Cluster	hotspot	varchar(3)	1	4	0	NULL
+error	Error	Input line number	input_line_number	int	0	0	0	NULL
+error	Error	Input line UID	uid	varchar(200)	0	1	0	NULL
+error	Error	Gene	hugo	varchar(30)	0	2	0	NULL
+error	Error	Error	error	varchar(300)	0	3	0	NULL
+error	Error	Input Line	input_line	varchar(500)	0	4	0	NULL
+noncoding	Variant Info	Input line	input_line_number	int	1	0	0	NULL
+noncoding	Variant Info	ID	uid	varchar(100)	1	1	0	NULL
+noncoding	Variant Info	Chromosome	chrom	varchar(25)	0	2	1	multisel
+noncoding	Variant Info	Position	position	int	0	3	0	NULL
+noncoding	Variant Info	Strand	strand	char(1)	0	4	0	NULL
+noncoding	Variant Info	Reference base(s)	ref_base	varchar(100)	0	5	0	NULL
+noncoding	Variant Info	Alternate base(s)	alt_base	varchar(100)	0	6	0	NULL
+noncoding	Variant Info	Sample ID	sample_id	varchar(100)	0	7	1	multisel
+noncoding	Variant Info	HUGO symbol	hugo	varchar(100)	1	8	0	NULL
+noncoding	Variant Info	dbSNP	dbsnp	varchar(20)	1	9	0	NULL
+noncoding	Disease Association	COSMIC ID	cosmic_id	varchar(20)	1	10	0	NULL
+noncoding	Disease Association	COSMIC variant count (tissue)	cosmic_site_nt	varchar(5000)	1	11	0	NULL
+noncoding	Disease Association	COSMIC variant count	cosmic_occur	int	1	12	1	>=
+noncoding	Disease Association	COSMIC transcript	cosmic_transcript	varchar(20)	1	13	0	NULL
+noncoding	Disease Association	COSMIC protein change	cosmic_protein_change	varchar(200)	1	14	0	NULL
+noncoding	Population Stats	1000 Genomes AF	kg	float	1	15	1	<=
+noncoding	Population Stats	ESP6500 AF (average)	esp_avg	float	1	16	1	<=
+noncoding	Population Stats	ExAC total AF	exac_total	float	1	17	1	<=
+noncoding	Study	Number of samples with variant	num_sample	int	0	18	0	NULL
+noncoding	Mutation Call Quality	Phred	qual	int	1	19	0	NULL
+noncoding	Mutation Call Quality	VCF filters	filter	varchar(10)	1	20	0	NULL
+noncoding	Mutation Call Quality	Zygosity	zygosity	varchar(3)	1	21	0	NULL
+noncoding	Mutation Call Quality	Alternate reads	variant_reads	int	1	22	0	NULL
+noncoding	Mutation Call Quality	Total reads	sample_reads	int	1	23	0	NULL
+noncoding	Mutation Call Quality	Variant allele frequency	vaf	float	1	24	1	>=
+noncoding	CHASM	CHASM score available	chasm_available	boolean	1	25	0	NULL
+noncoding	VEST	VEST score available	vest_available	boolean	1	26	0	NULL
+#noncoding	Mutation Call Quality	Mappability Warning	mappability	varchar(20)	0	20	0	NULL
+#noncoding	Variant Info	Transcript	transcript	varchar(100)	1	7	0	NULL
