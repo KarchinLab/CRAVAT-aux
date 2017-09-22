@@ -163,7 +163,7 @@ for transcript in transcripts:
             chrom, 
             str(exonend1 + 1), 
             str(exonstart2 - 1), 
-            transcript, 
+            transcript,
             'Intron']) + '\n')
     write_utr(chrom, exonstarts[-1], exonends[-1], cdsstart, cdsend, 
         transcript)
