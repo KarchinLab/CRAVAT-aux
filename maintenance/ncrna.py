@@ -15,12 +15,13 @@ def make_txt ():
 
     wf = open(dbtxtfilename, 'w')
 
+    # repFamily and repClass are the same for rRNA, scRNA, snRNA, srpRNA
     cursor.execute('select bin, genoName, genoStart, genoEnd, repName, ' +\
-        'repClass, repFamily, strand from rmsk')
+        'repFamily, strand from rmsk')
     for row in cursor.fetchall():
-        (binno, chrom, start, end, repname, repclass, repfamily, strand) = row
+        (binno, chrom, start, end, repname, repfamily, strand) = row
 
-        if repclass not in repclasses_to_include:
+        if repfamily not in repclasses_to_include:
             continue
 
         binno = str(binno)
@@ -32,8 +33,8 @@ def make_txt ():
             start,
             end,
             strand,
-            repclass,
-            repfamily + ':' + repname
+            repfamily,
+            repname
             ]) + '\n')
 
     cursor.execute('select bin, chrom, chromStart, chromEnd, strand, ' +\
@@ -75,7 +76,8 @@ def make_txt ():
     for row in cursor.fetchall():
         (binno, chrom, exonstarts, exonends, strand, name) = row
         binno = str(binno)
-        exonstarts = [v.strip() for v in exonstarts.strip().strip(',').split(',')]
+        exonstarts = [v.strip() for v in \
+            exonstarts.strip().strip(',').split(',')]
         exonends = [v.strip() for v in exonends.strip().strip(',').split(',')]
         for i in xrange(len(exonstarts)):
             exonstart = exonstarts[i]
@@ -106,12 +108,14 @@ def make_db ():
         ' (binno, chrom, start)')
     f = open(dbtxtfilename)
     for line in f:
-        [binno, chrom, start, end, strand, cls, name] = line[:-1].split('\t')
+        [binno, chrom, start, end, strand, family, name] =\
+            line[:-1].split('\t')
         sql = 'insert into ' + tablename + ' values(' +\
             '%s, "%s", %s, %s, "%s", "%s", "%s")'% \
-            (binno, chrom, start, end, strand, cls, name)
+            (binno, chrom, start, end, strand, family, name)
         cursor.execute(sql)
     f.close()
     conn.commit()
 
+make_txt()
 make_db()
