@@ -11,7 +11,7 @@ cursor.execute('select distinct name from SNVBox_5.Transcript')
 transcripts = [v[0] for v in cursor.fetchall()]
 sys.stderr.write(str(len(transcripts)) + ' transcripts\n')
 
-def write_updownstream (chrom, txstart, txend, transcript):
+def write_updownstream (chrom, txstart, txend, transcript, hugo):
     interval = 2000
     upstream_start = txstart - interval
     upstream_end = txstart - 1
@@ -22,6 +22,7 @@ def write_updownstream (chrom, txstart, txend, transcript):
         str(upstream_start),
         str(upstream_end),
         transcript,
+        hugo,
         '2k upstream']) + '\n')
     downstream_start = txend + 1
     downstream_end = txend + interval
@@ -32,6 +33,7 @@ def write_updownstream (chrom, txstart, txend, transcript):
         str(downstream_start),
         str(downstream_end),
         transcript,
+        hugo,
         '2k downstream']) + '\n')
 def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
     if exonstart >= cdsstart:
@@ -63,6 +65,7 @@ def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
             str(utr5start), 
             str(utr5end), 
             transcript, 
+            hugo,
             '5\' UTR']) + '\n')
     if utr3start != None and utr3end != None:
         wf.write('\t'.join([
@@ -71,6 +74,7 @@ def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
             str(utr3start), 
             str(utr3end), 
             transcript, 
+            hugo,
             '3\' UTR']) + '\n')
 
 def get_bin (start, end):
@@ -103,7 +107,17 @@ for transcript in transcripts:
     cursor.execute(sql)
     [chrom, txstart, txend, cdsstart, cdsend, exonstarts, exonends, enst]\
         = cursor.fetchone()
+    sql = 'select geneSymbol from kgXref where kgID="' + transcript + '"'
+    cursor.execute(sql)
+    hugo = cursor.fetchone()
+    if hugo == None:
+        print transcript, hugo
+        exit()
+    else:
+        hugo = hugo[0]
+
     transcript = enst
+
     # Makes "end"s inclusive.
     txend = txend - 1
     cdsend = cdsend - 1
@@ -118,7 +132,7 @@ for transcript in transcripts:
         print 'exonends', exonends
 
     # Upstream and downstream
-    write_updownstream(chrom, txstart, txend, transcript)
+    write_updownstream(chrom, txstart, txend, transcript, hugo)
 
     # 1-exon transcript
     if len(exonstarts) == 1:
@@ -133,6 +147,7 @@ for transcript in transcripts:
                 str(utr5start), 
                 str(utr5end), 
                 transcript, 
+                hugo,
                 '5\' UTR']) + '\n')
         if cdsend < exonend:
             utr3start = cdsend + 1
@@ -143,6 +158,7 @@ for transcript in transcripts:
                 str(utr3start), 
                 str(utr3end), 
                 transcript, 
+                hugo,
                 '3\' UTR']) + '\n')
         continue
 
@@ -164,7 +180,8 @@ for transcript in transcripts:
             str(exonend1 + 1), 
             str(exonstart2 - 1), 
             transcript,
-            'Intron']) + '\n')
+            hugo,
+            'intron']) + '\n')
     write_utr(chrom, exonstarts[-1], exonends[-1], cdsstart, cdsend, 
         transcript)
 wf.close()
@@ -172,5 +189,5 @@ wf.close()
 conn = sqlite3.connect('utrint.sqlite')
 cursor = conn.cursor()
 cursor.execute('drop table if exists utrint')
-cursor.execute('create table utrint (bin integer, chrom text, start integer, end integer, enst text, desc text)')
+cursor.execute('create table utrint (bin integer, chrom text, start integer, end integer, enst text, hugo, text, desc text)')
 cursor.execute('create index binchrstart on utrint (bin, chrom, start)')
