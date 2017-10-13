@@ -17,8 +17,8 @@ def write_updownstream (chrom, txstart, txend, transcript, hugo):
     upstream_end = txstart - 1
     binno = get_bin(upstream_start, upstream_end)
     wf.write('\t'.join([
-        str(binno),
         chrom,
+        str(binno),
         str(upstream_start),
         str(upstream_end),
         transcript,
@@ -28,8 +28,8 @@ def write_updownstream (chrom, txstart, txend, transcript, hugo):
     downstream_end = txend + interval
     binno = get_bin(downstream_start, downstream_end)
     wf.write('\t'.join([
-        str(binno),
         chrom,
+        str(binno),
         str(downstream_start),
         str(downstream_end),
         transcript,
@@ -61,8 +61,8 @@ def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
             utr3start = cdsend + 1
     if utr5start != None and utr5end != None:
         wf.write('\t'.join([
-            str(get_bin(utr5start, utr5end)), 
             chrom, 
+            str(get_bin(utr5start, utr5end)), 
             str(utr5start), 
             str(utr5end), 
             transcript, 
@@ -70,8 +70,8 @@ def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
             '5\' UTR']) + '\n')
     if utr3start != None and utr3end != None:
         wf.write('\t'.join([
-            str(get_bin(utr3start, utr3end)), 
             chrom, 
+            str(get_bin(utr3start, utr3end)), 
             str(utr3start), 
             str(utr3end), 
             transcript, 
@@ -147,8 +147,8 @@ for transcript in transcripts:
             utr5start = exonstart
             utr5end = cdsstart - 1
             wf.write('\t'.join([
-                str(get_bin(utr5start, utr5end)), 
                 chrom, 
+                str(get_bin(utr5start, utr5end)), 
                 str(utr5start), 
                 str(utr5end), 
                 transcript, 
@@ -158,8 +158,8 @@ for transcript in transcripts:
             utr3start = cdsend + 1
             utr3end = exonend
             wf.write('\t'.join([
-                str(get_bin(utr5start, utr5end)), 
                 chrom, 
+                str(get_bin(utr5start, utr5end)), 
                 str(utr3start), 
                 str(utr3end), 
                 transcript, 
@@ -174,20 +174,31 @@ for transcript in transcripts:
         exonstart2 = exonstarts[exonno + 1]
 
         # UTRs
-        write_utr(chrom, exonstart1, exonend1, cdsstart, cdsend, transcript)
+        write_utr(
+            chrom, 
+            exonstart1, 
+            exonend1, 
+            cdsstart, 
+            cdsend, 
+            transcript)
 
         # Intron
         intronstart = exonend1 + 1
         intronend = exonstart2 - 1
         wf.write('\t'.join([
-            str(get_bin(intronstart, intronend)), 
             chrom, 
+            str(get_bin(intronstart, intronend)), 
             str(exonend1 + 1), 
             str(exonstart2 - 1), 
             transcript,
             hugo,
             'intron']) + '\n')
-    write_utr(chrom, exonstarts[-1], exonends[-1], cdsstart, cdsend, 
+    write_utr(
+        chrom, 
+        exonstarts[-1], 
+        exonends[-1], 
+        cdsstart, 
+        cdsend, 
         transcript)
 wf.close()
 
@@ -195,4 +206,4 @@ conn = sqlite3.connect('utrint.sqlite')
 cursor = conn.cursor()
 cursor.execute('drop table if exists utrint')
 cursor.execute('create table utrint (chrom text, binno integer, start integer, end integer, enst text, hugo, text, desc text)')
-cursor.execute('create index binchrstart on utrint (bin, chrom, start)')
+cursor.execute('create index binchrstart on utrint (chrom, binno, start)')
