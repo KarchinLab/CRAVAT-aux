@@ -35,6 +35,7 @@ def write_updownstream (chrom, txstart, txend, transcript, hugo):
         transcript,
         hugo,
         '2k downstream']) + '\n')
+    
 def write_utr (chrom, exonstart, exonend, cdsstart, cdsend, transcript):
     if exonstart >= cdsstart:
         utr5start = None
@@ -118,11 +119,15 @@ for transcript in transcripts:
 
     transcript = enst
 
-    # Makes "end"s inclusive.
-    txend = txend - 1
-    cdsend = cdsend - 1
-    exonstarts = [int(v) for v in exonstarts.strip(',').split(',')]
-    exonends = [int(v) - 1 for v in exonends.strip(',').split(',')]
+    # starts in hg38 are 0-based.
+    txstart += 1
+    cdsstart += 1
+    exonstarts = [int(v) + 1 for v in exonstarts.strip(',').split(',')]
+    
+    txend = txend
+    cdsend = cdsend
+    exonends = [int(v) for v in exonends.strip(',').split(',')]
+    
     noexons = len(exonstarts)
 
     if debug:
@@ -189,5 +194,5 @@ wf.close()
 conn = sqlite3.connect('utrint.sqlite')
 cursor = conn.cursor()
 cursor.execute('drop table if exists utrint')
-cursor.execute('create table utrint (bin integer, chrom text, start integer, end integer, enst text, hugo, text, desc text)')
+cursor.execute('create table utrint (chrom text, binno integer, start integer, end integer, enst text, hugo, text, desc text)')
 cursor.execute('create index binchrstart on utrint (bin, chrom, start)')
