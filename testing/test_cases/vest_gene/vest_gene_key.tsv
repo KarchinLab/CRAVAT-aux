@@ -1,5 +1,5 @@
 hugo	vest_available	vest_score	vest_composite_pvalue	vest_composite_fdr
 CFTR	1	1	0.0000000000710229	0.05
-KIF11	1	0.852	0.650095	1
-F8	1	0.91	0.016089	0.05
-HBB	1	0.982	0.012446	0.05
+KIF11	1	0.852	0.626256	1
+F8	1	0.91	0.0322812	0.05
+HBB	1	0.982	0.00848113	0.05

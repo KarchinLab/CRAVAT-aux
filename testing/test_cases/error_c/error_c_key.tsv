@@ -5,7 +5,7 @@ input_line_number	error
 6	Number of columns should be 3, 4, 6, or 7
 7	Number of columns should be 3, 4, 6, or 7
 8	Input reference base is incorrect for the specified chromosome and position.
-9	Gene is on the opposite strand to the input strand.
+9	Input reference base is incorrect for the specified chromosome and position. There is a gene on the other strand of the input one.
 10	Alternate base error
 11	Chromosome not in CRAVAT
 12	Position error
