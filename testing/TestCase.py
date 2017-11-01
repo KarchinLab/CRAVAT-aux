@@ -34,9 +34,6 @@ class TestCase(object):
                 'inputfile': open(self.input_path, 'r')
                 }
         full_url = url_base+'/rest/service/submit'
-        print(full_url)
-        print(data)
-        print(files)
         r = requests.post(url_base+'/rest/service/submit', files=files, data=data)
         # Get the job_id 
         self.job_id = json.loads(r.text)['jobid']
