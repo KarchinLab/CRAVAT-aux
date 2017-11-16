@@ -1,0 +1,8 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: error
+verify_rules:
+  error:
+    method: string_included
+    modifier: ','

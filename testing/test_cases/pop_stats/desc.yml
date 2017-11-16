@@ -1,0 +1,41 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: noncoding,variant
+verify_rules:
+  esp_aa:
+    method: float_numeric_range
+    modifier: '0.01'
+  esp_avg:
+    method: float_numeric_range
+    modifier: '0.01'
+  esp_ea:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_afr:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_eas:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_fin:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_lat:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_nfe:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_oth:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_sas:
+    method: float_numeric_range
+    modifier: '0.01'
+  exac_total:
+    method: float_numeric_range
+    modifier: '0.01'
+  kg:
+    method: float_numeric_range
+    modifier: '0.01'

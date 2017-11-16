@@ -1,0 +1,8 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: variant
+verify_rules:
+  cosmic_protein_change:
+    method: string_parse
+    modifier: ' '

@@ -1,0 +1,8 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: variant
+verify_rules:
+  so_best_all:
+    method: string_included
+    modifier: ','

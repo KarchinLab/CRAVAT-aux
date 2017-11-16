@@ -1,0 +1,11 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: variant
+verify_rules:
+  ndex_pathway_ids:
+    method: string_included
+    modifier: ','
+  ndex_pathway_names:
+    method: string_included
+    modifier: '@'

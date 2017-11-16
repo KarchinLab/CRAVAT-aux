@@ -1,0 +1,15 @@
+sub_method: post
+sub_params:
+  analyses: CHASM
+  chasmclassifier: Colon
+tab: gene
+verify_rules:
+  chasm_composite_fdr:
+    method: float_numeric_range
+    modifier: '0.01'
+  chasm_composite_pvalue:
+    method: float_numeric_range
+    modifier: '0.001'
+  chasm_score:
+    method: float_numeric_range
+    modifier: '0.01'
