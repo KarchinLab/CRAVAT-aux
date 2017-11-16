@@ -1,0 +1,13 @@
+<desc>
+	<sub_params>
+		<analyses />
+	</sub_params>
+	<verify_rules>
+		<column name="name">
+			<method>method</method>
+			<modifier>modifier</modifier>
+		</column>
+	</verify_rules>
+	<tab>noncoding,variant,gene</tab>
+	<sub_method>post</sub_method>
+</desc>

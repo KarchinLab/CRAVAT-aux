@@ -28,6 +28,7 @@ if __name__ == '__main__':
     test_cases_dir = os.path.join(fdir,'test_cases')
     valid_cases = []
     for item_name in os.listdir(test_cases_dir):
+        if item_name == 'template': continue
         item_path = os.path.join(test_cases_dir, item_name)
         if os.path.isdir(item_path) and os.listdir(item_path):
             valid_cases.append(item_name)
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     #
     if sys_args.include:
         invalid_cases = set(sys_args.include) - set(valid_cases)
-        if invalid_cases: raise Exception('Invalid cases:%s' %', '.join(invalid_cases))
+        if invalid_cases: raise Exception('Invalid cases: %s' %', '.join(invalid_cases))
         include_cases = sys_args.include
     else:
         include_cases = valid_cases
