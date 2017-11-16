@@ -11,9 +11,9 @@ class TestCase(object):
         self.name = name
         self.path = path
         test_dir = os.path.split(self.path)[1]
-        self.input_path = os.path.join(self.path,'%s_input.txt' %test_dir)
-        self.key_path = os.path.join(self.path,'%s_key.tsv' %test_dir)
-        self.desc_path = os.path.join(self.path, '%s_desc.xml' %test_dir)
+        self.input_path = os.path.join(self.path,'input.txt')
+        self.key_path = os.path.join(self.path,'key.tsv')
+        self.desc_path = os.path.join(self.path, 'desc.xml')
         self.desc = {}
         self.key = {}
         self.job_id = ''

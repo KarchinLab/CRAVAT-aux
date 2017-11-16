@@ -32,9 +32,11 @@ if __name__ == '__main__':
         if os.path.isdir(item_path) and os.listdir(item_path):
             valid_cases.append(item_name)
     sys_args_parser = argparse.ArgumentParser()
-    sys_args_parser.add_argument('-i', '--include', 
+    sys_args_parser.add_argument('-i', '--include',
+                                 nargs='+', 
                           help='List of cases to include. Comma seperated.')
     sys_args_parser.add_argument('-e','--exclude',
+                                 nargs='+',
                           help='List of cases to exclude.  Comma seperated.')
     sys_args = sys_args_parser.parse_args()
     
@@ -43,13 +45,13 @@ if __name__ == '__main__':
     #
     #
     if sys_args.include:
-        include_cases = sys_args.include.split(',')
-        invalid_cases = set(include_cases) - set(valid_cases)
+        invalid_cases = set(sys_args.include) - set(valid_cases)
         if invalid_cases: raise Exception('Invalid cases:%s' %', '.join(invalid_cases))
+        include_cases = sys_args.include
     else:
         include_cases = valid_cases
     if sys_args.exclude:
-        exclude_cases = sys_args.exclude.split(',')
+        exclude_cases = sys_args.exclude
     else:
         exclude_cases = []
     test_cases = list(set(include_cases) - set(exclude_cases))
