@@ -1,0 +1,11 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: noncoding,variant,gene
+verify_rules:
+  grasp_nhlbi:
+    method: string_included
+    modifier: ','
+  grasp_pmid:
+    method: string_included
+    modifier: ','

@@ -1,0 +1,5 @@
+intron	chr17	43081000	+	A	T
+utr5	chr17	43044295	+	A	T
+utr3	chr17	43125370	+	A	T
+m1	chr12	112379979	-	A	T
+m2	chr12	112207597	-	C	T

@@ -1,0 +1,8 @@
+grasp_intron	chr7	11555251	+	A	T
+grasp_ms1	chr7	95308134	+	A	T
+grasp_ms2	chr7	11555251	+	A	T
+grasp_ms3	chr7	11553866	+	A	T
+grasp_ms4	chr7	11541494	+	A	T
+grasp_ms5	chr7	11537998	+	A	T
+grasp_ms6	chr7	95308134	+	A	T
+grasp_ms7	chr6	32039109	+	A	T

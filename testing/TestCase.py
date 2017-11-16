@@ -76,9 +76,6 @@ class TestCase(object):
         while self.job_status == '':
             try:
                 json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
-#                 print 'Response'
-#                 print json_response.text
-#                 print '</Response>'
                 json_status = json.loads(json_response.text)['status']
             except:
                 print traceback.format_exc()

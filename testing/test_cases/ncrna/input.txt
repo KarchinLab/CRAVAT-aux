@@ -1,0 +1,1 @@
+ncrna	chr1	157790	+	A	T

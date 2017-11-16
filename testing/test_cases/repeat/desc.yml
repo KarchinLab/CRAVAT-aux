@@ -1,0 +1,5 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: noncoding,variant,gene
+verify_rules:
