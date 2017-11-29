@@ -1,7 +1,7 @@
 sub_method: post
 sub_params:
   analyses: ''
-tab: noncoding,variant,gene
+tab: noncoding,variant
 verify_rules:
   grasp_nhlbi:
     method: string_included

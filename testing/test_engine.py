@@ -170,6 +170,8 @@ if __name__ == '__main__':
         log_text += '%s \n%s \n%s \n%s \nTime: %s\n\n' \
         %('-'*25, curTest.name, curTest.job_id, curTest.log_text, curTest.elapsed_time)
     if not(os.path.exists(log_dir)) and not(os.path.isdir(log_dir)):
-		os.mkdir(log_dir)
-    with open(os.path.join(log_dir,'%s.txt' %log_name),'w') as log_file:
+        os.mkdir(log_dir)
+    log_path = os.path.join(log_dir,'%s.txt' %log_name)
+    with open(log_path,'w') as log_file:
         log_file.write(log_text)
+    print 'Log available at: %s' %log_path
