@@ -12,28 +12,31 @@ verify_rules:
   esp_ea:
     method: float_numeric_range
     modifier: '0.01'
-  exac_afr:
+  gnomad_total:
     method: float_numeric_range
     modifier: '0.01'
-  exac_eas:
+  gnomad_afr:
     method: float_numeric_range
     modifier: '0.01'
-  exac_fin:
+  gnomad_amr:
     method: float_numeric_range
     modifier: '0.01'
-  exac_lat:
+  gnomad_asj:
     method: float_numeric_range
     modifier: '0.01'
-  exac_nfe:
+  gnomad_eas:
     method: float_numeric_range
     modifier: '0.01'
-  exac_oth:
+  gnomad_fin:
     method: float_numeric_range
     modifier: '0.01'
-  exac_sas:
+  gnomad_nfe:
     method: float_numeric_range
     modifier: '0.01'
-  exac_total:
+  gnomad_oth:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_sas:
     method: float_numeric_range
     modifier: '0.01'
   kg:
