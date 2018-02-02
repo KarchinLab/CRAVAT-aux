@@ -118,6 +118,9 @@ def make_input_files(path_tsv, keep_cols, ref_dicts, out_dir):
                 # Append the defined values to row
                 for col in keep_cols:
                     row.append(line[col])
+                # Use correct cravat pos for insertions
+                if row[2] == '-':
+                    row[1] = str(int(row[1])+1)
                     
                 # Use the ref_dicts to look up the diseases specified in PhenotypeIDs
                 pheno_ids = line['PhenotypeIDS']   
