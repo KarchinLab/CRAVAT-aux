@@ -1,0 +1,7 @@
+sub_method: post
+sub_params:
+  analyses: ''
+  chasmclassifier: Colon
+  hg19: 'on'
+tab: variant
+verify_rules: "\n\t"

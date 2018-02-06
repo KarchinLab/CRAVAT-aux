@@ -1,0 +1,11 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: gene
+verify_rules:
+  num_sample:
+    method: float_round
+    modifier: '0'
+  variants:
+    method: string_included
+    modifier: ','

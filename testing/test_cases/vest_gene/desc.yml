@@ -1,0 +1,14 @@
+sub_method: post
+sub_params:
+  analyses: VEST
+tab: gene
+verify_rules:
+  vest_composite_fdr:
+    method: float_numeric_range
+    modifier: '0.01'
+  vest_composite_pvalue:
+    method: float_numeric_range
+    modifier: '0.001'
+  vest_score:
+    method: float_numeric_range
+    modifier: '0.01'

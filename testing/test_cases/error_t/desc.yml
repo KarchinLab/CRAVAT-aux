@@ -1,0 +1,5 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: error
+verify_rules: ''

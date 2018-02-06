@@ -1,0 +1,9 @@
+sub_method: post
+sub_params:
+  analyses: ''
+  analysistype: geneannotationonly
+tab: variant
+verify_rules:
+  pubmed_n:
+    method: float_numeric_range
+    modifier: '10'

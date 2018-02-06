@@ -1,0 +1,30 @@
+$VERNUM='5.2.0'
+alias cmrun='docker exec cravatmupit'
+
+docker pull karchinlab/cravatmupit:$VERNUM
+
+cmrun cd tomcat/webapps/CRAVAT
+cmrun cp tomcat/webapps/CRAVAT/index.jsp tomcat/webapps/CRAVAT/index.jsp.bak
+cmrun echo 'CRAVAT is being updated. We appreciate your patience' > tomcat/webapps/CRAVAT/index.jsp
+
+# Verify that there are no running jobs
+# Log in to www.cravat.us as admin (the usual password).
+# Check the Server Status to make sure that (or wait until) no job is running.
+# When no job is shown on the Server Status, in the web03's container, do the following.
+# docker exec -it cm /bin/bash
+# db
+# show processlist;
+# Make sure that only 1 row with Info column "show processlist" is returned for the command "show processlist; 
+# Stop and wait until 1) the image has been pulled, 2) no job is shown on the Server Status, and 3) "show processlist;" shows only 1 row, before doing the next steps.
+
+docker stop cravatmupit
+docker rm cravatmupit
+docker run --name cravatmupit --restart unless-stopped -d -p 80:8080 -p 8895:3306 -p 443:8443 -v /local/dockervolume/mysql:/var/lib/mysql -v /local/dockervolume:/ext karchinlab/cravatmupit:$VERNUM
+
+# Within the container, open /ext/resource/cravat_config.txt.bak and set <dbPasswordRoot=NrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8>
+# Open ~/.bashrc and set <alias db='mysql -u root -pNrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8 -A'>
+cmrun cp /ext/resource/cravat_config.txt /ext/resource/cravat_config.txt.bak
+cmrun cp /usr/local/tomcat/webapps/CRAVAT/WEB-INF/classes/cravat_config.txt /ext/resource/cravat_config.txt
+docker restart cravatmupit
+# Use the setup page to set number of small and big job workers to 10
+# You're done!

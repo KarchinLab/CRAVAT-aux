@@ -4,16 +4,16 @@ import time
 import traceback
 import math
 import os
-import XMLConverter
+import yaml
 
 class TestCase(object):
     def __init__(self, name, path):
         self.name = name
         self.path = path
         test_dir = os.path.split(self.path)[1]
-        self.input_path = os.path.join(self.path,'%s_input.txt' %test_dir)
-        self.key_path = os.path.join(self.path,'%s_key.tsv' %test_dir)
-        self.desc_path = os.path.join(self.path, '%s_desc.xml' %test_dir)
+        self.input_path = os.path.join(self.path,'input.txt')
+        self.key_path = os.path.join(self.path,'key.tsv')
+        self.desc_path = os.path.join(self.path, 'desc.yml')
         self.desc = {}
         self.key = {}
         self.job_id = ''
@@ -23,7 +23,7 @@ class TestCase(object):
         self.log_text = ''
 
         # Read test desc file to a dict
-        self.desc = XMLConverter.xml_to_dict(self.desc_path)
+        self.desc = yaml.load(open(self.desc_path))
             
     # Submit the job to cravat   
     def submitJobPOST(self,url_base,email):
@@ -76,9 +76,6 @@ class TestCase(object):
         while self.job_status == '':
             try:
                 json_response = requests.get('%s/rest/service/status?jobid=%s' %(url_base, self.job_id))
-#                 print 'Response'
-#                 print json_response.text
-#                 print '</Response>'
                 json_status = json.loads(json_response.text)['status']
             except:
                 print traceback.format_exc()

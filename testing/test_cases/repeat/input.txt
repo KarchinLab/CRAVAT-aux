@@ -1,0 +1,7 @@
+simplerepeat	chr1	10100	+	A	T
+satellite	chr1	3694500	+	A	T
+line	chr1	30000	+	A	T
+sine	chr1	31500	+	A	T
+ltr	chr1	42000	+	A	T
+lowcomplexity	chr1	532970	+	A	T
+mul	chr1	39623	+	A	T

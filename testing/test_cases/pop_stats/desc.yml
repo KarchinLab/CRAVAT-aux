@@ -1,0 +1,44 @@
+sub_method: post
+sub_params:
+  analyses: ''
+tab: noncoding,variant
+verify_rules:
+  esp_aa:
+    method: float_numeric_range
+    modifier: '0.01'
+  esp_avg:
+    method: float_numeric_range
+    modifier: '0.01'
+  esp_ea:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_total:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_afr:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_amr:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_asj:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_eas:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_fin:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_nfe:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_oth:
+    method: float_numeric_range
+    modifier: '0.01'
+  gnomad_sas:
+    method: float_numeric_range
+    modifier: '0.01'
+  kg:
+    method: float_numeric_range
+    modifier: '0.01'
