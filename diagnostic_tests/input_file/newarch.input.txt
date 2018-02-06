@@ -5,8 +5,14 @@ ncrna	chr1	157790	+	A	T
 pg	chr1	12000	+	A	T
 
 #grasp
-grasp1	chr13	31872705	+	A	T
-grasp_ms	chr7	92779015	+	A	T
+grasp_intron	chr7	11555251	+	A	T
+grasp_ms1	chr7	95308134	+	A	T
+grasp_ms2 chr7 11555251 + A T
+grasp_ms3 chr7 11553866 + A T
+grasp_ms4 chr7 11541494 + A T
+grasp_ms5 chr7 11537998 + A T
+grasp_ms6 chr7 95308134 + A T
+grasp_ms7 chr6 32039109 + A T
 
 #repeats
 simplerepeat	chr1	10100	+	A	T
@@ -21,3 +27,7 @@ mul	chr1	39623	+	A	T
 intron	chr17	43081000	+	A	T	
 utr5	chr17	43044295	+	A	T	
 utr3	chr17	43125370	+	A	T	
+
+m1 chr12 112379979 - A T
+m2 chr12 112207597 - C T
+m3 chr12 25209843 + A C
