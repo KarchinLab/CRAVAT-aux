@@ -1,4 +1,4 @@
-$VERNUM='5.2.0'
+$VERNUM='5.2.1'
 alias cmrun='docker exec cravatmupit'
 
 docker pull karchinlab/cravatmupit:$VERNUM
