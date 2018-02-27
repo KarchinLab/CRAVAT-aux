@@ -1,3 +1,5 @@
+Add/move the version number tag to the HEAD of the branch next_release of CRAVAT, CRAVAT-docker, CRAVAT-newarch, CVS, and MuPIT_Interactive. 
+
 $VERNUM='5.2.1'
 alias cmrun='docker exec cravatmupit'
 
