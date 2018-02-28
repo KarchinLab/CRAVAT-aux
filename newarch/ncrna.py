@@ -25,7 +25,7 @@ def make_txt ():
             continue
 
         binno = str(binno)
-        start = str(start)
+        start = str(start + 1)
         end = str(end)
         wf.write('\t'.join([
             binno,
@@ -42,7 +42,7 @@ def make_txt ():
     for row in cursor.fetchall():
         (binno, chrom, start, end, strand, aa) = row
         binno = str(binno)
-        start = str(start)
+        start = str(start + 1)
         end = str(end)
         wf.write('\t'.join([
             binno,
@@ -59,7 +59,7 @@ def make_txt ():
     for row in cursor.fetchall():
         (binno, chrom, start, end, strand, feattype, featname) = row
         binno = str(binno)
-        start = str(start)
+        start = str(start + 1)
         end = str(end)
         wf.write('\t'.join([
             binno,
@@ -76,11 +76,11 @@ def make_txt ():
     for row in cursor.fetchall():
         (binno, chrom, exonstarts, exonends, strand, name) = row
         binno = str(binno)
-        exonstarts = [v.strip() for v in \
+        exonstarts = [str(int(v.strip()) + 1) for v in \
             exonstarts.strip().strip(',').split(',')]
         exonends = [v.strip() for v in exonends.strip().strip(',').split(',')]
-        for i in xrange(len(exonstarts)):
-            exonstart = exonstarts[i]
+        for i in range(len(exonstarts)):
+            exonstart = exonstarts[i] 
             exonend = exonends[i]
             wf.write('\t'.join([
                 binno,
