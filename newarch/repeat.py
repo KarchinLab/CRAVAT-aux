@@ -26,7 +26,7 @@ def make_txt ():
             continue
 
         binno = str(binno)
-        start = str(start)
+        start = str(start + 1)
         end = str(end)
         wf.write('\t'.join([
             binno,
