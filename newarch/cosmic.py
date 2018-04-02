@@ -300,7 +300,8 @@ class COSMIC_Processor:
                                 
                 cosmic_id = line_dict['Mutation ID']
                 accession = line_dict['Accession Number']
-                 
+                idsample = line_dict['ID_sample']
+                
                 if cosmic_id in cosmic_tsv_data:
                     if accession != cosmic_tsv_data[cosmic_id]['accession']:
                         self.report_major_error_tsv('THE ID HAS MORE THAN ONE ACCESSION NUMBER!!!! THIS IS BAD!!!!', line_num, cosmic_id, cosmic_tsv_data[cosmic_id]['accession'], accession)
@@ -309,15 +310,19 @@ class COSMIC_Processor:
                     cosmic_tsv_data[cosmic_id]['accession'] = accession
                     cosmic_tsv_data[cosmic_id]['occurrences'] = 0
                     cosmic_tsv_data[cosmic_id]['primary_sites'] = {}
-                    
+                    cosmic_tsv_data[cosmic_id]['idsamples'] = {}
+                if idsample in cosmic_tsv_data[cosmic_id]['idsamples']:
+                    continue
+                else:
+                    cosmic_tsv_data[cosmic_id]['idsamples'][idsample] = True
                 primary_site_string =  line_dict['Primary site']
                 primary_sites = primary_site_string.split(',')
-                for prime_site in primary_sites:
-                    if prime_site in cosmic_tsv_data[cosmic_id]['primary_sites']:
-                        cosmic_tsv_data[cosmic_id]['primary_sites'][prime_site] += 1
+                for primary_site in primary_sites:
+                    if primary_site in cosmic_tsv_data[cosmic_id]['primary_sites']:
+                        cosmic_tsv_data[cosmic_id]['primary_sites'][primary_site] += 1
                         cosmic_tsv_data[cosmic_id]['occurrences'] += 1
                     else:
-                        cosmic_tsv_data[cosmic_id]['primary_sites'][prime_site] = 1
+                        cosmic_tsv_data[cosmic_id]['primary_sites'][primary_site] = 1
                         cosmic_tsv_data[cosmic_id]['occurrences'] += 1
                     
         rf_tsv.close()
@@ -432,7 +437,7 @@ class COSMIC_Processor:
             else:
                 cosmic_accession_gene_primeSite_dict[site] = primary_sites[site]
         return
-        
+    
     def make_sqlite_tables (self):
         print('Entered make_sqlite_tables')
         db = sqlite3.connect('cosmic.sqlite')
