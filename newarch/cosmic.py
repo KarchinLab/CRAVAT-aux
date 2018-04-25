@@ -1,17 +1,22 @@
-import MySQLdb
+import sqlite3
 import os
 import re
 import sys
 import vcf
-options_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'WebContent','WEB-INF','Wrappers')
-sys.path.insert(0, options_dir)
-import options
-import common_needed_functions
+import paramiko
+
+"""
+The latest update will be v84
+"""
+
+"""
+COSMIC data to download: VCF Files (coding and non-coding mutations), COSMIC Mutation Data
+"""
 
 """
 COSMIC_Processor class is used to read in a COSMIC database file and
-generate three MySQL tables for the COSMIC data in "CRAVAT_ANNOT_DEV" database
-in karchin-db01.icm.jhu.edu. The three MySQL tables correspond to
+generate three sqlite tables for the COSMIC data in "CRAVAT_ANNOT_DEV" database
+in karchin-db01.icm.jhu.edu. The three sqlite tables correspond to
 genomic, amino acid-, and tissue- level summary of the COSMIC data.
 """
 
@@ -41,13 +46,10 @@ class COSMIC_Processor:
     base_rev_dic = {'A':'T', 'T':'A', 'G':'C', 'C':'G', 'X':'X', '.':'.', 'N':'N'}
     
     def __init__ (self):
-        self.genomic_mysql_filename = 'cosmic_genomic_mysql.txt'
-        self.aa_mysql_filename = 'cosmic_aa_mysql.txt'
-        self.accession_mysql_filename = 'cosmic_accession_mysql.txt'
+        self.genomic_sqlite_filename = 'cosmic_genomic_sqlite.txt'
+        self.accession_sqlite_filename = 'cosmic_accession_sqlite.txt'
         self.genomic_table = 'cosmic_genomic'
-        self.aa_table = 'cosmic_aa'
         self.accession_table = 'cosmic_accession'
-        
         self.rep_limit = 100
 
     def main (self, vcf_coding_cosmic_filename, vcf_noncoding_cosmic_filename, tsv_cosmic_mutants_filename):
@@ -55,84 +57,125 @@ class COSMIC_Processor:
         self.vcf_noncoding_cosmic_filename = vcf_noncoding_cosmic_filename
         self.tsv_cosmic_mutants_filename = tsv_cosmic_mutants_filename
         self.tmp_file_dir = os.path.dirname(vcf_coding_cosmic_filename)
-        print 'make_mysql_files'
-        self.make_mysql_files()
-        print 'make_mysql_tables'
-        self.make_mysql_tables()
+        print('make_db_files')
+        self.make_sqlite_files()
+        print('make_db_tables')
+        self.make_sqlite_tables()
         
     def get_reverse_strand_bases (self, bases): # reverses bases in the reverse order
         rev_bases = ''
-        for base_pos in xrange(len(bases)-1,-1,-1):
+        for base_pos in range(len(bases)-1,-1,-1):
             rev_bases += self.base_rev_dic[bases[base_pos]]
         return rev_bases
     
-    def report_major_error_vcf(self, message, id, alts, AA_change, num_entry):
-        
-        for x in range(0,20):
-            sys.stderr.write(str(message) + '\n')
-        sys.stderr.write('num_entry = ' + str(num_entry) + '    cosmic id = ' + str(id) + '    alts = ' + str(alts) + '     AA_change =  '+str(AA_change)+'   fix!!!!!\n\n')
+    def report_major_error_vcf(self, message, uid, alts, AA_change, num_entry):
+        sys.stderr.write(str(message) + '\n')
+        sys.stderr.write('num_entry = ' + str(num_entry) +\
+                         '    cosmic id = ' + str(uid) + \
+                         '    alts = ' + str(alts) + \
+                         '     AA_change =  ' + str(AA_change) + \
+                         '   fix!!!!!\n\n')
 
-    def report_major_error_tsv(self, message, line_num, id, old_accession, new_accession):
-        
-        for x in range(0,20):
-            sys.stderr.write(str(message) + '\n')
-        sys.stderr.write('line_num = ' + str(line_num) + '    cosmic id = ' + str(id) + '    old_accession = ' + str(old_accession) + '     new_accession =  '+str(new_accession)+'   fix!!!!!\n\n')
+    def report_major_error_tsv(self, message, line_num, uid, old_accession, new_accession):
+        sys.stderr.write(str(message) + '\n')
+        sys.stderr.write('line_num = ' + str(line_num) + \
+                         '    cosmic id = ' + str(uid) + \
+                         '    old_accession = ' + str(old_accession) + \
+                         '    new_accession =  ' + str(new_accession) + \
+                         '   fix!!!!!\n\n')
 
+    def trimming_vcf_input(self, ref, alt, pos, strand):
+        pos = int(pos)
+        
+        reflen = len(ref)
+        altlen = len(alt)
+        minlen = min(reflen, altlen)
+        
+        new_ref = ref
+        new_alt = alt
+        new_pos = pos
     
-    def make_mysql_files (self):
-        cosmic_data_vcf_coding = {}
-#         cosmic_data_vcf_NonCoding = {}
-        cosmic_data_tsv_mutants = {}
+        # Trims from the end. Except don't remove the first nucleotide. 1:6530968 CTCA -> GTCTCA becomes C -> GTC.
+        for nt_pos in range(0, minlen - 1): 
+            if ref[reflen - nt_pos - 1] == alt[altlen - nt_pos - 1]:
+                new_ref = ref[:reflen - nt_pos - 1]
+                new_alt = alt[:altlen - nt_pos - 1]
+            else:
+                break    
+                
+        new_ref_len = len(new_ref)
+        new_alt_len = len(new_alt)
         
-        print 'Extracting from cosmic files:'
-#READ THE VCF CODING MUTATIONS FILE
-#     Build dictionary
-#         Key:
-#             cosmic_id
-#         Values:
-#             - chromosome
-#             - position
-#             - refbase
-#             - altbase
-#             - genename
-#             - aachange_cosmic
+        minlen = min(new_ref_len, new_alt_len)
+        
+        new_ref2 = new_ref
+        new_alt2 = new_alt
+        
+            
+        # Trims from the start. 1:6530968 G -> GT becomes 1:6530969 - -> T.
+        for nt_pos in range(0, minlen):
+            if new_ref[nt_pos] == new_alt[nt_pos]:
+                if strand == '+':
+                    new_pos += 1
+                elif strand == '-':
+                    new_pos -= 1
+                new_ref2 = new_ref[nt_pos + 1:]
+                new_alt2 = new_alt[nt_pos + 1:]
+            else:
+                new_ref2 = new_ref[nt_pos:]
+                new_alt2 = new_alt[nt_pos:]
+                break  
+            
+        return new_ref2, new_alt2, new_pos
+    
+    def make_sqlite_files (self):
+        print('Extracting from cosmic files:')
+        #READ THE VCF CODING MUTATIONS FILE
+        #     Build dictionary
+        #         Key:
+        #             cosmic_id
+        #         Values:
+        #             - chromosome
+        #             - position
+        #             - refbase
+        #             - altbase
+        #             - genename
+        #             - aachange_cosmic
         cosmic_data_vcf_coding = self.extract_from_vcf(self.vcf_coding_cosmic_filename, 'coding')
         
-#READ THE VCF NON-CODING MUTATIONS FILE   
-# WE DO NOT CURRENTLY SUPPORT THIS!!!     
-#         cosmic_data_vcf_NonCoding = self.extract_from_vcf(self.vcf_noncoding_cosmic_filename, 'noncoding')
-
-
-#READ THE TSV MUTATIONS FILE
-#     Build dictionary
-#         Key:
-#             cosmic_id
-#         Values:
-#             - accession
-#             - occurrences
-#             - primarysites
-#             - primarysitenos
+        #READ THE VCF NON-CODING MUTATIONS FILE   
+        # WE DO NOT CURRENTLY SUPPORT THIS!!!     
+        #         cosmic_data_vcf_NonCoding = self.extract_from_vcf(self.vcf_noncoding_cosmic_filename, 'noncoding')
+        
+        #READ THE TSV MUTATIONS FILE
+        #     Build dictionary
+        #         Key:
+        #             cosmic_id
+        #         Values:
+        #             - accession
+        #             - occurrences
+        #             - primarysites
+        #             - primarysitenos
         cosmic_data_tsv_mutants = self.extract_from_tsv(self.tsv_cosmic_mutants_filename)        
 
-# Using the dictionaries from the VCF file and the TSV file make the mysql input files
-#     -cosmic_accession_mysql.txt
-#     -cosmic_genomic_mysql.txt
-        print 'Making MySQL input files:'
-        self.make_mysql_file_for_comsic_genomic(cosmic_data_vcf_coding, cosmic_data_tsv_mutants)
-        self.make_mysql_file_for_cosmic_accession(cosmic_data_vcf_coding, cosmic_data_tsv_mutants)
+        # Using the dictionaries from the VCF file and the TSV file make the sqlite input files
+        #     -cosmic_accession_sqlite.txt
+        #     -cosmic_genomic_sqlite.txt
+        print('Making sqlite input files:')
+        self.make_sqlite_file_for_comsic_genomic(cosmic_data_vcf_coding, cosmic_data_tsv_mutants)
+        self.make_sqlite_file_for_cosmic_accession(cosmic_data_vcf_coding, cosmic_data_tsv_mutants)
          
-# Make the cosmic mysql tables and fill them using the cosmic mysql files previously created. This uses global variables to the class
-#     -CRAVAT_ANNOT_DEV
-#         -cosmic_genomic
-#         -cosmic_accession
-        print 'Making the MySQL tables'
-        self.make_mysql_tables()
+        # Make the cosmic sqlite tables and fill them using the cosmic sqlite files previously created. This uses global variables to the class
+        #     -CRAVAT_ANNOT_DEV
+        #         -cosmic_genomic
+        #         -cosmic_accession
+        print('Making the sqlite tables')
+        self.make_sqlite_tables()
         
         return
         
-        
     def extract_from_vcf(self, vcf_file, coding_or_non):
-        print '\t' + str(vcf_file)
+        print('\t' + str(vcf_file))
         
         cosmic_vcf_data = {}
         
@@ -142,7 +185,7 @@ class COSMIC_Processor:
         for entry in vcf.Reader(rf_vcf_cosmic):        #First looking at every VCF entry
             num_entry += 1
             if num_entry % 100000 == 0:
-                print '\t\t' + str(num_entry)
+                print('\t\t' + str(num_entry))
             id = entry.ID
             chr = entry.CHROM
             pos = entry.POS
@@ -156,7 +199,7 @@ class COSMIC_Processor:
                 sys.stderr.write("no GENE!!" + num_entry + '\n')
                 sys.exit(-1)
                 
-#             If a gene_name contains an underscor '_'. Then don't include that gene in cosmic
+            #             If a gene_name contains an underscor '_'. Then don't include that gene in cosmic
             if '_' in gene_name:
                 continue
             
@@ -167,7 +210,7 @@ class COSMIC_Processor:
                 cosmic_AA_change =  ''
                 sys.stderr.write("no AA_change!!" + num_entry + '\n')
                 sys.exit(-1)            
-#             Check if the id already exists in the dictionary cosmic_data
+            #             Check if the id already exists in the dictionary cosmic_data
             if id in cosmic_vcf_data:
                 self.report_major_error_vcf('THE COSMIC ID OCCURS MORE THAN ONCE!!! NO!!! THIS RUINS YOUR CODE!!!! num_entry is the second time!!!', id, alts, '', num_entry)
                 rf_vcf_cosmic.close()
@@ -175,22 +218,22 @@ class COSMIC_Processor:
             else:
                 cosmic_vcf_data[id] = {}
             
-#             Check if there is more than one alternate base in the alts location
+            #             Check if there is more than one alternate base in the alts location
             if len(alts) > 1:
                 self.report_major_error_vcf("ALTS HAS MORE THAN ONE ENTRY!!! YOU NEED TO CHANGE YOUR CODE!!!!", id, alts, cosmic_AA_change, num_entry)
                 rf_vcf_cosmic.close()
                 sys.exit(-1)
             alt = str(alts[0])
             
-#             Trim the ref and alt. Can change the ref, alt, and position
-#             You are looking at vcf format so you can put in that you are looking at the + strand
-            new_ref, new_alt, new_pos = options.trimming_vcf_input(ref, alt, pos, '+')
+            #             Trim the ref and alt. Can change the ref, alt, and position
+            #             You are looking at vcf format so you can put in that you are looking at the + strand
+            new_ref, new_alt, new_pos = self.trimming_vcf_input(ref, alt, pos, '+')
             if new_ref == '':
                 new_ref = '-'
             if new_alt == '':
                 new_alt = '-'            
             
-#       determine the sequence ontology / mutation type
+            #       determine the sequence ontology / mutation type
             mutation_type = None
             if coding_or_non == 'coding':
                 new_ref_len = len(new_ref)
@@ -224,19 +267,18 @@ class COSMIC_Processor:
         rf_vcf_cosmic.close()
         
         return cosmic_vcf_data
-        
-        
-# This function will extract information from the CosmicMutantExport.tsv file.
-#     Builds a dictionary
-#         Key:
-#             cosmic_id
-#         Values:
-#             - accession
-#             - occurrences
-#             - primarysites
-#             - primarysitenos
+    
+    # This function will extract information from the CosmicMutantExport.tsv file.
+    #     Builds a dictionary
+    #         Key:
+    #             cosmic_id
+    #         Values:
+    #             - accession
+    #             - occurrences
+    #             - primarysites
+    #             - primarysitenos
     def extract_from_tsv(self, tsv_file):
-        print '\t' + str(tsv_file)
+        print('\t' + str(tsv_file))
         cosmic_tsv_data = {}
         
         rf_tsv = open(tsv_file, 'rU')
@@ -246,36 +288,20 @@ class COSMIC_Processor:
         titles = []
         for line in rf_tsv:
             line_num += 1
-            line = common_needed_functions.remove_new_line_character(line)
+            line = remove_new_line_character(line)
             toks = line.split('\t')
-#             The first line is a header line so doing this will work
-#             IF THERE ARE EVER OTHER LINES BEFORE THE HEADER LINE THEN THIS WILL FAIL!!!
-#             IF THERE ARE EVER OTHER LINES BEFORE THE HEADER LINE THEN THIS WILL FAIL!!!
-#             IF THERE ARE EVER OTHER LINES BEFORE THE HEADER LINE THEN THIS WILL FAIL!!!
-#             IF THERE ARE EVER OTHER LINES BEFORE THE HEADER LINE THEN THIS WILL FAIL!!!
-#             IF THERE ARE EVER OTHER LINES BEFORE THE HEADER LINE THEN THIS WILL FAIL!!!
             if line_num == 1:
                 titles = toks
             else:
-#             Also assuming that the first line is the header line and then after that there are only variants! If not this will fail!
-#             Also assuming that the first line is the header line and then after that there are only variants! If not this will fail!
-#             Also assuming that the first line is the header line and then after that there are only variants! If not this will fail!
-#             Also assuming that the first line is the header line and then after that there are only variants! If not this will fail!
-#             Also assuming that the first line is the header line and then after that there are only variants! If not this will fail!
                 num_variant += 1
                 if num_variant % 100000 == 0:
-                    print '\t\t' + str(num_variant)
-                line_dict = common_needed_functions.make_dictionary_of_titles_and_line_tabs(titles, toks)
+                    print('\t\t' + str(num_variant))
+                line_dict = make_dictionary_of_titles_and_line_tabs(titles, toks)
                                 
                 cosmic_id = line_dict['Mutation ID']
                 accession = line_dict['Accession Number']
+                idsample = line_dict['ID_sample']
                 
-#                 I am only retrieving metaData so I don't think I need to convert the - strand to the + strand                
-#                 I actually don't think I need to do this because I am not retrieving any sequence information from the tsv file.
-# #                 If '-' strand then convert to + strand
-#                 strand = line_dict['Mutation strand']
-#                 print strand
-                 
                 if cosmic_id in cosmic_tsv_data:
                     if accession != cosmic_tsv_data[cosmic_id]['accession']:
                         self.report_major_error_tsv('THE ID HAS MORE THAN ONE ACCESSION NUMBER!!!! THIS IS BAD!!!!', line_num, cosmic_id, cosmic_tsv_data[cosmic_id]['accession'], accession)
@@ -284,29 +310,29 @@ class COSMIC_Processor:
                     cosmic_tsv_data[cosmic_id]['accession'] = accession
                     cosmic_tsv_data[cosmic_id]['occurrences'] = 0
                     cosmic_tsv_data[cosmic_id]['primary_sites'] = {}
-                    
-                    
+                    cosmic_tsv_data[cosmic_id]['idsamples'] = {}
+                if idsample in cosmic_tsv_data[cosmic_id]['idsamples']:
+                    continue
+                else:
+                    cosmic_tsv_data[cosmic_id]['idsamples'][idsample] = True
                 primary_site_string =  line_dict['Primary site']
                 primary_sites = primary_site_string.split(',')
-                for prime_site in primary_sites:
-                    if prime_site in cosmic_tsv_data[cosmic_id]['primary_sites']:
-                        cosmic_tsv_data[cosmic_id]['primary_sites'][prime_site] += 1
+                for primary_site in primary_sites:
+                    if primary_site in cosmic_tsv_data[cosmic_id]['primary_sites']:
+                        cosmic_tsv_data[cosmic_id]['primary_sites'][primary_site] += 1
                         cosmic_tsv_data[cosmic_id]['occurrences'] += 1
                     else:
-                        cosmic_tsv_data[cosmic_id]['primary_sites'][prime_site] = 1
+                        cosmic_tsv_data[cosmic_id]['primary_sites'][primary_site] = 1
                         cosmic_tsv_data[cosmic_id]['occurrences'] += 1
                     
         rf_tsv.close()
         
-        
-        
         return cosmic_tsv_data
-        
  
-#     function makes the mysql file that will be used to fill the cosmic_genomic table in the CRAVAT_ANNOT_DEV database 
-    def make_mysql_file_for_comsic_genomic(self, vcf_coding_dict, tsv_dict):
-        print '\t' + self.genomic_mysql_filename
-        wf_cosmic_genomic = open(os.path.join(self.tmp_file_dir, self.genomic_mysql_filename), 'w')
+    #     function makes the sqlite file that will be used to fill the cosmic_genomic table in the CRAVAT_ANNOT_DEV database 
+    def make_sqlite_file_for_comsic_genomic(self, vcf_coding_dict, tsv_dict):
+        print('\t' + self.genomic_sqlite_filename)
+        wf_cosmic_genomic = open(os.path.join(self.tmp_file_dir, self.genomic_sqlite_filename), 'w')
         for id in vcf_coding_dict:
             cosmic_id_info = []
             cosmic_id_info.append(id)
@@ -332,12 +358,12 @@ class COSMIC_Processor:
         
         return
     
-#     function makes the mysql file that will be used to fill the cosmic_accession table in the CRAVAT_ANNOT_DEV database
-    def make_mysql_file_for_cosmic_accession(self, vcf_coding_dic, tsv_dic):
-        print '\t' + self.accession_mysql_filename
+    #     function makes the sqlite file that will be used to fill the cosmic_accession table in the CRAVAT_ANNOT_DEV database
+    def make_sqlite_file_for_cosmic_accession(self, vcf_coding_dic, tsv_dic):
+        print('\t' + self.accession_sqlite_filename)
         
         cosmic_accession_dict = self.make_cosmic_accession_dict(vcf_coding_dic, tsv_dic)
-        wf_cosmic_accession = open(os.path.join(self.tmp_file_dir,  self.accession_mysql_filename), 'w')
+        wf_cosmic_accession = open(os.path.join(self.tmp_file_dir,  self.accession_sqlite_filename), 'w')
         for gene in cosmic_accession_dict:
             cosmic_accession_info = []
             cosmic_accession_info.append(gene)
@@ -357,11 +383,8 @@ class COSMIC_Processor:
         wf_cosmic_accession.close()
         
         return
- 
-
 
     def make_string_for_primary_sites_input(self, primary_sites_dict):
-        
         primarysites = ''
         primarysitesnos = ''
         num_sites_written = 0
@@ -375,7 +398,6 @@ class COSMIC_Processor:
         return primarysites, primarysitesnos
  
     def make_cosmic_accession_dict(self, vcf_coding_dic, tsv_dic):
-        
         cosmic_accession_dic = {}
         num_cosmic_ids_for_gene = {}
         
@@ -396,7 +418,7 @@ class COSMIC_Processor:
                 self.put_primary_sites_in_accession_dict(primary_sites, cosmic_accession_dic[gene]['primary_sites'])
             else:
                 if accession != cosmic_accession_dic[gene]['accession']:
-                    print 'BAD BAD BAD', gene, cosmic_accession_dic[gene], 'does not equal', accession
+                    print(gene, cosmic_accession_dic[gene], 'does not equal', accession)
                 num_cosmic_ids_for_gene[gene] += 1
 #                 We are limiting to only 1000 cosmic ids for a gene
                 if num_cosmic_ids_for_gene[gene] <= 1000:
@@ -408,94 +430,104 @@ class COSMIC_Processor:
         
         return cosmic_accession_dic
     
-    
     def put_primary_sites_in_accession_dict(self, primary_sites, cosmic_accession_gene_primeSite_dict):
-        
         for site in primary_sites:
             if site in cosmic_accession_gene_primeSite_dict:
                 cosmic_accession_gene_primeSite_dict[site] += primary_sites[site]
             else:
                 cosmic_accession_gene_primeSite_dict[site] = primary_sites[site]
-        
-        
         return
- 
- 
+    
+    def make_sqlite_tables (self):
+        print('Entered make_sqlite_tables')
+        db = sqlite3.connect('cosmic.sqlite')
+        cursor = db.cursor()
+        print('db and cursor gotten')
+        print('dropping '+self.genomic_table)
+        cursor.execute('drop table if exists '+self.genomic_table)
+        print('creating '+self.genomic_table)
+        cursor.execute('create table '+self.genomic_table+' (' +\
+                       'cosmic_id text, '+\
+                       'genename texr, '+\
+                       'accession text, '+\
+                       'aachange text, '+\
+                       'aachange_cosmic text, '+\
+                       'chromosome text, '+\
+                       'position int, '+\
+                       'mutation_type text, '+\
+                       'refbase text, '+\
+                       'altbase text, '+\
+                       'occurrences int, '+\
+                       'primarysites text, '+\
+                       'primarysitenos text'+\
+                       ')')
+        print(self.genomic_table, 'generated')
         
-    def make_mysql_tables (self):
-        print 'Entered make_mysql_tables'
+        # Import afterwards.
         
-        try:
-#             db=MySQLdb.connect(host='karchin-db01.icm.jhu.edu',db='CRAVAT_ANNOT_DEV',user='mryan',passwd='royalenfield')
-            db=MySQLdb.connect(host='localhost',db='annot_liftover',user='root',passwd='1234')
-            cursor=db.cursor()
-            print 'db and cursor gotten'
-            print 'dropping '+self.genomic_table
-            cursor.execute('drop table if exists '+self.genomic_table)
-            print 'creating '+self.genomic_table
-            cursor.execute('create table '+self.genomic_table+' (cosmic_id varchar(20), '+\
-                                                                'genename varchar(45), '+\
-                                                                'accession varchar(45), '+\
-                                                                'aachange varchar(100), '+\
-                                                                'aachange_cosmic varchar(100), '+\
-                                                                'chromosome varchar(45), '+\
-                                                                'position int, '+\
-                                                                'mutation_type varchar(4), '+\
-                                                                'refbase varchar(45), '+\
-                                                                'altbase varchar(45), '+\
-                                                                'occurrences int, '+\
-                                                                'primarysites varchar(500), '+\
-                                                                'primarysitenos varchar(100)'+\
-                                                                ') engine=innodb')
-            print self.genomic_table, 'generated'
-            print 'loading '+self.genomic_table
-            cursor.execute('load data local infile "'+self.genomic_mysql_filename+\
-                           '" into table '+self.genomic_table+\
-                           ' (cosmic_id, genename, accession, aachange, aachange_cosmic, chromosome, position, mutation_type, refbase, altbase, occurrences, primarysites, primarysitenos)')
-            cursor.execute('create index '+self.genomic_table+'_index on '+self.genomic_table+'(chromosome, position)')
-            print self.genomic_table, 'indexed'
-            cursor.execute('drop table if exists '+self.accession_table)
-            cursor.execute('create table '+self.accession_table+' (genename varchar(45), '+\
-                                                           'accession varchar(45), '+\
-                                                           'occurrences int, '+\
-                                                           'primarysites varchar(500), '+\
-                                                           'primarysitenos varchar(200), '+\
-                                                           'cosmic_ids varchar(12000), '+\
-                                                           'truncated_cosmic_ids varchar(1)' +\
-                                                           ') engine=innodb')
-            cursor.execute('load data local infile "'+self.accession_mysql_filename+\
-                           '" into table '+self.accession_table+\
-                           ' (genename, accession, occurrences, primarysites, primarysitenos, cosmic_ids, truncated_cosmic_ids)')
-            print self.accession_table, 'generated'
-            cursor.execute('create index '+self.accession_table+'_index on '+self.accession_table+'(accession)')
-            print self.accession_table, 'indexed'
-            db.commit()
-            cursor.close()
-            db.close()
-        except Exception, messUp:
-            try:
-                cursor.close()
-                db.close()
-            except Exception, messUp2:
-                pass
-            sys.stderr.write(str(repr(messUp)) + '\n')
+        cursor.execute('create index '+self.genomic_table+'_index on '+self.genomic_table+'(chromosome, position)')
+        print(self.genomic_table, 'indexed')
+        db.commit()
+        cursor.close()
+        db.close()
+        
+        db = sqlite3.connect('cosmic_gene.sqlite')
+        cursor = db.cursor()
+        cursor.execute('drop table if exists '+self.accession_table)
+        cursor.execute('create table '+self.accession_table+' (' +\
+                       'genename varchar(45), '+\
+                       'accession varchar(45), '+\
+                       'occurrences int, '+\
+                       'primarysites varchar(500), '+\
+                       'primarysitenos varchar(200), '+\
+                       'cosmic_ids varchar(12000), '+\
+                       'truncated_cosmic_ids varchar(1)' +\
+                       ')')
+        
+        # Import afterwards.
+        
+        cursor.execute('create index '+self.accession_table+'_index on '+self.accession_table+'(accession)')
+        print(self.accession_table, 'indexed')
+        db.commit()
+        cursor.close()
+        db.close()
 
+def remove_new_line_character (line):
+    line = line.rstrip('\r\n')
+    return line
 
+def determine_if_start_reading_cravat_output_file(line, file_type):
+    start_reading = False
+    if file_type == 'tsv':
+        if line != '':
+            if line[0] != '#':
+                start_reading = True
+    elif file_type == 'vcf':
+        toks = line.split("\t")
+        first_col =  toks[0]
+        if first_col == "#CHROM":
+            start_reading = True
+    return start_reading
 
-
+def make_dictionary_of_titles_and_line_tabs (titles, toks):
+    line_dict = {}
+    tok_num = 0
+    for tok in toks:
+        line_dict[titles[tok_num]] = tok
+        tok_num += 1
+    return line_dict
 
 def check_first_and_second_gene_and_strand_INFO_in_VCF_match(cosmic_file):
-    
     wf = open(cosmic_file, 'rU')
     start_reading = False
     line_num = 0
     for line in wf:
         line_num += 1
         if line_num % 100000 == 0:
-            print line_num
-        line = common_needed_functions.remove_new_line_character(line)
+            print(line_num)
+        line = remove_new_line_character(line)
         if start_reading == False:
-            start_reading = common_needed_functions.determine_if_start_reading_cravat_output_file(line, 'vcf')
+            start_reading = determine_if_start_reading_cravat_output_file(line, 'vcf')
             continue
         toks = line.split('\t')
         info = toks[7]
@@ -533,37 +565,15 @@ def check_first_and_second_gene_and_strand_INFO_in_VCF_match(cosmic_file):
                     'How did it see a third strand!!!'
                     sys.exit(-1)
         if gene1 != gene2:
-            print 'at input ' + str(line) + ' The two gene values in the INFO section are not the same!' 
+            print('at input ' + str(line) + ' The two gene values in the INFO section are not the same!') 
         if strand1 != strand2:
-            print 'at input ' + str(line) + ' The two strand values in the INFO section are not the same!'
-        
+            print('at input ' + str(line) + ' The two strand values in the INFO section are not the same!')
     wf.close()
-    
     return
 
+cosmic_vcf_coding = 'CosmicCodingMuts.vcf'
+cosmic_vcf_noncoding = 'CosmicNonCodingVariants.vcf'
+cosmic_tsv_mutants = 'CosmicMutantExport.tsv'
 
-if __name__ == "__main__":
-
-    cosmic_vcf_coding = sys.argv[1]
-    cosmic_vcf_noncoding = sys.argv[2]
-    cosmic_tsv_mutants = sys.argv[3]
-    algorithm_type = sys.argv[4]
-
-    if algorithm_type == 'mysql':
-        c = COSMIC_Processor()
-        c.main(cosmic_vcf_coding, cosmic_vcf_noncoding, cosmic_tsv_mutants)
-    elif algorithm_type == 'input_match':
-        check_first_and_second_gene_and_strand_INFO_in_VCF_match(cosmic_file)
-    else:
-        sys.stderr.write('\n' + algorithm_type + ' is not an alogrithm type that can be used. The types are:\n\tmysql\n\t\tOR\n\tinput_match\n\n')
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+c = COSMIC_Processor()
+c.main(cosmic_vcf_coding, cosmic_vcf_noncoding, cosmic_tsv_mutants)
