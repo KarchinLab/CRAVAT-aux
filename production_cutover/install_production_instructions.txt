@@ -23,6 +23,7 @@ docker rm cravatmupit
 docker run --name cravatmupit --restart unless-stopped -d -p 80:8080 -p 8895:3306 -p 443:8443 -v /local/dockervolume/mysql:/var/lib/mysql -v /local/dockervolume:/ext karchinlab/cravatmupit:$VERNUM
 
 # Within the container, open /ext/resource/cravat_config.txt.bak and set <dbPasswordRoot=NrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8>
+# Also set adminresultdbbackup=yes to run backups
 # Open ~/.bashrc and set <alias db='mysql -u root -pNrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8 -A'>
 cmrun cp /ext/resource/cravat_config.txt /ext/resource/cravat_config.txt.bak
 cmrun cp /usr/local/tomcat/webapps/CRAVAT/WEB-INF/classes/cravat_config.txt /ext/resource/cravat_config.txt
