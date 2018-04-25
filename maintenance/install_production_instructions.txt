@@ -3,9 +3,8 @@ alias cmrun='docker exec cravatmupit'
 
 docker pull karchinlab/cravatmupit:$VERNUM
 
-cmrun cd tomcat/webapps/CRAVAT
-cmrun cp tomcat/webapps/CRAVAT/index.jsp tomcat/webapps/CRAVAT/index.jsp.bak
-cmrun echo 'CRAVAT is being updated. We appreciate your patience' > tomcat/webapps/CRAVAT/index.jsp
+cp /usr/local/tomcat/webapps/CRAVAT/index.jsp tomcat/webapps/CRAVAT/index_backup.jsp
+echo 'CRAVAT is being updated. We appreciate your patience' > /usr/local/tomcat/webapps/CRAVAT/webapps/CRAVAT/index.jsp
 
 # Verify that there are no running jobs
 # Log in to www.cravat.us as admin (the usual password).
