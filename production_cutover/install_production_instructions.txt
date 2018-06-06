@@ -5,9 +5,8 @@ alias cmrun='docker exec cravatmupit'
 
 docker pull karchinlab/cravatmupit:$VERNUM
 
-cmrun cd tomcat/webapps/CRAVAT
-cmrun cp tomcat/webapps/CRAVAT/index.jsp tomcat/webapps/CRAVAT/index.jsp.bak
-cmrun echo 'CRAVAT is being updated. We appreciate your patience' > tomcat/webapps/CRAVAT/index.jsp
+cp /usr/local/tomcat/webapps/CRAVAT/index.jsp tomcat/webapps/CRAVAT/index_backup.jsp
+echo 'CRAVAT is being updated. We appreciate your patience' > /usr/local/tomcat/webapps/CRAVAT/webapps/CRAVAT/index.jsp
 
 # Verify that there are no running jobs
 # Log in to www.cravat.us as admin (the usual password).
@@ -24,6 +23,7 @@ docker rm cravatmupit
 docker run --name cravatmupit --restart unless-stopped -d -p 80:8080 -p 8895:3306 -p 443:8443 -v /local/dockervolume/mysql:/var/lib/mysql -v /local/dockervolume:/ext karchinlab/cravatmupit:$VERNUM
 
 # Within the container, open /ext/resource/cravat_config.txt.bak and set <dbPasswordRoot=NrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8>
+# Also set adminresultdbbackup=yes to run backups
 # Open ~/.bashrc and set <alias db='mysql -u root -pNrKzPVD4Ca5J2ZLdvU8fsBg6qKGmvwt8 -A'>
 cmrun cp /ext/resource/cravat_config.txt /ext/resource/cravat_config.txt.bak
 cmrun cp /usr/local/tomcat/webapps/CRAVAT/WEB-INF/classes/cravat_config.txt /ext/resource/cravat_config.txt
